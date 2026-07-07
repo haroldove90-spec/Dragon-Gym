@@ -449,14 +449,14 @@ export default function AdminRole({
           {/* TAB 2: MEMBERSHIP PLANS CONFIGURATION */}
           {activeTab === 'plans' && (
             <div className="space-y-4 animate-fade-in">
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3">
                 <div>
                   <h4 className="text-xs text-neutral-400 uppercase tracking-wider font-mono">Catálogo</h4>
                   <h3 className="text-sm font-bold text-white">Configuración de Membresías</h3>
                 </div>
                 <button 
                   onClick={() => setShowAddPlanForm(!showAddPlanForm)}
-                  className="bg-[#ccff00] hover:bg-[#d9ff26] text-black text-[10px] font-extrabold uppercase tracking-wide py-1.5 px-3 rounded-xl flex items-center gap-1 transition-all active:scale-95 cursor-pointer shadow-lg"
+                  className="bg-[#ccff00] hover:bg-[#d9ff26] text-black text-[10px] font-extrabold uppercase tracking-wide py-1.5 px-3 rounded-xl flex items-center gap-1 transition-all active:scale-95 cursor-pointer shadow-lg w-max shrink-0"
                 >
                   <PlusCircle className="w-3.5 h-3.5" />
                   <span>Nuevo Plan</span>
@@ -528,20 +528,20 @@ export default function AdminRole({
                 {plans.map(p => {
                   const isEditing = editingPlanId === p.id;
                   return (
-                    <div key={p.id} className="bg-[#111] border border-[#222] hover:border-neutral-800 rounded-2xl p-4 flex justify-between items-center">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <h4 className="text-sm font-bold text-white">{p.name}</h4>
-                          <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded ${p.status === 'Activo' ? 'bg-emerald-950 text-emerald-400' : 'bg-neutral-900 text-neutral-500'}`}>
+                    <div key={p.id} className="bg-[#111] border border-[#222] hover:border-neutral-800 rounded-2xl p-4 flex flex-col sm:flex-row gap-3 sm:items-center justify-between">
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h4 className="text-sm font-bold text-white truncate">{p.name}</h4>
+                          <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded shrink-0 ${p.status === 'Activo' ? 'bg-emerald-950 text-emerald-400' : 'bg-neutral-900 text-neutral-500'}`}>
                             {p.status}
                           </span>
                         </div>
-                        <p className="text-[10px] text-neutral-400 font-mono mt-1">
+                        <p className="text-[10px] text-neutral-400 font-mono mt-1 truncate">
                           Vigencia: {p.durationDays} días • ID: #{p.id}
                         </p>
                       </div>
 
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center justify-between sm:justify-end gap-4 border-t sm:border-t-0 border-[#222] pt-3 sm:pt-0 w-full sm:w-auto">
                         {isEditing ? (
                           <div className="flex items-center gap-1">
                             <input 
@@ -596,14 +596,14 @@ export default function AdminRole({
           {/* TAB 3: STAFF MANAGEMENT */}
           {activeTab === 'staff' && (
             <div className="space-y-4 animate-fade-in">
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3">
                 <div>
                   <h4 className="text-xs text-neutral-400 uppercase tracking-wider font-mono">Personal</h4>
                   <h3 className="text-sm font-bold text-white">Gestión de Staff y Permisos</h3>
                 </div>
                 <button 
                   onClick={() => setShowAddStaffForm(!showAddStaffForm)}
-                  className="bg-[#ccff00] hover:bg-[#d9ff26] text-black text-[10px] font-extrabold uppercase tracking-wide py-1.5 px-3 rounded-xl flex items-center gap-1 transition-all active:scale-95 cursor-pointer shadow-lg"
+                  className="bg-[#ccff00] hover:bg-[#d9ff26] text-black text-[10px] font-extrabold uppercase tracking-wide py-1.5 px-3 rounded-xl flex items-center gap-1 transition-all active:scale-95 cursor-pointer shadow-lg w-max shrink-0"
                 >
                   <UserPlus className="w-3.5 h-3.5" />
                   <span>+ Agregar Staff</span>
@@ -676,34 +676,34 @@ export default function AdminRole({
                 {staff.map(s => {
                   const isSuspended = s.status === 'Inactivo';
                   return (
-                    <div key={s.id} className="bg-[#111] border border-[#222] rounded-2xl p-3.5 flex justify-between items-center hover:border-neutral-800">
+                    <div key={s.id} className="bg-[#111] border border-[#222] rounded-2xl p-3.5 flex flex-col sm:flex-row gap-3 sm:items-center justify-between hover:border-neutral-800">
                       <div className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center border font-black text-sm ${
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center border font-black text-sm shrink-0 ${
                           isSuspended ? 'bg-red-950/20 text-red-500 border-red-900/30' : 'bg-white/5 text-[#ccff00] border-[#222]'
                         }`}>
                           {s.name.slice(0, 2).toUpperCase()}
                         </div>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h4 className={`text-xs font-bold ${isSuspended ? 'text-neutral-500 line-through' : 'text-white'}`}>{s.name}</h4>
-                            <span className="text-[8px] bg-white/5 border border-white/10 text-neutral-400 px-1.5 py-0.5 rounded font-mono font-bold tracking-wider uppercase">
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h4 className={`text-xs font-bold truncate ${isSuspended ? 'text-neutral-500 line-through' : 'text-white'}`}>{s.name}</h4>
+                            <span className="text-[8px] bg-white/5 border border-white/10 text-neutral-400 px-1.5 py-0.5 rounded font-mono font-bold tracking-wider uppercase shrink-0">
                               {s.role}
                             </span>
                           </div>
-                          <span className="text-[9px] text-neutral-500 font-mono block mt-0.5">
+                          <span className="text-[9px] text-neutral-500 font-mono block mt-0.5 truncate">
                             Usuario: @{s.username} • ID: #{s.id}
                           </span>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-between sm:justify-end gap-2 border-t sm:border-t-0 border-[#222] pt-2.5 sm:pt-0 w-full sm:w-auto">
                         {isSuspended ? (
-                          <span className="text-[10px] text-red-400 font-mono font-bold flex items-center gap-1 bg-red-950/20 border border-red-900/40 py-1 px-2 rounded-lg">
+                          <span className="text-[10px] text-red-400 font-mono font-bold flex items-center gap-1 bg-red-950/20 border border-red-900/40 py-1 px-2 rounded-lg shrink-0">
                             <ShieldX className="w-3 h-3 text-red-400" />
                             <span>SUSPENDIDO</span>
                           </span>
                         ) : (
-                          <span className="text-[10px] text-emerald-400 font-mono font-bold flex items-center gap-1 bg-emerald-950/20 border border-emerald-900/40 py-1 px-2 rounded-lg">
+                          <span className="text-[10px] text-emerald-400 font-mono font-bold flex items-center gap-1 bg-emerald-950/20 border border-emerald-900/40 py-1 px-2 rounded-lg shrink-0">
                             <UserCheck className="w-3 h-3 text-emerald-400" />
                             <span>ACTIVO</span>
                           </span>
@@ -711,7 +711,7 @@ export default function AdminRole({
 
                         <button
                           onClick={() => onToggleStaffStatus(s.id)}
-                          className={`text-[10px] font-black uppercase py-1.5 px-3 rounded-lg transition-all ${
+                          className={`text-[10px] font-black uppercase py-1.5 px-3 rounded-lg transition-all shrink-0 ${
                             isSuspended 
                               ? 'bg-[#ccff00] hover:bg-[#d9ff26] text-black cursor-pointer' 
                               : 'bg-red-950/40 hover:bg-red-950 text-red-400 border border-red-900/40 cursor-pointer'
@@ -730,14 +730,14 @@ export default function AdminRole({
           {/* TAB 4: MEMBER DIRECTORY & CLASSES */}
           {activeTab === 'socios' && (
             <div className="space-y-4 animate-fade-in">
-              <div className="flex justify-between items-center">
+              <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3">
                 <div>
                   <h4 className="text-xs text-neutral-400 uppercase tracking-wider font-mono">Directorio</h4>
                   <h3 className="text-sm font-bold text-white">Socios del Dragon Gym</h3>
                 </div>
                 <button 
                   onClick={() => setShowAddMember(!showAddMember)}
-                  className="bg-[#ccff00] hover:bg-[#d9ff26] text-black text-[10px] font-extrabold uppercase py-1.5 px-3 rounded-xl flex items-center gap-1 cursor-pointer"
+                  className="bg-[#ccff00] hover:bg-[#d9ff26] text-black text-[10px] font-extrabold uppercase py-1.5 px-3 rounded-xl flex items-center gap-1 cursor-pointer w-max shrink-0"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>+ Nuevo Socio</span>
