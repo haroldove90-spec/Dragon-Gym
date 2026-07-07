@@ -457,7 +457,7 @@ export default function ClientRole({
             className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'credencial' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <QrCode className="w-5 h-5" />
-            <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Acceso</span>
+            <span className="text-[8px] xs:text-[9px] font-mono uppercase font-bold tracking-tight xs:tracking-wider">Acceso</span>
           </button>
 
           <button 
@@ -466,7 +466,7 @@ export default function ClientRole({
             className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'membresia' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Calendar className="w-5 h-5" />
-            <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Membresía</span>
+            <span className="text-[8px] xs:text-[9px] font-mono uppercase font-bold tracking-tight xs:tracking-wider">Plan</span>
           </button>
 
           <button 
@@ -475,7 +475,7 @@ export default function ClientRole({
             className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'avisos' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Bell className="w-5 h-5" />
-            <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Anuncios</span>
+            <span className="text-[8px] xs:text-[9px] font-mono uppercase font-bold tracking-tight xs:tracking-wider">Avisos</span>
           </button>
 
           <button 
@@ -484,7 +484,7 @@ export default function ClientRole({
             className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'recibos' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Receipt className="w-5 h-5" />
-            <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Recibos</span>
+            <span className="text-[8px] xs:text-[9px] font-mono uppercase font-bold tracking-tight xs:tracking-wider">Recibos</span>
           </button>
 
           <button 
@@ -493,7 +493,7 @@ export default function ClientRole({
             className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'perfil' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <User className="w-5 h-5" />
-            <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Perfil</span>
+            <span className="text-[8px] xs:text-[9px] font-mono uppercase font-bold tracking-tight xs:tracking-wider">Perfil</span>
           </button>
 
         </div>

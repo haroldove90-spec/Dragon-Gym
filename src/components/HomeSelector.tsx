@@ -16,7 +16,7 @@ export default function HomeSelector({ onSelectRole, onInstallClick, isInstalled
       <div className="absolute bottom-[-150px] right-[-100px] w-[350px] h-[350px] rounded-full bg-[#7A724E]/5 blur-[150px] pointer-events-none"></div>
 
       {/* Responsive Content Wrapper */}
-      <div className="w-full max-w-3xl mx-auto flex-1 flex flex-col justify-between gap-6 z-10">
+      <div className="w-full max-w-3xl mx-auto flex-1 flex flex-col justify-start gap-6 z-10">
         
         {/* Top Brand Logo / Aesthetic */}
         <div className="flex flex-col items-center pt-2 gap-2">
@@ -36,26 +36,29 @@ export default function HomeSelector({ onSelectRole, onInstallClick, isInstalled
           <motion.div 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-gradient-to-r from-neutral-950 to-[#111] border border-[#7A724E]/25 rounded-[24px] p-4 flex items-center justify-between gap-4 shadow-[0_8px_30px_rgb(122,114,78,0.03)]"
+            className="flex flex-col gap-2.5"
           >
-            <div className="flex items-center gap-3">
+            {/* The Card */}
+            <div className="bg-gradient-to-r from-neutral-950 to-[#111] border border-[#7A724E]/25 rounded-[24px] p-4 flex items-center gap-3.5 shadow-[0_8px_30px_rgba(122,114,78,0.03)]">
               <div className="w-10 h-10 rounded-xl bg-[#7A724E]/10 flex items-center justify-center text-[#7A724E] shrink-0 border border-[#7A724E]/20">
                 <Smartphone className="w-5 h-5" />
               </div>
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
                   Aplicación Dragon Gym
-                  <span className="text-[7px] font-bold px-1.5 py-0.5 rounded-full bg-[#7A724E] text-black font-mono uppercase tracking-wider scale-90">PWA</span>
+                  <span className="text-[7px] font-bold px-1.5 py-0.5 rounded bg-[#7A724E] text-black font-mono uppercase tracking-wider">PWA</span>
                 </h4>
-                <p className="text-[10px] text-neutral-400 truncate mt-0.5">Instala la app en tu pantalla de inicio móvil</p>
+                <p className="text-[10px] text-neutral-400 mt-0.5">Instala la app en tu pantalla de inicio móvil para un acceso rápido.</p>
               </div>
             </div>
+            
+            {/* Install Button below the card */}
             <button 
               onClick={onInstallClick}
-              className="bg-[#7A724E] hover:bg-[#91875d] text-black text-[10px] font-extrabold uppercase tracking-wider py-2 px-3.5 rounded-xl transition-all active:scale-95 cursor-pointer shadow-[0_4px_12px_rgba(122,114,78,0.25)] shrink-0 flex items-center gap-1"
+              className="w-full bg-[#7A724E] hover:bg-[#91875d] text-black text-xs font-extrabold uppercase tracking-widest py-3 rounded-xl transition-all active:scale-95 cursor-pointer shadow-[0_4px_12px_rgba(122,114,78,0.25)] flex items-center justify-center gap-2"
             >
-              <Download className="w-3 h-3" />
-              <span>Instalar</span>
+              <Download className="w-4 h-4" />
+              <span>Instalar Aplicación</span>
             </button>
           </motion.div>
         )}
@@ -77,16 +80,16 @@ export default function HomeSelector({ onSelectRole, onInstallClick, isInstalled
             <div className="absolute inset-0 bg-[#7A724E]/5 mix-blend-color"></div>
 
             {/* Floating Badge */}
-            <div className="absolute top-4 right-4 bg-[#7A724E] text-black text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full shadow-[0_4px_12px_rgba(122,114,78,0.3)] font-mono">
+            <div className="absolute top-3 xs:top-4 right-3 xs:right-4 bg-[#7A724E] text-black text-[7px] xs:text-[8px] font-black uppercase tracking-widest px-2 xs:px-2.5 py-0.5 xs:py-1 rounded-full shadow-[0_4px_12px_rgba(122,114,78,0.3)] font-mono">
               SISTEMA INTEGRADO 2026
             </div>
 
             {/* Overlaid message */}
-            <div className="absolute bottom-4 left-4 right-4 bg-[#7A724E] text-black p-4 rounded-[20px] shadow-lg">
-              <h4 className="text-[12px] font-black uppercase tracking-wider text-black font-display">
+            <div className="absolute bottom-3 xs:bottom-4 left-3 xs:left-4 right-3 xs:right-4 bg-[#7A724E] text-black p-3 xs:p-4 rounded-[16px] xs:rounded-[20px] shadow-lg">
+              <h4 className="text-[10px] xs:text-[12px] font-black uppercase tracking-wider text-black font-display">
                 MÁXIMA EFICIENCIA OPERATIVA
               </h4>
-              <p className="text-[10px] md:text-xs text-black/80 mt-1 leading-snug font-serif italic">
+              <p className="text-[9px] xs:text-[10px] md:text-xs text-black/80 mt-1 leading-snug font-serif italic">
                 "Control financiero global, gestión ágil de caja en recepción, y acceso seguro por QR para todos nuestros atletas."
               </p>
             </div>
@@ -189,7 +192,7 @@ export default function HomeSelector({ onSelectRole, onInstallClick, isInstalled
         </div>
 
         {/* Footer Details */}
-        <div className="flex items-center justify-between text-[9px] text-[#444] uppercase font-mono pt-3 border-t border-[#222]">
+        <div className="flex items-center justify-between text-[9px] text-[#444] uppercase font-mono mt-auto pt-4 border-t border-[#222]">
           <span>Dragon Gym Core Infrastructure</span>
           <span>● ST_ONLINE</span>
         </div>
