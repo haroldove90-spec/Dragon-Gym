@@ -13,35 +13,33 @@ export default function MobileFrame({ children, activeRole, onNavigateHome }: Mo
       
       {/* Header quick navigation indicator (If not on Selector Home screen) */}
       {activeRole !== 'home' && (
-        <div className="h-14 bg-[#050505] px-6 flex items-center justify-between border-b border-[#111] shrink-0 z-30">
+        <div className="h-14 bg-[#050505] px-4 flex items-center justify-between border-b border-[#111] shrink-0 z-30 gap-2">
           <button 
             id={`btn-back-role-${activeRole}`}
             onClick={onNavigateHome}
-            className="flex items-center gap-1.5 text-xs font-semibold text-[#ccff00] hover:text-[#dfff54] transition-all py-1.5 px-3 rounded-lg bg-white/5 active:scale-95 cursor-pointer"
+            className="flex items-center gap-1 text-xs font-semibold text-[#ccff00] hover:text-[#dfff54] transition-all py-1.5 px-2.5 rounded-lg bg-white/5 active:scale-95 cursor-pointer shrink-0"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Cerrar Sesión</span>
+            <span className="hidden xs:inline">Cerrar Sesión</span>
+            <span className="xs:hidden">Salir</span>
           </button>
           
-          <div className="flex items-center gap-1.5 text-[10px] text-neutral-400 uppercase tracking-widest font-mono font-bold">
+          <div className="flex-1 flex items-center justify-center">
+            <img 
+              src="https://appdesignproyectos.com/dragongymlogo.png" 
+              alt="Dragon Gym" 
+              className="h-6 md:h-7 object-contain max-w-[120px] select-none"
+              referrerPolicy="no-referrer"
+            />
+          </div>
+          
+          <div className="flex items-center gap-1 text-[9px] text-neutral-400 uppercase tracking-wider font-mono font-bold shrink-0">
             {activeRole === 'client' ? (
-              <>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#ccff00] animate-pulse"></span>
-                <Dumbbell className="w-3.5 h-3.5 text-[#ccff00]" />
-                <span>Portal Atleta</span>
-              </>
+              <span className="bg-[#ccff00]/10 border border-[#ccff00]/30 text-[#ccff00] px-2 py-0.5 rounded-md text-[8px] font-bold">Atleta</span>
             ) : activeRole === 'staff' ? (
-              <>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#ccff00] animate-pulse"></span>
-                <ShieldAlert className="w-3.5 h-3.5 text-[#ccff00]" />
-                <span>Recepción Staff</span>
-              </>
+              <span className="bg-[#ccff00]/10 border border-[#ccff00]/30 text-[#ccff00] px-2 py-0.5 rounded-md text-[8px] font-bold">Staff</span>
             ) : (
-              <>
-                <span className="w-1.5 h-1.5 rounded-full bg-[#ccff00] animate-pulse"></span>
-                <ShieldAlert className="w-3.5 h-3.5 text-red-500" />
-                <span>SuperAdmin</span>
-              </>
+              <span className="bg-red-500/10 border border-red-500/30 text-red-400 px-2 py-0.5 rounded-md text-[8px] font-bold">Admin</span>
             )}
           </div>
         </div>

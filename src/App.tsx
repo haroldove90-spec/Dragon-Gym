@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Dumbbell, Users, Bell, ShieldAlert, Sparkles, Database, RefreshCw, 
-  Info, Calendar, ArrowRightLeft, Terminal, Heart, Trophy, Activity
+  Info, Calendar, ArrowRightLeft, Terminal, Heart, Trophy, Activity,
+  Download, Share2, MoreVertical, PlusSquare, X, Smartphone, CheckCircle
 } from 'lucide-react';
 import { Client, GymClass, Announcement, Booking, Plan, Staff, Payment, CheckIn } from './types';
 import { 
@@ -69,6 +70,59 @@ export default function App() {
 
   const [activeRole, setActiveRole] = useState<'home' | 'client' | 'staff' | 'admin'>('home');
   const [activeClientId, setActiveClientId] = useState<string>('1'); // Carlos by default
+
+  // --- PWA INSTALLATION FUNCTIONALITY ---
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstalled, setIsInstalled] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                          (window.navigator as any).standalone === true;
+      return isStandalone;
+    }
+    return false;
+  });
+  const [showInstallModal, setShowInstallModal] = useState<boolean>(false);
+  const [installTab, setInstallTab] = useState<'android' | 'ios'>('android');
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      addLog('Evento PWA "beforeinstallprompt" capturado. Listo para instalar.', 'system');
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    const handleAppInstalled = () => {
+      setIsInstalled(true);
+      setDeferredPrompt(null);
+      addLog('¡Felicidades! Dragon Gym se ha instalado correctamente en este dispositivo.', 'system');
+    };
+
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setIsInstalled(true);
+        addLog('Instalación de la PWA aceptada por el usuario.', 'client');
+      } else {
+        addLog('Instalación de la PWA rechazada.', 'client');
+      }
+      setDeferredPrompt(null);
+    } else {
+      setShowInstallModal(true);
+      addLog('Mostrando guía visual de instalación móvil PWA.', 'system');
+    }
+  };
 
   // Simulated live event logger for visual premium touch
   const [logs, setLogs] = useState<SystemLog[]>([
@@ -414,7 +468,11 @@ export default function App() {
       {/* Mobile Device Container Mockup - FULL SCREEN INTERFACE */}
       <MobileFrame activeRole={activeRole} onNavigateHome={handleNavigateHome}>
         {activeRole === 'home' && (
-          <HomeSelector onSelectRole={handleRoleSelection} />
+          <HomeSelector 
+            onSelectRole={handleRoleSelection} 
+            onInstallClick={handleInstallClick}
+            isInstalled={isInstalled}
+          />
         )}
 
         {activeRole === 'client' && (
@@ -470,6 +528,155 @@ export default function App() {
           />
         )}
       </MobileFrame>
+
+      {/* PWA Installation Walkthrough Modal */}
+      {showInstallModal && (
+        <div className="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="bg-[#0c0c0c] border border-[#ccff00]/30 rounded-[32px] w-full max-w-md p-6 relative shadow-[0_20px_50px_rgba(204,255,0,0.08)] overflow-hidden">
+            {/* Ambient light glow inside modal */}
+            <div className="absolute -top-12 -left-12 w-32 h-32 rounded-full bg-[#ccff00]/5 blur-3xl"></div>
+
+            {/* Close Button */}
+            <button 
+              onClick={() => setShowInstallModal(false)}
+              className="absolute top-4 right-4 text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10 p-2 rounded-full transition-all cursor-pointer border border-white/5"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            {/* Header / Brand info */}
+            <div className="text-center mt-2 flex flex-col items-center">
+              <img 
+                src="https://appdesignproyectos.com/dragongymicono.png" 
+                alt="Dragon Gym Icon" 
+                className="w-16 h-16 rounded-[20px] shadow-[0_0_20px_rgba(204,255,0,0.25)] border border-[#ccff00]/30 object-cover mb-3"
+                referrerPolicy="no-referrer"
+              />
+              <h3 className="text-lg font-black text-white tracking-wide uppercase font-sans">Instalar Dragon Gym</h3>
+              <p className="text-[11px] text-neutral-400 mt-1 text-center px-4">Lleva la experiencia del gym en tu bolsillo con accesos ultra rápidos</p>
+            </div>
+
+            {/* Tabs for platform instructions */}
+            <div className="grid grid-cols-2 bg-neutral-900/60 p-1 rounded-2xl my-5 border border-neutral-800/80">
+              <button 
+                onClick={() => setInstallTab('android')}
+                className={`py-2 px-3 rounded-xl text-xs font-bold tracking-wide transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                  installTab === 'android' 
+                    ? 'bg-[#ccff00] text-black shadow-md' 
+                    : 'text-neutral-400 hover:text-white'
+                }`}
+              >
+                <Smartphone className="w-3.5 h-3.5" />
+                <span>Android / Chrome</span>
+              </button>
+              <button 
+                onClick={() => setInstallTab('ios')}
+                className={`py-2 px-3 rounded-xl text-xs font-bold tracking-wide transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
+                  installTab === 'ios' 
+                    ? 'bg-[#ccff00] text-black shadow-md' 
+                    : 'text-neutral-400 hover:text-white'
+                }`}
+              >
+                <span className="font-sans"> iOS / Safari</span>
+              </button>
+            </div>
+
+            {/* Instructions */}
+            <div className="space-y-4 text-left px-1">
+              {installTab === 'android' ? (
+                <>
+                  <div className="flex gap-3.5 items-start">
+                    <div className="w-6 h-6 rounded-full bg-[#ccff00]/10 border border-[#ccff00]/30 text-[#ccff00] text-xs font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
+                      1
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-white">Abre el menú del navegador</p>
+                      <p className="text-[10px] text-neutral-400 mt-0.5 leading-relaxed">
+                        Toca los tres puntos <MoreVertical className="w-3 h-3 text-neutral-400 inline" /> situados en la esquina superior derecha de Google Chrome.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3.5 items-start">
+                    <div className="w-6 h-6 rounded-full bg-[#ccff00]/10 border border-[#ccff00]/30 text-[#ccff00] text-xs font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
+                      2
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-white">Selecciona "Instalar aplicación"</p>
+                      <p className="text-[10px] text-neutral-400 mt-0.5 leading-relaxed">
+                        Busca y presiona la opción <strong className="text-white">"Instalar aplicación"</strong> o <strong className="text-white">"Agregar a la pantalla principal"</strong>.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3.5 items-start">
+                    <div className="w-6 h-6 rounded-full bg-[#ccff00]/10 border border-[#ccff00]/30 text-[#ccff00] text-xs font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
+                      3
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-white">Confirma y disfruta</p>
+                      <p className="text-[10px] text-neutral-400 mt-0.5 leading-relaxed">
+                        Confirma en el cuadro de diálogo para añadir el acceso directo con icono oficial a tu celular.
+                      </p>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex gap-3.5 items-start">
+                    <div className="w-6 h-6 rounded-full bg-[#ccff00]/10 border border-[#ccff00]/30 text-[#ccff00] text-xs font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
+                      1
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-white">Presiona el botón de Compartir</p>
+                      <p className="text-[10px] text-neutral-400 mt-0.5 leading-relaxed">
+                        Toca el botón <strong className="text-[#ccff00] inline-flex items-center gap-0.5">Compartir <Share2 className="w-3 h-3 text-blue-400 inline" /></strong> en la barra de navegación de Safari.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3.5 items-start">
+                    <div className="w-6 h-6 rounded-full bg-[#ccff00]/10 border border-[#ccff00]/30 text-[#ccff00] text-xs font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
+                      2
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-white">Añadir a la pantalla de inicio</p>
+                      <p className="text-[10px] text-neutral-400 mt-0.5 leading-relaxed">
+                        Desplázate hacia abajo en el menú de opciones de Safari y selecciona <strong className="text-white">"Agregar a inicio"</strong> <PlusSquare className="w-3.5 h-3.5 inline text-white ml-0.5" />.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3.5 items-start">
+                    <div className="w-6 h-6 rounded-full bg-[#ccff00]/10 border border-[#ccff00]/30 text-[#ccff00] text-xs font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
+                      3
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-white">Confirma el guardado</p>
+                      <p className="text-[10px] text-neutral-400 mt-0.5 leading-relaxed">
+                        Toca <strong className="text-white">"Agregar"</strong> en la esquina superior derecha. El icono de Dragon Gym aparecerá de inmediato.
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Action buttons */}
+            <div className="mt-6 flex flex-col gap-2">
+              <button 
+                onClick={() => {
+                  setShowInstallModal(false);
+                  addLog('Guía de instalación móvil cerrada.', 'system');
+                }}
+                className="w-full bg-[#ccff00] hover:bg-[#d9ff26] text-black font-extrabold text-xs uppercase tracking-wider py-3 rounded-2xl transition-all cursor-pointer shadow-lg active:scale-98"
+              >
+                Entendido, ¡Listo!
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

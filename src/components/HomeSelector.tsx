@@ -1,12 +1,14 @@
 import React from 'react';
-import { ShieldAlert, Dumbbell, Crown, Laptop, User } from 'lucide-react';
+import { ShieldAlert, Dumbbell, Crown, Laptop, User, Download, Smartphone } from 'lucide-react';
 import { motion } from 'motion/react';
 
 interface HomeSelectorProps {
   onSelectRole: (role: 'client' | 'staff' | 'admin') => void;
+  onInstallClick: () => void;
+  isInstalled: boolean;
 }
 
-export default function HomeSelector({ onSelectRole }: HomeSelectorProps) {
+export default function HomeSelector({ onSelectRole, onInstallClick, isInstalled }: HomeSelectorProps) {
   return (
     <div className="flex flex-col min-h-screen bg-[#050505] px-6 py-8 relative overflow-y-auto overflow-x-hidden">
       {/* Background premium glows */}
@@ -17,19 +19,46 @@ export default function HomeSelector({ onSelectRole }: HomeSelectorProps) {
       <div className="w-full max-w-3xl mx-auto flex-1 flex flex-col justify-between gap-6 z-10">
         
         {/* Top Brand Logo / Aesthetic */}
-        <div className="flex flex-col items-center pt-2">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[#ccff00] flex items-center justify-center shadow-[0_0_15px_rgba(204,255,0,0.4)] animate-pulse">
-              <Dumbbell className="w-4 h-4 text-black" strokeWidth={2.5} />
-            </div>
-            <span className="text-xl font-black uppercase tracking-[0.15em] text-white">
-              DRAGON <span className="text-[#ccff00]">GYM</span>
-            </span>
-          </div>
-          <p className="text-[9px] text-neutral-400 tracking-[0.3em] uppercase font-mono mt-1.5 text-center">
+        <div className="flex flex-col items-center pt-2 gap-2">
+          <img 
+            src="https://appdesignproyectos.com/dragongymlogo.png" 
+            alt="Dragon Gym Logo" 
+            className="h-16 md:h-20 object-contain select-none"
+            referrerPolicy="no-referrer"
+          />
+          <p className="text-[9px] text-neutral-400 tracking-[0.3em] uppercase font-mono mt-1 text-center">
             ELITE PERFORMANCE, RECOVERY & ADMINISTRATION
           </p>
         </div>
+
+        {/* PWA Install Banner */}
+        {!isInstalled && (
+          <motion.div 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-gradient-to-r from-neutral-950 to-[#111] border border-[#ccff00]/25 rounded-[24px] p-4 flex items-center justify-between gap-4 shadow-[0_8px_30px_rgb(204,255,0,0.03)]"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-[#ccff00]/10 flex items-center justify-center text-[#ccff00] shrink-0 border border-[#ccff00]/20">
+                <Smartphone className="w-5 h-5" />
+              </div>
+              <div className="min-w-0">
+                <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
+                  Aplicación Dragon Gym
+                  <span className="text-[7px] font-bold px-1.5 py-0.5 rounded-full bg-[#ccff00] text-black font-mono uppercase tracking-wider scale-90">PWA</span>
+                </h4>
+                <p className="text-[10px] text-neutral-400 truncate mt-0.5">Instala la app en tu pantalla de inicio móvil</p>
+              </div>
+            </div>
+            <button 
+              onClick={onInstallClick}
+              className="bg-[#ccff00] hover:bg-[#d9ff26] text-black text-[10px] font-extrabold uppercase tracking-wider py-2 px-3.5 rounded-xl transition-all active:scale-95 cursor-pointer shadow-[0_4px_12px_rgba(204,255,0,0.25)] shrink-0 flex items-center gap-1"
+            >
+              <Download className="w-3 h-3" />
+              <span>Instalar</span>
+            </button>
+          </motion.div>
+        )}
 
         {/* Center Image Banner resembling the middle phone screen */}
         <div className="relative group">
