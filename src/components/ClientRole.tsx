@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { 
-  Dumbbell, Calendar, BarChart3, QrCode, Sparkles, Flame, CheckCircle2, 
-  Trash2, Plus, Play, Award, Scale, Bell, Heart, Trophy, UserCheck 
+  QrCode, Calendar, Bell, CreditCard, User, Dumbbell, Sparkles, 
+  CheckCircle2, AlertCircle, Smartphone, Sun, Users, Receipt, ShieldCheck
 } from 'lucide-react';
-import { Client, GymClass, Announcement, WorkoutRoutine } from '../types';
-import { WORKOUT_ROUTINES } from '../data/mockData';
+import { Client, GymClass, Announcement, Plan, Payment } from '../types';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface ClientRoleProps {
   clients: Client[];
   classes: GymClass[];
   announcements: Announcement[];
   bookings: { classId: string; date: string }[];
+  plans: Plan[];
+  payments: Payment[];
   onBookClass: (classId: string) => void;
   onCancelBooking: (classId: string) => void;
   onAddWeightRecord: (clientId: string, weight: number, date: string) => void;
@@ -19,13 +21,15 @@ interface ClientRoleProps {
   onChangeClient: (id: string) => void;
 }
 
-type TabType = 'dashboard' | 'classes' | 'progress' | 'pass';
+type ClientTab = 'credencial' | 'membresia' | 'avisos' | 'recibos' | 'perfil';
 
 export default function ClientRole({
   clients,
   classes,
   announcements,
   bookings,
+  plans,
+  payments,
   onBookClass,
   onCancelBooking,
   onAddWeightRecord,
@@ -33,620 +37,465 @@ export default function ClientRole({
   activeClientId,
   onChangeClient
 }: ClientRoleProps) {
-  const [activeTab, setActiveTab] = useState<TabType>('dashboard');
+  const [activeTab, setActiveTab] = useState<ClientTab>('credencial');
   
-  // Find currently logged-in client
+  // High Visibility screen simulation state
+  const [highVisibility, setHighVisibility] = useState(false);
+
+  // Find current logged-in client
   const client = clients.find(c => c.id === activeClientId) || clients[0];
-  
-  // Workout Tracker Modal State
-  const [activeWorkout, setActiveWorkout] = useState<WorkoutRoutine | null>(null);
-  const [completedExercises, setCompletedExercises] = useState<Record<string, boolean>>({});
-  const [showSuccessAnim, setShowSuccessAnim] = useState(false);
 
-  // Add new weight state
-  const [newWeight, setNewWeight] = useState('');
-  const [newWeightDate, setNewWeightDate] = useState('');
-  const [weightError, setWeightError] = useState('');
-
-  // Handle active workout click
-  const handleStartWorkout = (routine: WorkoutRoutine) => {
-    setActiveWorkout(routine);
-    setCompletedExercises({});
+  // Expiration helper logic
+  const getDaysRemaining = (expDateStr: string) => {
+    const exp = new Date(expDateStr);
+    const today = new Date('2026-07-06'); // Reference app date
+    const diffTime = exp.getTime() - today.getTime();
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   };
 
-  const toggleExercise = (exName: string) => {
-    setCompletedExercises(prev => ({
-      ...prev,
-      [exName]: !prev[exName]
-    }));
-  };
+  const daysRemaining = getDaysRemaining(client.expirationDate);
+  const isExpired = daysRemaining < 0 || client.status === 'Inactivo';
 
-  const handleFinishWorkout = () => {
-    if (!activeWorkout) return;
-    onCompleteWorkout(client.id);
-    setActiveWorkout(null);
-    setShowSuccessAnim(true);
-    setTimeout(() => {
-      setShowSuccessAnim(false);
-    }, 4000);
-  };
+  // Find current plan details
+  const currentPlan = plans.find(p => p.id === client.planId);
 
-  const handleWeightSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const weightVal = parseFloat(newWeight);
-    if (isNaN(weightVal) || weightVal <= 20 || weightVal > 300) {
-      setWeightError('Ingresa un peso válido (20 - 300 kg)');
-      return;
-    }
-    const dateVal = newWeightDate.trim() || new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
-    onAddWeightRecord(client.id, weightVal, dateVal);
-    setNewWeight('');
-    setNewWeightDate('');
-    setWeightError('');
-  };
+  // Filter receipts for this client
+  const clientPayments = payments.filter(p => p.clientId === client.id);
 
-  // Check if class is booked by client
-  const isClassBooked = (classId: string) => {
-    return bookings.some(b => b.classId === classId);
-  };
-
-  // Weight history coordinates calculation for custom SVG graph
-  const renderWeightGraph = () => {
-    const history = client.weightHistory || [];
-    if (history.length === 0) return null;
-
-    const weights = history.map(h => h.weight);
-    const maxWeight = Math.max(...weights) + 1;
-    const minWeight = Math.min(...weights) - 1;
-    const range = maxWeight - minWeight || 1;
-
-    const width = 310;
-    const height = 140;
-    const paddingLeft = 30;
-    const paddingBottom = 20;
-    const paddingTop = 10;
-    const paddingRight = 10;
-
-    const chartWidth = width - paddingLeft - paddingRight;
-    const chartHeight = height - paddingTop - paddingBottom;
-
-    // Map each data point to svg coordinate
-    const points = history.map((record, index) => {
-      const x = paddingLeft + (index / (history.length - 1 || 1)) * chartWidth;
-      const y = paddingTop + chartHeight - ((record.weight - minWeight) / range) * chartHeight;
-      return { x, y, ...record };
-    });
-
-    // Create Path SVG
-    let pathData = '';
-    let areaData = '';
-    
-    if (points.length > 0) {
-      pathData = `M ${points[0].x} ${points[0].y}`;
-      areaData = `M ${points[0].x} ${height - paddingBottom}`;
-      areaData += ` L ${points[0].x} ${points[0].y}`;
-      
-      for (let i = 1; i < points.length; i++) {
-        pathData += ` L ${points[i].x} ${points[i].y}`;
-        areaData += ` L ${points[i].x} ${points[i].y}`;
-      }
-      
-      areaData += ` L ${points[points.length - 1].x} ${height - paddingBottom} Z`;
-    }
-
-    return (
-      <div className="relative bg-[#111] rounded-[24px] border border-[#222] p-4 shadow-xl">
-        <h4 className="text-[10px] font-mono text-neutral-400 tracking-wider uppercase mb-3">HISTORIAL DE PESO (kg)</h4>
-        
-        <svg className="w-full h-[140px]" viewBox={`0 0 ${width} ${height}`}>
-          <defs>
-            <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#ccff00" stopOpacity="0.25"/>
-              <stop offset="100%" stopColor="#ccff00" stopOpacity="0.0"/>
-            </linearGradient>
-          </defs>
-          
-          {/* Grid lines */}
-          <line x1={paddingLeft} y1={paddingTop} x2={width - paddingRight} y2={paddingTop} stroke="#222" strokeWidth="1" strokeDasharray="3 3" />
-          <line x1={paddingLeft} y1={paddingTop + chartHeight / 2} x2={width - paddingRight} y2={paddingTop + chartHeight / 2} stroke="#222" strokeWidth="1" strokeDasharray="3 3" />
-          <line x1={paddingLeft} y1={height - paddingBottom} x2={width - paddingRight} y2={height - paddingBottom} stroke="#222" strokeWidth="1" />
-
-          {/* Area under the line */}
-          {points.length > 0 && (
-            <path d={areaData} fill="url(#chartGlow)" />
-          )}
-
-          {/* Main line */}
-          {points.length > 0 && (
-            <path d={pathData} fill="none" stroke="#ccff00" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-          )}
-
-          {/* Data points & Tooltip labels */}
-          {points.map((pt, i) => (
-            <g key={i}>
-              <circle cx={pt.x} cy={pt.y} r="4" fill="#000" stroke="#ccff00" strokeWidth="2.5" />
-              {/* Highlight weight number above point */}
-              <text 
-                x={pt.x} 
-                y={pt.y - 8} 
-                textAnchor="middle" 
-                fill="#FFF" 
-                fontSize="9" 
-                fontWeight="bold"
-                className="font-mono bg-black"
-              >
-                {pt.weight}
-              </text>
-              {/* Date label at bottom */}
-              <text 
-                x={pt.x} 
-                y={height - 4} 
-                textAnchor="middle" 
-                fill="#555" 
-                fontSize="8"
-                fontWeight="500"
-              >
-                {pt.date}
-              </text>
-            </g>
-          ))}
-          
-          {/* Y-Axis scale markers */}
-          <text x={paddingLeft - 6} y={paddingTop + 3} textAnchor="end" fill="#555" fontSize="8" fontWeight="bold">{maxWeight.toFixed(0)}</text>
-          <text x={paddingLeft - 6} y={paddingTop + chartHeight / 2 + 3} textAnchor="end" fill="#555" fontSize="8" fontWeight="bold">{((maxWeight + minWeight)/2).toFixed(0)}</text>
-          <text x={paddingLeft - 6} y={height - paddingBottom + 3} textAnchor="end" fill="#555" fontSize="8" fontWeight="bold">{minWeight.toFixed(0)}</text>
-        </svg>
-
-        <div className="flex justify-between items-center mt-3 pt-3 border-t border-[#222] text-[11px] text-neutral-400">
-          <span>Último peso: <strong className="text-white font-mono">{weights[weights.length - 1]} kg</strong></span>
-          <span>Diferencia: <strong className={weights[weights.length - 1] < weights[0] ? "text-green-400 font-mono" : "text-[#ccff00] font-mono"}>
-            {(weights[weights.length - 1] - weights[0]).toFixed(1)} kg
-          </strong></span>
-        </div>
-      </div>
-    );
-  };
+  // Simulated contracted plans history
+  const contractedHistory = [
+    { name: currentPlan?.name || 'Membresía Activa', date: client.joinDate, price: currentPlan?.price || 50, status: 'Vigente' },
+    ...(client.id === '1' ? [
+      { name: 'Pase del Día', date: '2025-11-10', price: 10, status: 'Vencido' },
+      { name: 'Mensual', date: '2025-12-01', price: 50, status: 'Vencido' }
+    ] : [])
+  ];
 
   return (
-    <div className="flex flex-col h-full bg-[#050505] relative overflow-hidden">
+    <div className={`flex flex-col h-full text-gray-100 relative overflow-hidden transition-all duration-500 ${
+      highVisibility ? 'bg-[#111]' : 'bg-[#050505]'
+    }`}>
       
-      {/* Simulation Banner Switcher */}
-      <div className="bg-[#111] px-4 py-1.5 flex items-center justify-between border-b border-[#222] z-20">
-        <label className="text-[9px] font-bold text-neutral-400 uppercase tracking-widest font-mono flex items-center gap-1">
-          <UserCheck className="w-3 h-3 text-[#ccff00]" />
-          <span>Ver como:</span>
-        </label>
-        <select 
-          id="client-profile-switcher"
-          value={activeClientId} 
-          onChange={(e) => onChangeClient(e.target.value)}
-          className="bg-black text-[11px] text-[#ccff00] border border-[#222] rounded-md px-1.5 py-0.5 outline-none font-semibold focus:border-[#ccff00] cursor-pointer"
-        >
-          {clients.map(c => (
-            <option key={c.id} value={c.id}>
-              {c.name} ({c.plan})
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Main Tab Content */}
-      <div className="flex-1 overflow-y-auto scrollbar-none pb-20">
-        <div className="max-w-3xl mx-auto w-full px-6 py-4">
-        
-        {/* SUCCESS CELEBRATION FLOATING POPUP */}
-        {showSuccessAnim && (
-          <div className="absolute inset-x-4 top-16 bg-[#ccff00] text-black p-4 rounded-2xl shadow-[0_10px_30px_rgba(204,255,0,0.4)] z-50 animate-bounce flex items-center gap-3 border border-[#b8e600]">
-            <div className="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center text-xl">🎉</div>
-            <div>
-              <h4 className="text-xs font-black uppercase tracking-wider font-display">¡Rutina Completada!</h4>
-              <p className="text-[10px] text-black/80 font-serif italic">Se sumó a tus estadísticas de entrenamiento diario. ¡Sigue así!</p>
-            </div>
-          </div>
-        )}
-
-        {/* TAB 1: DASHBOARD */}
-        {activeTab === 'dashboard' && (
-          <div className="flex flex-col gap-4 animate-fade-in">
-            {/* Header / Avatar info based on the yellow dashboard screen */}
-            <div className="flex items-center justify-between mt-1">
-              <div>
-                <span className="text-[10px] text-neutral-400 uppercase tracking-[0.2em] font-mono">Panel del Socio</span>
-                <h2 className="text-lg font-black text-white tracking-tight leading-tight flex items-center gap-1.5">
-                  ¡Hola, {client.name.split(' ')[0]}! <span className="animate-pulse">⚡</span>
-                </h2>
-                <p className="text-[11px] text-[#ccff00]/80 font-serif italic">"Supera tus límites hoy"</p>
-              </div>
-              <div className="relative">
-                <img 
-                  src={client.avatar} 
-                  alt={client.name} 
-                  className="w-11 h-11 rounded-full object-cover border-2 border-[#ccff00] shadow-[0_0_10px_rgba(204,255,0,0.3)]"
-                  referrerPolicy="no-referrer"
-                />
-                <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[#050505]"></span>
-              </div>
-            </div>
-
-            {/* Daily stats - Grid mimicking the design */}
-            <div className="grid grid-cols-3 gap-2">
-              <div className="bg-[#111] border border-[#222] rounded-[20px] p-3 flex flex-col items-center text-center">
-                <Flame className="w-5 h-5 text-[#ccff00] mb-1" />
-                <span className="text-[9px] text-neutral-400 font-mono uppercase">Racha</span>
-                <span className="text-sm font-black text-white mt-0.5">{client.streakDays} <span className="text-[10px] text-[#ccff00]">días</span></span>
-              </div>
-              <div className="bg-[#111] border border-[#222] rounded-[20px] p-3 flex flex-col items-center text-center">
-                <Dumbbell className="w-5 h-5 text-[#ccff00] mb-1" />
-                <span className="text-[9px] text-neutral-400 font-mono uppercase">Sesiones</span>
-                <span className="text-sm font-black text-white mt-0.5">{client.completedWorkouts}</span>
-              </div>
-              <div className="bg-[#111] border border-[#222] rounded-[20px] p-3 flex flex-col items-center text-center">
-                <Scale className="w-5 h-5 text-[#ccff00] mb-1" />
-                <span className="text-[9px] text-neutral-400 font-mono uppercase">Peso</span>
-                <span className="text-sm font-black text-white mt-0.5">
-                  {client.weightHistory?.[client.weightHistory.length - 1]?.weight || '--'} <span className="text-[9px] font-normal text-neutral-400">kg</span>
-                </span>
-              </div>
-            </div>
-
-            {/* Important Broadcast from Admin, if any exists */}
-            {announcements.length > 0 && (
-              <div className="bg-[#ccff00]/5 border border-[#ccff00]/20 rounded-[20px] p-3.5 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-[#ccff00]/5 rounded-full blur-xl pointer-events-none"></div>
-                <div className="flex items-start gap-2.5">
-                  <div className="bg-[#ccff00] text-black p-1.5 rounded-lg shrink-0 mt-0.5">
-                    <Bell className="w-3.5 h-3.5 animate-ring" />
-                  </div>
-                  <div>
-                    <span className="text-[8px] font-mono text-[#ccff00] uppercase tracking-widest font-bold">AVISO DEL CLUB</span>
-                    <h4 className="text-xs font-bold text-white mt-0.5 leading-snug">{announcements[0].title}</h4>
-                    <p className="text-[10.5px] text-neutral-300 mt-1 leading-normal font-serif italic">"{announcements[0].content}"</p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Workout of the day block */}
-            <div className="bg-[#ccff00] text-black rounded-[28px] p-4 shadow-xl">
-              <div className="flex justify-between items-center mb-2">
-                <div className="bg-black/10 text-black text-[9px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full font-mono">
-                  NIVEL: {WORKOUT_ROUTINES[0].level}
-                </div>
-                <div className="flex items-center gap-1 text-[10px] font-bold font-mono">
-                  <Flame className="w-3.5 h-3.5 text-black" />
-                  <span>{WORKOUT_ROUTINES[0].durationMin} MIN</span>
-                </div>
-              </div>
-
-              <span className="text-[10px] font-mono tracking-wider opacity-60 uppercase block">RUTINA SUGERIDA DE HOY</span>
-              <h3 className="text-base font-black uppercase tracking-wide mt-0.5 leading-tight font-display">{WORKOUT_ROUTINES[0].title}</h3>
-              
-              <div className="mt-3 space-y-1.5 bg-black/5 p-2 rounded-xl">
-                {WORKOUT_ROUTINES[0].exercises.slice(0, 3).map((ex, idx) => (
-                  <div key={idx} className="flex justify-between items-center text-[11px] font-medium border-b border-black/5 pb-1 last:border-0 last:pb-0">
-                    <span>{ex.name}</span>
-                    <span className="font-mono text-black/70">{ex.sets}x{ex.reps}</span>
-                  </div>
-                ))}
-                {WORKOUT_ROUTINES[0].exercises.length > 3 && (
-                  <p className="text-[9px] text-black/50 text-right font-mono">+ {WORKOUT_ROUTINES[0].exercises.length - 3} más...</p>
-                )}
-              </div>
-
-              <button 
-                id="btn-start-workout"
-                onClick={() => handleStartWorkout(WORKOUT_ROUTINES[0])}
-                className="w-full bg-black hover:bg-neutral-900 text-[#ccff00] text-xs font-bold uppercase tracking-widest py-3 rounded-2xl shadow-lg mt-4 flex items-center justify-center gap-1.5 active:scale-95 transition-all cursor-pointer"
-              >
-                <Play className="w-4 h-4 fill-current" />
-                <span>Iniciar Entrenamiento</span>
-              </button>
-            </div>
-
-            {/* Quick Tips */}
-            <div className="bg-[#111] border border-[#222] rounded-[24px] p-4 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#ccff00]/10 flex items-center justify-center text-[#ccff00] shrink-0">
-                <Award className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-xs font-bold text-white">Objetivo Semanal</h4>
-                <p className="text-[10.5px] text-neutral-400 leading-relaxed mt-0.5 font-serif italic">Completa 3 entrenamientos esta semana para mantener tu racha activa.</p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* TAB 2: CLASSES BOOKING */}
-        {activeTab === 'classes' && (
-          <div className="flex flex-col gap-4 animate-fade-in">
-            <div className="mb-1">
-              <span className="text-[10px] text-neutral-400 uppercase tracking-[0.2em] font-mono">Clases Dirigidas</span>
-              <h3 className="text-lg font-black text-white tracking-tight">Horarios e Inscripciones</h3>
-              <p className="text-xs text-neutral-400 font-serif italic">Reserva tu plaza en tiempo real para asegurar tu espacio.</p>
-            </div>
-
-            <div className="space-y-3">
-              {classes.map(cl => {
-                const booked = isClassBooked(cl.id);
-                const full = cl.bookedCount >= cl.capacity;
-                return (
-                  <div key={cl.id} className="bg-[#111] border border-[#222] rounded-[24px] p-4 flex justify-between items-center hover:border-neutral-800 transition-all">
-                    <div className="space-y-1 pr-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] bg-[#ccff00]/10 text-[#ccff00] px-2 py-0.5 rounded-full font-mono uppercase font-bold">
-                          {cl.day}
-                        </span>
-                        <span className="text-[10px] text-neutral-400 font-mono">
-                          {cl.time}
-                        </span>
-                      </div>
-                      
-                      <h4 className="text-sm font-bold text-white tracking-wide">{cl.name}</h4>
-                      <p className="text-[11px] text-neutral-400">Instructor: <span className="text-white/80">{cl.instructor}</span></p>
-                      
-                      {/* Booking Counter Bar */}
-                      <div className="pt-2 flex items-center gap-1.5">
-                        <div className="w-24 h-1.5 bg-black rounded-full overflow-hidden">
-                          <div 
-                            className={`h-full rounded-full ${booked ? 'bg-green-500' : 'bg-[#ccff00]'}`}
-                            style={{ width: `${(cl.bookedCount / cl.capacity) * 100}%` }}
-                          ></div>
-                        </div>
-                        <span className="text-[9px] font-mono text-neutral-500">
-                          {cl.bookedCount}/{cl.capacity} Plazas
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="shrink-0">
-                      {booked ? (
-                        <button
-                          id={`btn-cancel-class-${cl.id}`}
-                          onClick={() => onCancelBooking(cl.id)}
-                          className="px-3 py-2 rounded-xl bg-green-500/10 hover:bg-green-500/20 text-green-400 border border-green-500/30 text-[10px] font-extrabold uppercase tracking-wider transition-all active:scale-95 cursor-pointer"
-                        >
-                          Reservado ✓
-                        </button>
-                      ) : (
-                        <button
-                          id={`btn-book-class-${cl.id}`}
-                          onClick={() => onBookClass(cl.id)}
-                          disabled={full}
-                          className={`px-3 py-2 rounded-xl text-[10px] font-extrabold uppercase tracking-wider transition-all active:scale-95 cursor-pointer ${
-                            full 
-                              ? 'bg-[#222] text-neutral-600 border border-neutral-800 cursor-not-allowed' 
-                              : 'bg-[#ccff00] text-black hover:bg-[#d9ff26] font-extrabold'
-                          }`}
-                        >
-                          {full ? 'Lleno' : 'Reservar'}
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* TAB 3: PROGRESS */}
-        {activeTab === 'progress' && (
-          <div className="flex flex-col gap-4 animate-fade-in">
-            <div className="mb-1">
-              <span className="text-[10px] text-neutral-400 uppercase tracking-[0.2em] font-mono">Control Corporal</span>
-              <h3 className="text-lg font-black text-white tracking-tight">Sigue Tu Evolución</h3>
-              <p className="text-xs text-neutral-400 font-serif italic">Monitorea tus marcas de peso y mantente enfocado en tu meta.</p>
-            </div>
-
-            {/* Custom SVG Line Chart */}
-            {renderWeightGraph()}
-
-            {/* Form to log weight */}
-            <div className="bg-[#111] border border-[#222] rounded-[24px] p-4">
-              <h4 className="text-xs font-mono text-[#ccff00] uppercase tracking-wider mb-3">REGISTRAR NUEVA MARCA</h4>
-              
-              <form onSubmit={handleWeightSubmit} className="space-y-3">
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="text-[9px] text-neutral-400 uppercase font-mono block mb-1">Peso (kg)</label>
-                    <input 
-                      id="input-weight-val"
-                      type="number" 
-                      step="0.1" 
-                      placeholder="e.g. 78.5"
-                      value={newWeight}
-                      onChange={(e) => setNewWeight(e.target.value)}
-                      className="w-full bg-black text-white border border-[#222] rounded-xl px-3 py-2 text-xs outline-none focus:border-[#ccff00] font-mono"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[9px] text-neutral-400 uppercase font-mono block mb-1">Fecha (Opcional)</label>
-                    <input 
-                      id="input-weight-date"
-                      type="text" 
-                      placeholder="e.g. 15 Jul"
-                      value={newWeightDate}
-                      onChange={(e) => setNewWeightDate(e.target.value)}
-                      className="w-full bg-black text-white border border-[#222] rounded-xl px-3 py-2 text-xs outline-none focus:border-[#ccff00]"
-                    />
-                  </div>
-                </div>
-
-                {weightError && (
-                  <p className="text-red-400 text-[10px] font-mono">{weightError}</p>
-                )}
-
-                <button 
-                  id="btn-save-weight"
-                  type="submit"
-                  className="w-full bg-[#ccff00] hover:bg-[#d9ff26] text-black font-extrabold text-xs uppercase tracking-wider py-2.5 rounded-xl transition-all active:scale-95 flex items-center justify-center gap-1 cursor-pointer shadow-lg"
-                >
-                  <Plus className="w-3.5 h-3.5" strokeWidth={2.5} />
-                  <span>Guardar Registro</span>
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
-
-        {/* TAB 4: PASS */}
-        {activeTab === 'pass' && (
-          <div className="flex flex-col gap-4 animate-fade-in text-center items-center">
-            <div className="mb-1 w-full text-left">
-              <span className="text-[10px] text-neutral-400 uppercase tracking-[0.2em] font-mono">Acceso sin llave</span>
-              <h3 className="text-lg font-black text-white tracking-tight">Pase Virtual</h3>
-              <p className="text-xs text-neutral-400 font-serif italic">Muestra este código en recepción para registrar tu ingreso.</p>
-            </div>
-
-            {/* Premium Gold Pass Card (Visual inspired by the gold aesthetics in the image) */}
-            <div className="w-full max-w-[280px] bg-gradient-to-br from-[#ccff00] via-[#d9ff26] to-[#ccff00] rounded-[32px] p-6 shadow-2xl relative overflow-hidden text-black text-left border border-white/10">
-              {/* Subtle background graphics */}
-              <div className="absolute right-[-40px] bottom-[-40px] w-40 h-40 bg-black/[0.04] rounded-full border-[10px] border-black"></div>
-              <div className="absolute left-[-20px] top-[-20px] w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
-
-              <div className="flex justify-between items-start mb-6">
-                <div>
-                  <span className="text-[9px] font-mono font-black tracking-widest bg-black/15 px-2 py-0.5 rounded-md uppercase">MEMBER PASS</span>
-                  <h4 className="text-base font-black uppercase tracking-tight mt-1 font-display">IRON SQUAD</h4>
-                </div>
-                <div className="w-9 h-9 rounded-xl bg-black flex items-center justify-center text-[#ccff00] shadow-lg">
-                  <Dumbbell className="w-5 h-5" />
-                </div>
-              </div>
-
-              {/* QR Code Container */}
-              <div className="bg-white p-4 rounded-[20px] shadow-lg flex flex-col items-center justify-center mx-auto my-4 w-[140px] h-[140px]">
-                <QrCode className="w-28 h-28 text-black" strokeWidth={1.5} />
-              </div>
-
-              <div className="space-y-2 mt-4 pt-4 border-t border-black/10">
-                <div className="flex justify-between text-xs">
-                  <span className="opacity-60 font-medium">Socio:</span>
-                  <span className="font-extrabold">{client.name}</span>
-                </div>
-                <div className="flex justify-between text-xs">
-                  <span className="opacity-60 font-medium">Plan:</span>
-                  <span className="font-mono font-bold">{client.plan}</span>
-                </div>
-                <div className="flex justify-between text-xs">
-                  <span className="opacity-60 font-medium">Estado:</span>
-                  <span className="text-[10px] bg-black text-[#ccff00] px-2 py-0.5 rounded-full font-bold">
-                    {client.status.toUpperCase()}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="text-[11px] text-neutral-400 max-w-[260px] leading-relaxed mt-2 font-mono uppercase">
-              <span>* Escanea para registrar asistencia automática</span>
-            </div>
-          </div>
-        )}
-
-        </div>
-      </div>
-
-      {/* WORKOUT ACTIVE MODE FULLSCREEN OVERLAY */}
-      {activeWorkout && (
-        <div className="absolute inset-0 bg-[#050505] z-50 flex flex-col p-4 animate-fade-in">
-          <div className="flex justify-between items-center border-b border-[#222] pb-3 mb-3">
-            <div>
-              <span className="text-[9px] font-mono text-[#ccff00] uppercase tracking-widest font-bold">ENTRENAMIENTO ACTIVO</span>
-              <h3 className="text-sm font-bold text-white font-display">{activeWorkout.title}</h3>
-            </div>
-            <button 
-              id="btn-cancel-workout-modal"
-              onClick={() => setActiveWorkout(null)}
-              className="text-white/40 hover:text-white text-xs bg-white/5 py-1 px-2.5 rounded-lg border border-white/5 cursor-pointer"
-            >
-              Salir
-            </button>
-          </div>
-
-          <p className="text-[11px] text-neutral-400 mb-3 leading-snug font-serif italic">
-            "Marca cada ejercicio completado. Tu progreso se guardará cuando termines toda la lista."
-          </p>
-
-          {/* Exercise Checklist */}
-          <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 scrollbar-thin">
-            {activeWorkout.exercises.map((ex, index) => {
-              const isDone = !!completedExercises[ex.name];
-              return (
-                <div 
-                  key={index} 
-                  onClick={() => toggleExercise(ex.name)}
-                  className={`border rounded-2xl p-3 flex justify-between items-center transition-all cursor-pointer ${
-                    isDone 
-                      ? 'bg-green-500/10 border-green-500/30 text-white/60' 
-                      : 'bg-[#111] border-[#222] text-white hover:border-neutral-800'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-5 h-5 rounded-full border border-white/20 flex items-center justify-center shrink-0">
-                      {isDone && <CheckCircle2 className="w-5 h-5 text-green-400 bg-black rounded-full" />}
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold">{ex.name}</h4>
-                      <p className="text-[10px] text-neutral-400 font-mono mt-0.5">Series: {ex.sets} | Carga: {ex.weight || 'N/A'}</p>
-                    </div>
-                  </div>
-                  <span className="text-xs font-mono font-bold bg-black px-2 py-1 rounded-lg text-[#ccff00]">
-                    {ex.reps} Reps
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Complete button */}
-          <button
-            id="btn-submit-workout-completed"
-            onClick={handleFinishWorkout}
-            className="w-full bg-[#ccff00] hover:bg-[#d9ff26] text-black font-black text-xs uppercase tracking-widest py-3.5 rounded-2xl shadow-xl mt-4 active:scale-95 transition-all cursor-pointer"
+      {/* High Visibility Simulation Screen Overlay */}
+      <AnimatePresence>
+        {highVisibility && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setHighVisibility(false)}
+            className="absolute inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-6 text-center"
           >
-            Terminar y Registrar Rutina
-          </button>
-        </div>
-      )}
+            <div className="absolute top-4 right-4 text-xs font-mono text-neutral-500">Toca en cualquier parte para cerrar</div>
+            
+            <div className="bg-white text-black p-8 rounded-[36px] shadow-[0_0_50px_rgba(255,255,255,0.4)] flex flex-col items-center max-w-xs w-full animate-scale-up">
+              <span className="text-[9px] font-mono font-black tracking-widest text-[#555] uppercase mb-4">
+                BRILLO AL MÁXIMO ACTIVADO
+              </span>
+              
+              {/* High visibility glowing QR */}
+              <div className="bg-white p-3 rounded-2xl border-4 border-black mb-4">
+                <div className="w-48 h-48 bg-neutral-100 flex items-center justify-center relative">
+                  {/* Mock high contrast QR */}
+                  <div className="absolute inset-0 p-4 flex flex-wrap content-between justify-between">
+                    {[...Array(36)].map((_, i) => (
+                      <div 
+                        key={i} 
+                        className={`w-5 h-5 ${
+                          (i % 2 === 0 && i % 3 === 0) || i < 6 || i % 7 === 0 || i > 30 ? 'bg-black' : 'bg-transparent'
+                        }`}
+                      ></div>
+                    ))}
+                  </div>
+                  <div className="bg-white p-1 rounded z-10">
+                    <Dumbbell className="w-6 h-6 text-black" strokeWidth={2.5} />
+                  </div>
+                </div>
+              </div>
 
-      {/* Bottom Navigation Tabs - Perfectly Styled inside the mobile frame */}
+              <h3 className="text-sm font-black uppercase tracking-tight text-black">{client.name}</h3>
+              <p className="text-[10px] font-mono text-neutral-500 mt-1">Socio ID: #{client.id}</p>
+              
+              <div className="mt-5 bg-[#ccff00] text-black text-[10px] font-black uppercase py-1.5 px-4 rounded-full tracking-wider">
+                LISTO PARA ESCANEAR
+              </div>
+            </div>
+            
+            <button 
+              onClick={() => setHighVisibility(false)}
+              className="mt-6 text-xs text-[#ccff00] border border-[#ccff00]/40 bg-[#ccff00]/5 py-2 px-5 rounded-full hover:bg-[#ccff00] hover:text-black transition-all cursor-pointer"
+            >
+              Cerrar Modo Escáner
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Top Profile Selection Dropdown for Testing / Demo */}
+      <div className="bg-[#111] px-4 py-2 border-b border-[#222] shrink-0 z-10">
+        <div className="flex items-center justify-between">
+          <span className="text-[9px] font-mono text-neutral-500 uppercase tracking-wider">Demo: Cuenta de Socio</span>
+          <div className="flex items-center gap-1.5">
+            <span className="text-[9px] text-[#ccff00] font-mono font-bold">Cambiar Socio:</span>
+            <select
+              value={activeClientId}
+              onChange={(e) => onChangeClient(e.target.value)}
+              className="bg-black border border-[#333] text-[10px] text-white py-0.5 px-1.5 rounded outline-none font-mono"
+            >
+              {clients.map(c => (
+                <option key={c.id} value={c.id}>{c.name.split(' ')[0]} ({c.status})</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Dynamic Header */}
+      <div className="px-6 pt-4 pb-3 shrink-0">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <img src={client.avatar} alt="Avatar" className="w-12 h-12 rounded-full object-cover border border-[#222]" />
+            <div>
+              <span className="text-[9px] font-mono text-[#ccff00] uppercase tracking-widest font-bold">Bienvenido de vuelta</span>
+              <h3 className="text-sm font-black text-white tracking-tight">{client.name}</h3>
+            </div>
+          </div>
+          <div className={`w-3 h-3 rounded-full ${isExpired ? 'bg-red-500 animate-pulse' : 'bg-[#ccff00] animate-pulse'}`}></div>
+        </div>
+      </div>
+
+      {/* Tab Contents Area */}
+      <div className="flex-1 overflow-y-auto scrollbar-none pb-20">
+        <div className="px-6 py-2 space-y-5">
+
+          {/* TAB 1: CRENDENCIAL (QR CODE) */}
+          {activeTab === 'credencial' && (
+            <div className="space-y-4 text-center animate-fade-in py-2">
+              
+              {/* QR Holder Card */}
+              <div className="bg-[#111] border border-[#222] rounded-[36px] p-6 max-w-sm mx-auto shadow-xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-[120px] h-[120px] rounded-bl-full bg-[#ccff00]/5 pointer-events-none"></div>
+                
+                <span className="text-[9px] font-mono text-neutral-400 uppercase tracking-widest block mb-4">
+                  Credencial Digital de Acceso
+                </span>
+
+                {/* Main QR Code container with micro-interactions */}
+                <div 
+                  onClick={() => setHighVisibility(true)}
+                  className="bg-neutral-900 border border-neutral-800 p-6 rounded-3xl inline-block relative cursor-pointer group hover:border-[#ccff00]/40 transition-all duration-300"
+                  title="Tocar para ampliar brillo"
+                >
+                  <div className="bg-white p-3.5 rounded-2xl inline-block shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                    <div className="w-36 h-36 relative flex items-center justify-center bg-white">
+                      {/* Generar QR con ID */}
+                      <div className="absolute inset-0 p-2.5 flex flex-wrap content-between justify-between">
+                        {[...Array(25)].map((_, i) => (
+                          <div 
+                            key={i} 
+                            className={`w-4 h-4 ${
+                              (i % 2 === 0 && i % 3 === 0) || i < 4 || i % 5 === 0 || i > 20 ? 'bg-black' : 'bg-transparent'
+                            }`}
+                          ></div>
+                        ))}
+                      </div>
+                      <div className="bg-white p-1 rounded z-10 shadow border border-neutral-100">
+                        <Dumbbell className="w-5 h-5 text-black" strokeWidth={2.5} />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Absolute click indicator button */}
+                  <div className="absolute bottom-2 inset-x-0 mx-auto w-max bg-black/80 text-[8px] font-mono text-[#ccff00] uppercase tracking-widest py-1 px-3 rounded-full flex items-center gap-1.5 opacity-85 group-hover:opacity-100 transition-opacity">
+                    <Sun className="w-2.5 h-2.5 animate-spin" />
+                    <span>Tocar para Brillo Escáner</span>
+                  </div>
+                </div>
+
+                <div className="mt-5 space-y-1">
+                  <span className="text-[10px] text-neutral-400 font-mono">SOCIO ID: #{client.id}</span>
+                  <h4 className="text-sm font-bold text-white tracking-wide uppercase">Socio Activo Dragon Gym</h4>
+                </div>
+              </div>
+
+              {/* Status Alert Summary */}
+              <div className={`p-4 rounded-2xl max-w-sm mx-auto flex items-center gap-3 border ${
+                isExpired 
+                  ? 'bg-red-950/20 border-red-900/40 text-red-400' 
+                  : 'bg-emerald-950/20 border-emerald-900/40 text-emerald-400'
+              }`}>
+                {isExpired ? (
+                  <>
+                    <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />
+                    <div className="text-left text-xs">
+                      <strong className="text-white block uppercase">Acceso Denegado por Vencimiento</strong>
+                      Por favor, acude a la recepción para realizar el pago de tu membresía.
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                    <div className="text-left text-xs">
+                      <strong className="text-white block uppercase">Membresía Vigente y Activa</strong>
+                      Aproxima tu QR al lector de la recepción al ingresar para registrar tu check-in.
+                    </div>
+                  </>
+                )}
+              </div>
+
+            </div>
+          )}
+
+          {/* TAB 2: MEMBERSHIP & ESTATUS */}
+          {activeTab === 'membresia' && (
+            <div className="space-y-4 animate-fade-in">
+              
+              {/* Membership Main Panel */}
+              <div className="bg-[#111] border border-[#222] rounded-[28px] p-5 shadow-lg relative overflow-hidden">
+                <span className="text-[8px] font-mono text-[#ccff00] uppercase tracking-widest block mb-2 font-bold">ESTADO DE MEMBRESÍA</span>
+                
+                <h3 className="text-lg font-black text-white">{currentPlan?.name || 'Membresía Plan'}</h3>
+                
+                <div className="mt-4 flex items-center gap-5">
+                  {/* Visual progress wheel */}
+                  <div className="relative w-20 h-20 flex items-center justify-center shrink-0">
+                    <svg className="absolute w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                      <path
+                        className="text-neutral-800"
+                        strokeWidth="3"
+                        stroke="currentColor"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                      <path
+                        className={isExpired ? 'text-red-500' : 'text-[#ccff00]'}
+                        strokeDasharray={`${Math.max(0, Math.min(100, (daysRemaining / Math.max(1, currentPlan?.durationDays || 30)) * 100))}, 100`}
+                        strokeWidth="3"
+                        strokeLinecap="round"
+                        stroke="currentColor"
+                        fill="none"
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      />
+                    </svg>
+                    <div className="text-center z-10">
+                      <span className="text-lg font-black text-white font-mono leading-none">
+                        {Math.max(0, daysRemaining)}
+                      </span>
+                      <span className="text-[7px] text-neutral-400 font-mono uppercase block">Días</span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5 min-w-0">
+                    <p className="text-xs text-neutral-300">
+                      Tu plan actual tiene <strong className="text-white font-bold">{daysRemaining > 0 ? `${daysRemaining} días` : '0 días'}</strong> de validez restantes.
+                    </p>
+                    <div className="text-[11px] text-neutral-400 font-mono">
+                      Próximo Pago: <span className={isExpired ? 'text-red-400 font-bold' : 'text-[#ccff00] font-bold'}>{client.expirationDate}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Contraction History */}
+              <div className="bg-[#111] border border-[#222] rounded-[28px] p-5 shadow-lg">
+                <h4 className="text-xs text-neutral-400 uppercase tracking-wider font-mono mb-3">HISTORIAL DE CONTRATACIÓN</h4>
+                
+                <div className="space-y-2">
+                  {contractedHistory.map((item, index) => (
+                    <div key={index} className="flex justify-between items-center p-2.5 rounded-xl bg-[#050505] border border-[#1e1e1e]">
+                      <div>
+                        <span className="text-xs font-bold text-white block">{item.name}</span>
+                        <span className="text-[9px] text-neutral-500 font-mono">Fecha: {item.date}</span>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-xs font-bold text-[#ccff00] font-mono block">${item.price}</span>
+                        <span className={`text-[8px] font-bold uppercase font-mono px-1.5 py-0.2 rounded ${
+                          item.status === 'Vigente' ? 'bg-emerald-950 text-emerald-400' : 'bg-neutral-900 text-neutral-500'
+                        }`}>
+                          {item.status}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+            </div>
+          )}
+
+          {/* TAB 3: AVISOS (TABLÓN DE ANUNCIOS) */}
+          {activeTab === 'avisos' && (
+            <div className="space-y-4 animate-fade-in">
+              <div className="flex items-center gap-1.5">
+                <Bell className="w-4 h-4 text-[#ccff00]" />
+                <h3 className="text-xs text-neutral-400 uppercase tracking-wider font-mono">Muro de Comunicados</h3>
+              </div>
+
+              {announcements.length === 0 ? (
+                <p className="text-xs text-neutral-600 italic py-4 text-center">No hay anuncios publicados en este momento.</p>
+              ) : (
+                <div className="space-y-3">
+                  {announcements.map(ann => (
+                    <div 
+                      key={ann.id} 
+                      className={`p-4 rounded-2xl border transition-all ${
+                        ann.important 
+                          ? 'bg-red-950/20 border-red-500/30 shadow-[0_4px_15px_rgba(239,68,68,0.1)]' 
+                          : 'bg-[#111] border-neutral-800'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-2 mb-1.5">
+                        <h4 className="text-xs font-bold text-white">{ann.title}</h4>
+                        {ann.important && (
+                          <span className="text-[8px] bg-red-500 text-black font-mono font-black px-2 py-0.5 rounded-full uppercase">
+                            Urgente
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-neutral-300 leading-relaxed">{ann.content}</p>
+                      <span className="text-[8px] text-neutral-500 font-mono mt-2 block text-right">{ann.date}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* TAB 4: RECIBOS (PAGOS) */}
+          {activeTab === 'recibos' && (
+            <div className="space-y-4 animate-fade-in">
+              <div className="flex items-center gap-1.5">
+                <CreditCard className="w-4 h-4 text-[#ccff00]" />
+                <h3 className="text-xs text-neutral-400 uppercase tracking-wider font-mono">Historial de Recibos</h3>
+              </div>
+
+              {clientPayments.length === 0 ? (
+                <p className="text-xs text-neutral-600 italic py-4 text-center">No posees recibos de pago anteriores en el sistema.</p>
+              ) : (
+                <div className="space-y-3">
+                  {clientPayments.map(pay => (
+                    <div key={pay.id} className="bg-[#111] border border-neutral-800 rounded-2xl p-4 flex justify-between items-center relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-[60px] h-[60px] rounded-bl-full bg-[#ccff00]/5"></div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-bold text-white font-mono">{pay.folio}</span>
+                          <span className="text-[8px] bg-white/5 border border-white/10 text-neutral-400 px-1 rounded uppercase font-mono">
+                            {pay.method}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-neutral-400 font-mono mt-1.5">
+                          Concepto: Membresía {pay.planName} • Fecha: {pay.date}
+                        </p>
+                      </div>
+
+                      <div className="text-right shrink-0">
+                        <span className="text-xs font-black text-[#ccff00] font-mono block">${pay.amount} MXN</span>
+                        <span className="text-[8px] text-neutral-500 font-mono block">Comprobante Digital</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* TAB 5: PERFIL (DATOS BASICOS) */}
+          {activeTab === 'perfil' && (
+            <div className="space-y-4 animate-fade-in">
+              
+              {/* Profile Details (Basic info only to prevent overwhelming user) */}
+              <div className="bg-[#111] border border-[#222] rounded-[28px] p-5 shadow-lg space-y-4">
+                <div className="text-center pb-2 border-b border-[#222]">
+                  <img src={client.avatar} alt="Foto" className="w-20 h-20 rounded-full object-cover mx-auto border-2 border-[#ccff00] mb-2" />
+                  <h4 className="text-sm font-bold text-white">{client.name}</h4>
+                  <span className="text-[9px] text-neutral-400 font-mono block uppercase">Socio ID: #{client.id}</span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-black/40 border border-neutral-900 rounded-xl p-2.5">
+                    <span className="text-[8px] text-neutral-500 font-mono uppercase block mb-0.5">Móvil</span>
+                    <span className="text-xs font-semibold text-white truncate block">{client.phone}</span>
+                  </div>
+                  <div className="bg-black/40 border border-neutral-900 rounded-xl p-2.5">
+                    <span className="text-[8px] text-neutral-500 font-mono uppercase block mb-0.5">Correo</span>
+                    <span className="text-xs font-semibold text-white truncate block">{client.email}</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-black/40 border border-neutral-900 rounded-xl p-2.5">
+                    <span className="text-[8px] text-neutral-500 font-mono uppercase block mb-0.5">Fecha Ingreso</span>
+                    <span className="text-xs font-semibold text-white block">{client.joinDate}</span>
+                  </div>
+                  <div className="bg-black/40 border border-neutral-900 rounded-xl p-2.5">
+                    <span className="text-[8px] text-neutral-500 font-mono uppercase block mb-0.5">Adeudos</span>
+                    <span className={`text-xs font-bold block ${client.debt > 0 ? 'text-red-400 font-mono' : 'text-emerald-400 font-mono'}`}>
+                      {client.debt > 0 ? `$${client.debt} MXN` : 'Sin adeudos'}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="bg-black/40 border border-neutral-900 rounded-xl p-2.5">
+                  <span className="text-[8px] text-neutral-500 font-mono uppercase block mb-0.5">Contacto Emergencia</span>
+                  <p className="text-xs text-neutral-300 font-semibold">{client.emergencyContact}</p>
+                </div>
+              </div>
+
+            </div>
+          )}
+
+        </div>
+      </div>
+
+      {/* Bottom PWA Navigation Tabs */}
       <div className="absolute bottom-0 inset-x-0 h-16 bg-[#111111]/95 backdrop-blur-lg border-t border-[#222] flex items-center justify-center px-4 z-30">
         <div className="max-w-xl mx-auto w-full flex items-center justify-around">
+          
           <button 
-            id="btn-tab-dashboard"
-            onClick={() => setActiveTab('dashboard')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'dashboard' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
-          >
-            <Dumbbell className="w-5 h-5" />
-            <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Inicio</span>
-          </button>
-
-          <button 
-            id="btn-tab-classes"
-            onClick={() => setActiveTab('classes')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'classes' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
-          >
-            <Calendar className="w-5 h-5" />
-            <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Clases</span>
-          </button>
-
-          <button 
-            id="btn-tab-progress"
-            onClick={() => setActiveTab('progress')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'progress' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
-          >
-            <BarChart3 className="w-5 h-5" />
-            <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Progreso</span>
-          </button>
-
-          <button 
-            id="btn-tab-pass"
-            onClick={() => setActiveTab('pass')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'pass' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+            id="btn-client-tab-credencial"
+            onClick={() => setActiveTab('credencial')}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'credencial' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <QrCode className="w-5 h-5" />
-            <span className="text-[9px] font-mono uppercase font-bold tracking-wider">QR Pase</span>
+            <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Acceso</span>
           </button>
+
+          <button 
+            id="btn-client-tab-membresia"
+            onClick={() => setActiveTab('membresia')}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'membresia' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+          >
+            <Calendar className="w-5 h-5" />
+            <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Membresía</span>
+          </button>
+
+          <button 
+            id="btn-client-tab-avisos"
+            onClick={() => setActiveTab('avisos')}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'avisos' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+          >
+            <Bell className="w-5 h-5" />
+            <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Anuncios</span>
+          </button>
+
+          <button 
+            id="btn-client-tab-recibos"
+            onClick={() => setActiveTab('recibos')}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'recibos' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+          >
+            <Receipt className="w-5 h-5" />
+            <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Recibos</span>
+          </button>
+
+          <button 
+            id="btn-client-tab-perfil"
+            onClick={() => setActiveTab('perfil')}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'perfil' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+          >
+            <User className="w-5 h-5" />
+            <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Perfil</span>
+          </button>
+
         </div>
       </div>
 

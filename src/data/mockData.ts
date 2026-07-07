@@ -1,4 +1,28 @@
-import { Client, GymClass, Announcement, WorkoutRoutine } from '../types';
+import { Client, GymClass, Announcement, WorkoutRoutine, Plan, Staff, Payment, CheckIn } from '../types';
+
+export const INITIAL_PLANS: Plan[] = [
+  { id: 'p1', name: 'Mensual', price: 50, durationDays: 30, status: 'Activo' },
+  { id: 'p2', name: 'Trimestral', price: 130, durationDays: 90, status: 'Activo' },
+  { id: 'p3', name: 'Anual', price: 450, durationDays: 365, status: 'Activo' },
+  { id: 'p4', name: 'Pase del Día', price: 10, durationDays: 1, status: 'Activo' }
+];
+
+export const INITIAL_STAFF: Staff[] = [
+  { id: 's1', name: 'Lucía Fernández', role: 'Recepcionista', username: 'lucia.gym', status: 'Activo' },
+  { id: 's2', name: 'Marcos Rubio', role: 'Entrenador', username: 'marcos.gym', status: 'Activo' },
+  { id: 's3', name: 'Alejandro Martínez', role: 'Administrador', username: 'alejandro.gym', status: 'Activo' }
+];
+
+export const INITIAL_PAYMENTS: Payment[] = [
+  { id: 'pay1', clientId: '1', clientName: 'Carlos Mendoza', planName: 'Anual', amount: 450, date: '2026-01-15', method: 'Tarjeta', folio: 'F-2026-001' },
+  { id: 'pay2', clientId: '2', clientName: 'Mariana Silva', planName: 'Mensual', amount: 50, date: '2026-06-10', method: 'Efectivo', folio: 'F-2026-002' },
+  { id: 'pay3', clientId: '3', clientName: 'Sebastián Ortiz', planName: 'Trimestral', amount: 130, date: '2026-04-01', method: 'Transferencia', folio: 'F-2026-003' }
+];
+
+export const INITIAL_CHECKINS: CheckIn[] = [
+  { id: 'ck1', clientId: '1', clientName: 'Carlos Mendoza', time: '08:30', date: '2026-07-06', status: 'Permitido' },
+  { id: 'ck2', clientId: '2', clientName: 'Mariana Silva', time: '10:15', date: '2026-07-06', status: 'Permitido' }
+];
 
 export const INITIAL_CLIENTS: Client[] = [
   {
@@ -6,10 +30,13 @@ export const INITIAL_CLIENTS: Client[] = [
     name: 'Carlos Mendoza',
     email: 'carlos.m@gym.com',
     phone: '+34 612 345 678',
-    plan: 'Anual',
+    planId: 'p3',
     status: 'Activo',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200', // Beautiful portrait
-    joinDate: '15/01/2026',
+    joinDate: '2026-01-15',
+    expirationDate: '2027-01-15',
+    debt: 0,
+    emergencyContact: 'Juan Mendoza (Padre) - +34 612 999 000',
     completedWorkouts: 42,
     streakDays: 5,
     weightHistory: [
@@ -26,10 +53,13 @@ export const INITIAL_CLIENTS: Client[] = [
     name: 'Mariana Silva',
     email: 'mariana.silva@gym.com',
     phone: '+34 699 888 777',
-    plan: 'Mensual',
+    planId: 'p1',
     status: 'Activo',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200',
-    joinDate: '10/06/2026',
+    joinDate: '2026-06-10',
+    expirationDate: '2026-07-10', // near (in 4 days relative to July 6)
+    debt: 0,
+    emergencyContact: 'Isabel Silva (Madre) - +34 699 111 222',
     completedWorkouts: 15,
     streakDays: 3,
     weightHistory: [
@@ -43,10 +73,13 @@ export const INITIAL_CLIENTS: Client[] = [
     name: 'Sebastián Ortiz',
     email: 'sebas.ortiz@gym.com',
     phone: '+34 655 444 333',
-    plan: 'Trimestral',
-    status: 'Activo',
+    planId: 'p2',
+    status: 'Inactivo',
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200',
-    joinDate: '01/04/2026',
+    joinDate: '2026-04-01',
+    expirationDate: '2026-07-01', // expired
+    debt: 130,
+    emergencyContact: 'Andrés Ortiz (Hermano) - +34 655 000 111',
     completedWorkouts: 28,
     streakDays: 0,
     weightHistory: [
@@ -61,16 +94,19 @@ export const INITIAL_CLIENTS: Client[] = [
     name: 'Sofía Guerrero',
     email: 'sofia.g@gym.com',
     phone: '+34 622 111 000',
-    plan: 'Anual',
+    planId: 'p3',
     status: 'Inactivo',
     avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=200',
-    joinDate: '20/02/2025',
+    joinDate: '2025-02-20',
+    expirationDate: '2026-02-20', // expired
+    debt: 450,
+    emergencyContact: 'Laura Guerrero (Hermana) - +34 622 222 333',
     completedWorkouts: 89,
     streakDays: 12,
     weightHistory: [
-      { date: 'Jan', weight: 58.0 },
-      { date: 'Feb', weight: 57.5 },
-      { date: 'Mar', weight: 56.8 }
+      { date: 'Jan 5', weight: 58.0 },
+      { date: 'Feb 12', weight: 57.5 },
+      { date: 'Mar 18', weight: 56.8 }
     ]
   }
 ];

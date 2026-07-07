@@ -1,6 +1,10 @@
 {
-  "name": "Gym App",
-  "description": "Una aplicación móvil de gimnasio con roles de cliente y administrador, inspirada en un diseño moderno de alto contraste amarillo y negro.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "name": "Dragon Gym",
+  "description": "Aplicación premium de gimnasio con roles de SuperAdmin, Staff y Socio, optimizada para control de accesos por QR, métricas en tiempo real y renovación de membresías.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

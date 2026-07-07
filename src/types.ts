@@ -3,10 +3,13 @@ export interface Client {
   name: string;
   email: string;
   phone: string;
-  plan: 'Mensual' | 'Trimestral' | 'Anual';
+  planId: string; // References Plan.id
   status: 'Activo' | 'Inactivo';
   avatar: string;
-  joinDate: string;
+  joinDate: string; // YYYY-MM-DD
+  expirationDate: string; // YYYY-MM-DD
+  debt: number; // outstanding amount
+  emergencyContact: string; // emergency phone/name
   weightHistory: WeightRecord[];
   completedWorkouts: number;
   streakDays: number;
@@ -56,4 +59,40 @@ export interface WorkoutRoutine {
   durationMin: number;
   level: 'Principiante' | 'Intermedio' | 'Avanzado';
   exercises: WorkoutExercise[];
+}
+
+export interface Plan {
+  id: string;
+  name: string;
+  price: number;
+  durationDays: number;
+  status: 'Activo' | 'Inactivo';
+}
+
+export interface Staff {
+  id: string;
+  name: string;
+  role: 'Recepcionista' | 'Entrenador' | 'Administrador';
+  username: string;
+  status: 'Activo' | 'Inactivo';
+}
+
+export interface Payment {
+  id: string;
+  clientId: string;
+  clientName: string;
+  planName: string;
+  amount: number;
+  date: string; // YYYY-MM-DD
+  method: 'Efectivo' | 'Tarjeta' | 'Transferencia';
+  folio: string;
+}
+
+export interface CheckIn {
+  id: string;
+  clientId: string;
+  clientName: string;
+  time: string; // HH:MM
+  date: string; // YYYY-MM-DD
+  status: 'Permitido' | 'Denegado';
 }

@@ -1,9 +1,9 @@
 import React from 'react';
-import { User, ShieldAlert, Dumbbell, Calendar, BarChart3, Settings, Users } from 'lucide-react';
+import { ShieldAlert, Dumbbell, Crown, Laptop, User } from 'lucide-react';
 import { motion } from 'motion/react';
 
 interface HomeSelectorProps {
-  onSelectRole: (role: 'client' | 'admin') => void;
+  onSelectRole: (role: 'client' | 'staff' | 'admin') => void;
 }
 
 export default function HomeSelector({ onSelectRole }: HomeSelectorProps) {
@@ -14,7 +14,7 @@ export default function HomeSelector({ onSelectRole }: HomeSelectorProps) {
       <div className="absolute bottom-[-150px] right-[-100px] w-[350px] h-[350px] rounded-full bg-[#ccff00]/5 blur-[150px] pointer-events-none"></div>
 
       {/* Responsive Content Wrapper */}
-      <div className="w-full max-w-2xl mx-auto flex-1 flex flex-col justify-between gap-8 z-10">
+      <div className="w-full max-w-3xl mx-auto flex-1 flex flex-col justify-between gap-6 z-10">
         
         {/* Top Brand Logo / Aesthetic */}
         <div className="flex flex-col items-center pt-2">
@@ -23,20 +23,20 @@ export default function HomeSelector({ onSelectRole }: HomeSelectorProps) {
               <Dumbbell className="w-4 h-4 text-black" strokeWidth={2.5} />
             </div>
             <span className="text-xl font-black uppercase tracking-[0.15em] text-white">
-              IRON <span className="text-[#ccff00]">HAVEN</span>
+              DRAGON <span className="text-[#ccff00]">GYM</span>
             </span>
           </div>
-          <p className="text-[9px] text-neutral-400 tracking-[0.3em] uppercase font-mono mt-1.5">
-            ELITE PERFORMANCE & RECOVERY
+          <p className="text-[9px] text-neutral-400 tracking-[0.3em] uppercase font-mono mt-1.5 text-center">
+            ELITE PERFORMANCE, RECOVERY & ADMINISTRATION
           </p>
         </div>
 
         {/* Center Image Banner resembling the middle phone screen */}
         <div className="relative group">
-          <div className="relative h-[260px] md:h-[300px] rounded-[32px] overflow-hidden border border-[#222] shadow-2xl bg-[#111]">
+          <div className="relative h-[200px] md:h-[240px] rounded-[32px] overflow-hidden border border-[#222] shadow-2xl bg-[#111]">
             {/* Gym Athlete Background Image */}
             <img 
-              src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=600" 
+              src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&q=80&w=800" 
               alt="Gym Athlete" 
               className="w-full h-full object-cover object-center opacity-60 filter contrast-125 saturate-50 transition-all duration-700 group-hover:scale-105"
               referrerPolicy="no-referrer"
@@ -49,16 +49,16 @@ export default function HomeSelector({ onSelectRole }: HomeSelectorProps) {
 
             {/* Floating Badge */}
             <div className="absolute top-4 right-4 bg-[#ccff00] text-black text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full shadow-[0_4px_12px_rgba(204,255,0,0.3)] font-mono">
-              LIVE 2026
+              SISTEMA INTEGRADO 2026
             </div>
 
-            {/* Overlaid message inside a custom container matching the middle phone's popup block */}
+            {/* Overlaid message */}
             <div className="absolute bottom-4 left-4 right-4 bg-[#ccff00] text-black p-4 rounded-[20px] shadow-lg">
               <h4 className="text-[12px] font-black uppercase tracking-wider text-black font-display">
-                TRANSFORMA TU CUERPO
+                MÁXIMA EFICIENCIA OPERATIVA
               </h4>
               <p className="text-[10px] md:text-xs text-black/80 mt-1 leading-snug font-serif italic">
-                "Accede a rutinas exclusivas, controla tus marcas y reserva clases con instructores certificados."
+                "Control financiero global, gestión ágil de caja en recepción, y acceso seguro por QR para todos nuestros atletas."
               </p>
             </div>
           </div>
@@ -68,75 +68,100 @@ export default function HomeSelector({ onSelectRole }: HomeSelectorProps) {
         <div className="flex flex-col gap-4">
           <div className="text-center mb-1">
             <h3 className="text-xs text-neutral-400 uppercase tracking-[0.2em] font-mono">
-              SELECCIONA TU ROL
+              SELECCIONA TU ROL DE ACCESO
             </h3>
-            <p className="text-[11px] text-neutral-500">Toca un portal para iniciar sesión</p>
+            <p className="text-[11px] text-neutral-500">Toca uno de los portales para iniciar operaciones</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            
+            {/* SuperAdmin Access Card */}
+            <motion.button
+              id="btn-access-admin"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => onSelectRole('admin')}
+              className="flex flex-col justify-between p-5 rounded-[24px] bg-[#111111] border border-[#222] hover:border-[#ccff00]/50 transition-all duration-300 text-left group cursor-pointer shadow-lg relative overflow-hidden h-[180px]"
+            >
+              <div className="absolute top-0 right-0 w-[80px] h-[80px] rounded-bl-full bg-[#ccff00]/5 group-hover:bg-[#ccff00]/10 transition-all"></div>
+              
+              <div className="w-12 h-12 rounded-2xl bg-[#ccff00]/15 flex items-center justify-center text-[#ccff00] border border-[#ccff00]/35 group-hover:bg-[#ccff00] group-hover:text-black transition-all duration-300">
+                <Crown className="w-6 h-6" />
+              </div>
+              
+              <div className="mt-4">
+                <span className="text-[9px] text-[#ccff00] font-bold tracking-widest uppercase font-mono block">
+                  C-SUITE / PROPIETARIO
+                </span>
+                <h4 className="text-sm font-black text-white tracking-wide group-hover:text-[#ccff00] transition-all">
+                  SuperAdmin
+                </h4>
+                <p className="text-[10px] text-neutral-400 mt-1 leading-snug">
+                  Métricas globales, caja mayor, planes y staff.
+                </p>
+              </div>
+            </motion.button>
+
+            {/* Staff / Reception Access Card */}
+            <motion.button
+              id="btn-access-staff"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => onSelectRole('staff')}
+              className="flex flex-col justify-between p-5 rounded-[24px] bg-[#111111] border border-[#222] hover:border-[#ccff00]/50 transition-all duration-300 text-left group cursor-pointer shadow-lg relative overflow-hidden h-[180px]"
+            >
+              <div className="absolute top-0 right-0 w-[80px] h-[80px] rounded-bl-full bg-[#ccff00]/5 group-hover:bg-[#ccff00]/10 transition-all"></div>
+              
+              <div className="w-12 h-12 rounded-2xl bg-[#ccff00]/10 flex items-center justify-center text-[#ccff00] border border-[#ccff00]/20 group-hover:bg-[#ccff00] group-hover:text-black transition-all duration-300">
+                <Laptop className="w-6 h-6" />
+              </div>
+              
+              <div className="mt-4">
+                <span className="text-[9px] text-neutral-400 font-bold tracking-widest uppercase font-mono block">
+                  MOSTRADOR / TABLET
+                </span>
+                <h4 className="text-sm font-black text-white tracking-wide group-hover:text-[#ccff00] transition-all">
+                  Staff / Recepción
+                </h4>
+                <p className="text-[10px] text-neutral-400 mt-1 leading-snug">
+                  Check-in con QR, registro de socios, cobros inmediatos.
+                </p>
+              </div>
+            </motion.button>
+
             {/* Client Access Card */}
             <motion.button
               id="btn-access-client"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => onSelectRole('client')}
-              className="flex items-center justify-between p-4 rounded-[24px] bg-[#111111] border border-[#222] hover:border-[#ccff00]/50 transition-all duration-300 text-left group cursor-pointer shadow-lg"
+              className="flex flex-col justify-between p-5 rounded-[24px] bg-[#111111] border border-[#222] hover:border-[#ccff00]/50 transition-all duration-300 text-left group cursor-pointer shadow-lg relative overflow-hidden h-[180px]"
             >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-[#ccff00]/10 flex items-center justify-center text-[#ccff00] border border-[#ccff00]/20 group-hover:bg-[#ccff00] group-hover:text-black group-hover:shadow-[0_0_15px_rgba(204,255,0,0.3)] transition-all duration-300">
-                  <Dumbbell className="w-6 h-6" />
-                </div>
-                <div>
-                  <span className="text-[10px] text-[#ccff00] font-bold tracking-widest uppercase font-mono block">
-                    PORTAL DE ATLETAS
-                  </span>
-                  <h4 className="text-sm font-bold text-white tracking-wide group-hover:text-[#ccff00] transition-all">
-                    Ingresar como Cliente
-                  </h4>
-                  <p className="text-[11px] text-neutral-400 mt-0.5 italic font-serif line-clamp-1">
-                    Entrenar, peso y reservar clases
-                  </p>
-                </div>
+              <div className="absolute top-0 right-0 w-[80px] h-[80px] rounded-bl-full bg-[#ccff00]/5 group-hover:bg-[#ccff00]/10 transition-all"></div>
+              
+              <div className="w-12 h-12 rounded-2xl bg-[#ccff00]/10 flex items-center justify-center text-neutral-400 border border-neutral-800 group-hover:bg-[#ccff00] group-hover:text-black transition-all duration-300">
+                <User className="w-6 h-6" />
               </div>
-              <div className="w-8 h-8 rounded-full bg-[#1e1e1e] flex items-center justify-center group-hover:bg-[#ccff00]/10 group-hover:translate-x-1 transition-all duration-300 shrink-0">
-                <span className="text-[#ccff00] font-bold text-sm">→</span>
+              
+              <div className="mt-4">
+                <span className="text-[9px] text-neutral-400 font-bold tracking-widest uppercase font-mono block">
+                  APLICACIÓN PWA SOCIO
+                </span>
+                <h4 className="text-sm font-black text-white tracking-wide group-hover:text-[#ccff00] transition-all">
+                  Socio / Cliente
+                </h4>
+                <p className="text-[10px] text-neutral-400 mt-1 leading-snug">
+                  Credencial QR, estatus de plan, rutinas y recibos.
+                </p>
               </div>
             </motion.button>
 
-            {/* Admin Access Card */}
-            <motion.button
-              id="btn-access-admin"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => onSelectRole('admin')}
-              className="flex items-center justify-between p-4 rounded-[24px] bg-[#111111] border border-[#222] hover:border-[#ccff00]/50 transition-all duration-300 text-left group cursor-pointer shadow-lg"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-[#ccff00]/5 flex items-center justify-center text-white border border-[#444] group-hover:bg-[#ccff00] group-hover:text-black group-hover:shadow-[0_0_15px_rgba(204,255,0,0.3)] transition-all duration-300">
-                  <ShieldAlert className="w-6 h-6" />
-                </div>
-                <div>
-                  <span className="text-[10px] text-neutral-400 font-bold tracking-widest uppercase font-mono block">
-                    CONSOLA DE CONTROL
-                  </span>
-                  <h4 className="text-sm font-bold text-white tracking-wide group-hover:text-[#ccff00] transition-all">
-                    Ingresar como Admin
-                  </h4>
-                  <p className="text-[11px] text-neutral-400 mt-0.5 italic font-serif line-clamp-1">
-                    Gestión de socios, clases e informes
-                  </p>
-                </div>
-              </div>
-              <div className="w-8 h-8 rounded-full bg-[#1e1e1e] flex items-center justify-center group-hover:bg-[#ccff00]/10 group-hover:translate-x-1 transition-all duration-300 shrink-0">
-                <span className="text-[#ccff00] font-bold text-sm">→</span>
-              </div>
-            </motion.button>
           </div>
         </div>
 
         {/* Footer Details */}
         <div className="flex items-center justify-between text-[9px] text-[#444] uppercase font-mono pt-3 border-t border-[#222]">
-          <span>Iron Haven Infrastructure</span>
+          <span>Dragon Gym Core Infrastructure</span>
           <span>● ST_ONLINE</span>
         </div>
 
