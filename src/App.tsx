@@ -463,7 +463,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#050505] text-gray-100 font-sans relative overflow-x-hidden">
       {/* Visual atmospheric lighting background */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[300px] h-[300px] rounded-full bg-[#ccff00]/5 blur-[120px] pointer-events-none"></div>
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[300px] h-[300px] rounded-full bg-[#7A724E]/5 blur-[120px] pointer-events-none"></div>
 
       {/* Mobile Device Container Mockup - FULL SCREEN INTERFACE */}
       <MobileFrame activeRole={activeRole} onNavigateHome={handleNavigateHome}>
@@ -532,9 +532,9 @@ export default function App() {
       {/* PWA Installation Walkthrough Modal */}
       {showInstallModal && (
         <div className="fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
-          <div className="bg-[#0c0c0c] border border-[#ccff00]/30 rounded-[32px] w-full max-w-md p-6 relative shadow-[0_20px_50px_rgba(204,255,0,0.08)] overflow-hidden">
+          <div className="bg-[#0c0c0c] border border-[#7A724E]/30 rounded-[32px] w-full max-w-md p-6 relative shadow-[0_20px_50px_rgba(122,114,78,0.08)] overflow-hidden">
             {/* Ambient light glow inside modal */}
-            <div className="absolute -top-12 -left-12 w-32 h-32 rounded-full bg-[#ccff00]/5 blur-3xl"></div>
+            <div className="absolute -top-12 -left-12 w-32 h-32 rounded-full bg-[#7A724E]/5 blur-3xl"></div>
 
             {/* Close Button */}
             <button 
@@ -549,7 +549,7 @@ export default function App() {
               <img 
                 src="https://appdesignproyectos.com/dragongymicono.png" 
                 alt="Dragon Gym Icon" 
-                className="w-16 h-16 rounded-[20px] shadow-[0_0_20px_rgba(204,255,0,0.25)] border border-[#ccff00]/30 object-cover mb-3"
+                className="w-16 h-16 rounded-[20px] shadow-[0_0_20px_rgba(122,114,78,0.25)] border border-[#7A724E]/30 object-cover mb-3"
                 referrerPolicy="no-referrer"
               />
               <h3 className="text-lg font-black text-white tracking-wide uppercase font-sans">Instalar Dragon Gym</h3>
@@ -562,7 +562,7 @@ export default function App() {
                 onClick={() => setInstallTab('android')}
                 className={`py-2 px-3 rounded-xl text-xs font-bold tracking-wide transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                   installTab === 'android' 
-                    ? 'bg-[#ccff00] text-black shadow-md' 
+                    ? 'bg-[#7A724E] text-black shadow-md' 
                     : 'text-neutral-400 hover:text-white'
                 }`}
               >
@@ -573,7 +573,7 @@ export default function App() {
                 onClick={() => setInstallTab('ios')}
                 className={`py-2 px-3 rounded-xl text-xs font-bold tracking-wide transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                   installTab === 'ios' 
-                    ? 'bg-[#ccff00] text-black shadow-md' 
+                    ? 'bg-[#7A724E] text-black shadow-md' 
                     : 'text-neutral-400 hover:text-white'
                 }`}
               >
@@ -586,7 +586,7 @@ export default function App() {
               {installTab === 'android' ? (
                 <>
                   <div className="flex gap-3.5 items-start">
-                    <div className="w-6 h-6 rounded-full bg-[#ccff00]/10 border border-[#ccff00]/30 text-[#ccff00] text-xs font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
+                    <div className="w-6 h-6 rounded-full bg-[#7A724E]/10 border border-[#7A724E]/30 text-[#7A724E] text-xs font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
                       1
                     </div>
                     <div>
@@ -598,7 +598,7 @@ export default function App() {
                   </div>
 
                   <div className="flex gap-3.5 items-start">
-                    <div className="w-6 h-6 rounded-full bg-[#ccff00]/10 border border-[#ccff00]/30 text-[#ccff00] text-xs font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
+                    <div className="w-6 h-6 rounded-full bg-[#7A724E]/10 border border-[#7A724E]/30 text-[#7A724E] text-xs font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
                       2
                     </div>
                     <div>
@@ -610,7 +610,7 @@ export default function App() {
                   </div>
 
                   <div className="flex gap-3.5 items-start">
-                    <div className="w-6 h-6 rounded-full bg-[#ccff00]/10 border border-[#ccff00]/30 text-[#ccff00] text-xs font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
+                    <div className="w-6 h-6 rounded-full bg-[#7A724E]/10 border border-[#7A724E]/30 text-[#7A724E] text-xs font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
                       3
                     </div>
                     <div>
@@ -624,19 +624,19 @@ export default function App() {
               ) : (
                 <>
                   <div className="flex gap-3.5 items-start">
-                    <div className="w-6 h-6 rounded-full bg-[#ccff00]/10 border border-[#ccff00]/30 text-[#ccff00] text-xs font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
+                    <div className="w-6 h-6 rounded-full bg-[#7A724E]/10 border border-[#7A724E]/30 text-[#7A724E] text-xs font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
                       1
                     </div>
                     <div>
                       <p className="text-xs font-bold text-white">Presiona el botón de Compartir</p>
                       <p className="text-[10px] text-neutral-400 mt-0.5 leading-relaxed">
-                        Toca el botón <strong className="text-[#ccff00] inline-flex items-center gap-0.5">Compartir <Share2 className="w-3 h-3 text-blue-400 inline" /></strong> en la barra de navegación de Safari.
+                        Toca el botón <strong className="text-[#7A724E] inline-flex items-center gap-0.5">Compartir <Share2 className="w-3 h-3 text-blue-400 inline" /></strong> en la barra de navegación de Safari.
                       </p>
                     </div>
                   </div>
 
                   <div className="flex gap-3.5 items-start">
-                    <div className="w-6 h-6 rounded-full bg-[#ccff00]/10 border border-[#ccff00]/30 text-[#ccff00] text-xs font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
+                    <div className="w-6 h-6 rounded-full bg-[#7A724E]/10 border border-[#7A724E]/30 text-[#7A724E] text-xs font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
                       2
                     </div>
                     <div>
@@ -648,7 +648,7 @@ export default function App() {
                   </div>
 
                   <div className="flex gap-3.5 items-start">
-                    <div className="w-6 h-6 rounded-full bg-[#ccff00]/10 border border-[#ccff00]/30 text-[#ccff00] text-xs font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
+                    <div className="w-6 h-6 rounded-full bg-[#7A724E]/10 border border-[#7A724E]/30 text-[#7A724E] text-xs font-black flex items-center justify-center shrink-0 mt-0.5 font-mono">
                       3
                     </div>
                     <div>
@@ -669,7 +669,7 @@ export default function App() {
                   setShowInstallModal(false);
                   addLog('Guía de instalación móvil cerrada.', 'system');
                 }}
-                className="w-full bg-[#ccff00] hover:bg-[#d9ff26] text-black font-extrabold text-xs uppercase tracking-wider py-3 rounded-2xl transition-all cursor-pointer shadow-lg active:scale-98"
+                className="w-full bg-[#7A724E] hover:bg-[#91875d] text-black font-extrabold text-xs uppercase tracking-wider py-3 rounded-2xl transition-all cursor-pointer shadow-lg active:scale-98"
               >
                 Entendido, ¡Listo!
               </button>

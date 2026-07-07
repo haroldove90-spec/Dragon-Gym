@@ -272,10 +272,10 @@ export default function StaffRole({
         <div className="max-w-3xl mx-auto w-full">
           <div className="flex justify-between items-center mb-2">
             <div>
-              <span className="text-[9px] font-mono text-[#ccff00] uppercase tracking-widest font-bold">RECEPCIÓN Y ACCESOS</span>
+              <span className="text-[9px] font-mono text-[#7A724E] uppercase tracking-widest font-bold">RECEPCIÓN Y ACCESOS</span>
               <h3 className="text-sm font-black text-white tracking-tight font-display">DRAGON DESK v2.6</h3>
             </div>
-            <div className="bg-[#ccff00]/10 text-[#ccff00] border border-[#ccff00]/30 text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full font-mono">
+            <div className="bg-[#7A724E]/10 text-[#7A724E] border border-[#7A724E]/30 text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full font-mono">
               STAFF AUTORIZADO
             </div>
           </div>
@@ -284,7 +284,7 @@ export default function StaffRole({
           <div className="grid grid-cols-3 gap-2">
             <div className="bg-[#050505] border border-[#222] rounded-xl p-2 text-center">
               <span className="text-[8px] text-neutral-400 uppercase font-mono block">Check-ins hoy</span>
-              <span className="text-xs font-bold text-[#ccff00] font-mono">{checkIns.filter(c => c.date === '2026-07-06').length}</span>
+              <span className="text-xs font-bold text-[#7A724E] font-mono">{checkIns.filter(c => c.date === '2026-07-06').length}</span>
             </div>
             <div className="bg-[#050505] border border-[#222] rounded-xl p-2 text-center">
               <span className="text-[8px] text-neutral-400 uppercase font-mono block">Caja hoy</span>
@@ -378,7 +378,7 @@ export default function StaffRole({
                         <div>
                           <p className="text-xs text-emerald-300 font-mono uppercase tracking-wider mb-1">Suscripción Vigente</p>
                           <div className="text-xl font-bold text-white">
-                            Quedan <span className="text-[#ccff00]">{scanResult.daysLeft} días</span>
+                            Quedan <span className="text-[#7A724E]">{scanResult.daysLeft} días</span>
                           </div>
                           <p className="text-[10px] opacity-60 mt-1">Vence el {scanResult.client?.expirationDate}</p>
                         </div>
@@ -407,7 +407,7 @@ export default function StaffRole({
                             setScanResult(null);
                           }
                         }}
-                        className="w-full bg-[#ccff00] hover:bg-[#d9ff26] text-black font-extrabold uppercase py-3 rounded-xl tracking-wider text-xs transition-all active:scale-95 cursor-pointer z-10"
+                        className="w-full bg-[#7A724E] hover:bg-[#91875d] text-black font-extrabold uppercase py-3 rounded-xl tracking-wider text-xs transition-all active:scale-95 cursor-pointer z-10"
                       >
                         Cobrar Renovación Ahora
                       </button>
@@ -430,24 +430,24 @@ export default function StaffRole({
                         muted
                       />
                       {/* Interactive scanning laser line */}
-                      <div className="absolute inset-x-0 h-0.5 bg-[#ccff00] opacity-80 shadow-[0_0_10px_rgba(204,255,0,1)] animate-bounce top-1/4"></div>
-                      <div className="absolute inset-8 border-2 border-[#ccff00]/40 rounded-xl pointer-events-none">
+                      <div className="absolute inset-x-0 h-0.5 bg-[#7A724E] opacity-80 shadow-[0_0_10px_rgba(122,114,78,1)] animate-bounce top-1/4"></div>
+                      <div className="absolute inset-8 border-2 border-[#7A724E]/40 rounded-xl pointer-events-none">
                         {/* Target reticle corners */}
-                        <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[#ccff00]"></div>
-                        <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-[#ccff00]"></div>
-                        <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-[#ccff00]"></div>
-                        <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[#ccff00]"></div>
+                        <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[#7A724E]"></div>
+                        <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-[#7A724E]"></div>
+                        <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-[#7A724E]"></div>
+                        <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[#7A724E]"></div>
                       </div>
                     </>
                   ) : (
                     <div className="text-center p-6 space-y-3">
-                      <div className="w-16 h-16 rounded-full bg-[#ccff00]/10 flex items-center justify-center text-[#ccff00] mx-auto border border-[#ccff00]/20 animate-pulse">
+                      <div className="w-16 h-16 rounded-full bg-[#7A724E]/10 flex items-center justify-center text-[#7A724E] mx-auto border border-[#7A724E]/20 animate-pulse">
                         <QrCode className="w-8 h-8" />
                       </div>
                       <p className="text-xs text-neutral-400">Escáner desactivado. Usa la cámara de la tablet para leer credenciales QR.</p>
                       <button 
                         onClick={startCamera}
-                        className="bg-[#ccff00] hover:bg-[#d9ff26] text-black text-xs font-black uppercase tracking-wider py-2 px-4 rounded-xl cursor-pointer"
+                        className="bg-[#7A724E] hover:bg-[#91875d] text-black text-xs font-black uppercase tracking-wider py-2 px-4 rounded-xl cursor-pointer"
                       >
                         Activar Cámara Escáner
                       </button>
@@ -470,7 +470,7 @@ export default function StaffRole({
 
                 {/* Simulation Control Panel - CRITICAL FOR PREVIEW TESTING */}
                 <div className="mt-4 pt-4 border-t border-[#222]">
-                  <span className="text-[10px] text-[#ccff00] font-mono uppercase tracking-widest block mb-2 text-center">
+                  <span className="text-[10px] text-[#7A724E] font-mono uppercase tracking-widest block mb-2 text-center">
                     Simulación de Escáner QR de Clientes (Pruebas)
                   </span>
                   <div className="grid grid-cols-2 gap-2">
@@ -481,7 +481,7 @@ export default function StaffRole({
                         <button
                           key={client.id}
                           onClick={() => triggerCheckIn(client)}
-                          className="flex items-center gap-2 p-2 bg-[#1a1a1a] border border-[#2c2c2c] hover:border-[#ccff00]/30 rounded-xl text-left text-xs text-white transition-all active:scale-95 cursor-pointer"
+                          className="flex items-center gap-2 p-2 bg-[#1a1a1a] border border-[#2c2c2c] hover:border-[#7A724E]/30 rounded-xl text-left text-xs text-white transition-all active:scale-95 cursor-pointer"
                         >
                           <img src={client.avatar} alt="" className="w-6 h-6 rounded-full object-cover shrink-0" />
                           <div className="min-w-0 flex-1">
@@ -509,7 +509,7 @@ export default function StaffRole({
                     placeholder="Buscar por nombre o número de ID..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-xl py-2.5 pl-10 pr-4 text-xs font-semibold text-white placeholder-neutral-600 outline-none transition-all"
+                    className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-xl py-2.5 pl-10 pr-4 text-xs font-semibold text-white placeholder-neutral-600 outline-none transition-all"
                   />
                   <Search className="w-4 h-4 text-neutral-500 absolute left-3.5 top-3" />
                 </div>
@@ -537,7 +537,7 @@ export default function StaffRole({
                             </span>
                             <button
                               onClick={() => triggerCheckIn(c)}
-                              className="bg-[#ccff00] hover:bg-[#d9ff26] text-black text-[10px] font-black uppercase px-2.5 py-1 rounded-lg cursor-pointer"
+                              className="bg-[#7A724E] hover:bg-[#91875d] text-black text-[10px] font-black uppercase px-2.5 py-1 rounded-lg cursor-pointer"
                             >
                               Check-In
                             </button>
@@ -585,7 +585,7 @@ export default function StaffRole({
             <div className="space-y-5 animate-fade-in">
               <div className="bg-[#111] border border-[#222] rounded-[32px] p-5 shadow-lg">
                 <div className="flex items-center gap-2 mb-3">
-                  <UserPlus className="w-5 h-5 text-[#ccff00]" />
+                  <UserPlus className="w-5 h-5 text-[#7A724E]" />
                   <h3 className="text-sm font-black text-white uppercase tracking-wider font-display">Inscripción / Nuevo Socio</h3>
                 </div>
 
@@ -619,7 +619,7 @@ export default function StaffRole({
                         )}
                         
                         {cameraActive && (
-                          <div className="absolute inset-x-2 bottom-2 bg-black/80 text-[8px] text-center text-[#ccff00] uppercase font-mono tracking-wider p-0.5 rounded">
+                          <div className="absolute inset-x-2 bottom-2 bg-black/80 text-[8px] text-center text-[#7A724E] uppercase font-mono tracking-wider p-0.5 rounded">
                             Transmitiendo...
                           </div>
                         )}
@@ -643,7 +643,7 @@ export default function StaffRole({
                             <button
                               type="button"
                               onClick={captureSnapshot}
-                              className="bg-[#ccff00] hover:bg-[#d9ff26] text-black text-[10px] font-black uppercase py-1.5 px-3 rounded-lg flex items-center gap-1 cursor-pointer shadow-[0_0_10px_rgba(204,255,0,0.3)]"
+                              className="bg-[#7A724E] hover:bg-[#91875d] text-black text-[10px] font-black uppercase py-1.5 px-3 rounded-lg flex items-center gap-1 cursor-pointer shadow-[0_0_10px_rgba(122,114,78,0.3)]"
                             >
                               <Camera className="w-3.5 h-3.5 text-black" />
                               <span>Capturar Foto</span>
@@ -673,7 +673,7 @@ export default function StaffRole({
                         placeholder="Ej. Juan Pérez Gil"
                         value={newName}
                         onChange={(e) => setNewName(e.target.value)}
-                        className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-xl py-2 px-3 text-xs font-semibold text-white outline-none"
+                        className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-xl py-2 px-3 text-xs font-semibold text-white outline-none"
                       />
                     </div>
                     <div>
@@ -684,7 +684,7 @@ export default function StaffRole({
                         placeholder="Ej. +34 600 000 111"
                         value={newPhone}
                         onChange={(e) => setNewPhone(e.target.value)}
-                        className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-xl py-2 px-3 text-xs font-semibold text-white outline-none"
+                        className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-xl py-2 px-3 text-xs font-semibold text-white outline-none"
                       />
                     </div>
                   </div>
@@ -697,7 +697,7 @@ export default function StaffRole({
                         placeholder="Dejar vacío para autogenerar"
                         value={newEmail}
                         onChange={(e) => setNewEmail(e.target.value)}
-                        className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-xl py-2 px-3 text-xs font-semibold text-white outline-none"
+                        className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-xl py-2 px-3 text-xs font-semibold text-white outline-none"
                       />
                     </div>
                     <div>
@@ -707,7 +707,7 @@ export default function StaffRole({
                         placeholder="Ej. Madre María - +34 600 222 333"
                         value={newEmergency}
                         onChange={(e) => setNewEmergency(e.target.value)}
-                        className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-xl py-2 px-3 text-xs font-semibold text-white outline-none"
+                        className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-xl py-2 px-3 text-xs font-semibold text-white outline-none"
                       />
                     </div>
                   </div>
@@ -719,7 +719,7 @@ export default function StaffRole({
                       <select
                         value={selectedPlanId}
                         onChange={(e) => setSelectedPlanId(e.target.value)}
-                        className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-xl py-2 px-3 text-xs font-semibold text-white outline-none"
+                        className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-xl py-2 px-3 text-xs font-semibold text-white outline-none"
                       >
                         {plans.filter(p => p.status === 'Activo').map(p => (
                           <option key={p.id} value={p.id}>
@@ -735,14 +735,14 @@ export default function StaffRole({
                         placeholder="75"
                         value={initialWeight}
                         onChange={(e) => setInitialWeight(e.target.value)}
-                        className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-xl py-2 px-3 text-xs font-semibold text-white outline-none font-mono"
+                        className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-xl py-2 px-3 text-xs font-semibold text-white outline-none font-mono"
                       />
                     </div>
                   </div>
 
                   <button 
                     type="submit"
-                    className="w-full bg-[#ccff00] hover:bg-[#d9ff26] text-black font-extrabold uppercase py-3 rounded-xl tracking-wider text-xs transition-all active:scale-95 cursor-pointer shadow-lg mt-2"
+                    className="w-full bg-[#7A724E] hover:bg-[#91875d] text-black font-extrabold uppercase py-3 rounded-xl tracking-wider text-xs transition-all active:scale-95 cursor-pointer shadow-lg mt-2"
                   >
                     Registrar e Inscribir Socio
                   </button>
@@ -757,7 +757,7 @@ export default function StaffRole({
             <div className="space-y-5 animate-fade-in">
               <div className="bg-[#111] border border-[#222] rounded-[32px] p-5 shadow-lg">
                 <div className="flex items-center gap-2 mb-3">
-                  <CreditCard className="w-5 h-5 text-[#ccff00]" />
+                  <CreditCard className="w-5 h-5 text-[#7A724E]" />
                   <h3 className="text-sm font-black text-white uppercase tracking-wider font-display">Caja Rápida y Renovaciones</h3>
                 </div>
 
@@ -777,7 +777,7 @@ export default function StaffRole({
                       value={payClientId}
                       onChange={(e) => setPayClientId(e.target.value)}
                       required
-                      className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-xl py-2 px-3 text-xs font-semibold text-white outline-none"
+                      className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-xl py-2 px-3 text-xs font-semibold text-white outline-none"
                     >
                       <option value="">-- Elige un socio a cobrar o renovar --</option>
                       {clients.map(c => {
@@ -800,7 +800,7 @@ export default function StaffRole({
                         value={payPlanId}
                         onChange={(e) => setPayPlanId(e.target.value)}
                         required
-                        className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-xl py-2 px-3 text-xs font-semibold text-white outline-none"
+                        className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-xl py-2 px-3 text-xs font-semibold text-white outline-none"
                       >
                         <option value="">-- Selecciona el Plan --</option>
                         {plans.filter(p => p.status === 'Activo').map(p => (
@@ -817,7 +817,7 @@ export default function StaffRole({
                         value={payMethod}
                         onChange={(e) => setPayMethod(e.target.value as any)}
                         required
-                        className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-xl py-2 px-3 text-xs font-semibold text-white outline-none"
+                        className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-xl py-2 px-3 text-xs font-semibold text-white outline-none"
                       >
                         <option value="Efectivo">💵 Efectivo</option>
                         <option value="Tarjeta">💳 Tarjeta Bancaria</option>
@@ -846,7 +846,7 @@ export default function StaffRole({
                     className={`w-full font-extrabold uppercase py-3 rounded-xl tracking-wider text-xs transition-all active:scale-95 cursor-pointer shadow-lg mt-2 ${
                       !payClientId || !payPlanId
                         ? 'bg-neutral-800 text-neutral-600 cursor-not-allowed border border-neutral-900'
-                        : 'bg-[#ccff00] hover:bg-[#d9ff26] text-black'
+                        : 'bg-[#7A724E] hover:bg-[#91875d] text-black'
                     }`}
                   >
                     Registrar Cobro y Activar de Inmediato
@@ -877,7 +877,7 @@ export default function StaffRole({
                           </span>
                         </div>
                         <div className="text-right">
-                          <span className="text-xs font-black text-[#ccff00] font-mono">${pay.amount}</span>
+                          <span className="text-xs font-black text-[#7A724E] font-mono">${pay.amount}</span>
                           <span className="text-[8px] text-neutral-500 font-mono block">{pay.date}</span>
                         </div>
                       </div>
@@ -899,7 +899,7 @@ export default function StaffRole({
           <button 
             id="btn-staff-tab-checkin"
             onClick={() => { stopCamera(); setActiveTab('checkin'); }}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'checkin' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'checkin' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <ShieldCheck className="w-5 h-5" />
             <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Check-In</span>
@@ -908,7 +908,7 @@ export default function StaffRole({
           <button 
             id="btn-staff-tab-socios"
             onClick={() => { stopCamera(); setActiveTab('socios'); }}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'socios' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'socios' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <UserPlus className="w-5 h-5" />
             <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Inscripción</span>
@@ -917,7 +917,7 @@ export default function StaffRole({
           <button 
             id="btn-staff-tab-caja"
             onClick={() => { stopCamera(); setActiveTab('caja'); }}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'caja' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'caja' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <CreditCard className="w-5 h-5" />
             <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Caja Rápida</span>

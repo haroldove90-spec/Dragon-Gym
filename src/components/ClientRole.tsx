@@ -116,14 +116,14 @@ export default function ClientRole({
               <h3 className="text-sm font-black uppercase tracking-tight text-black">{client.name}</h3>
               <p className="text-[10px] font-mono text-neutral-500 mt-1">Socio ID: #{client.id}</p>
               
-              <div className="mt-5 bg-[#ccff00] text-black text-[10px] font-black uppercase py-1.5 px-4 rounded-full tracking-wider">
+              <div className="mt-5 bg-[#7A724E] text-black text-[10px] font-black uppercase py-1.5 px-4 rounded-full tracking-wider">
                 LISTO PARA ESCANEAR
               </div>
             </div>
             
             <button 
               onClick={() => setHighVisibility(false)}
-              className="mt-6 text-xs text-[#ccff00] border border-[#ccff00]/40 bg-[#ccff00]/5 py-2 px-5 rounded-full hover:bg-[#ccff00] hover:text-black transition-all cursor-pointer"
+              className="mt-6 text-xs text-[#7A724E] border border-[#7A724E]/40 bg-[#7A724E]/5 py-2 px-5 rounded-full hover:bg-[#7A724E] hover:text-black transition-all cursor-pointer"
             >
               Cerrar Modo Escáner
             </button>
@@ -136,7 +136,7 @@ export default function ClientRole({
         <div className="flex items-center justify-between">
           <span className="text-[9px] font-mono text-neutral-500 uppercase tracking-wider">Demo: Cuenta de Socio</span>
           <div className="flex items-center gap-1.5">
-            <span className="text-[9px] text-[#ccff00] font-mono font-bold">Cambiar Socio:</span>
+            <span className="text-[9px] text-[#7A724E] font-mono font-bold">Cambiar Socio:</span>
             <select
               value={activeClientId}
               onChange={(e) => onChangeClient(e.target.value)}
@@ -156,11 +156,11 @@ export default function ClientRole({
           <div className="flex items-center gap-3">
             <img src={client.avatar} alt="Avatar" className="w-12 h-12 rounded-full object-cover border border-[#222]" />
             <div>
-              <span className="text-[9px] font-mono text-[#ccff00] uppercase tracking-widest font-bold">Bienvenido de vuelta</span>
+              <span className="text-[9px] font-mono text-[#7A724E] uppercase tracking-widest font-bold">Bienvenido de vuelta</span>
               <h3 className="text-sm font-black text-white tracking-tight">{client.name}</h3>
             </div>
           </div>
-          <div className={`w-3 h-3 rounded-full ${isExpired ? 'bg-red-500 animate-pulse' : 'bg-[#ccff00] animate-pulse'}`}></div>
+          <div className={`w-3 h-3 rounded-full ${isExpired ? 'bg-red-500 animate-pulse' : 'bg-[#7A724E] animate-pulse'}`}></div>
         </div>
       </div>
 
@@ -174,7 +174,7 @@ export default function ClientRole({
               
               {/* QR Holder Card */}
               <div className="bg-[#111] border border-[#222] rounded-[36px] p-6 max-w-sm mx-auto shadow-xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-[120px] h-[120px] rounded-bl-full bg-[#ccff00]/5 pointer-events-none"></div>
+                <div className="absolute top-0 right-0 w-[120px] h-[120px] rounded-bl-full bg-[#7A724E]/5 pointer-events-none"></div>
                 
                 <span className="text-[9px] font-mono text-neutral-400 uppercase tracking-widest block mb-4">
                   Credencial Digital de Acceso
@@ -183,7 +183,7 @@ export default function ClientRole({
                 {/* Main QR Code container with micro-interactions */}
                 <div 
                   onClick={() => setHighVisibility(true)}
-                  className="bg-neutral-900 border border-neutral-800 p-6 rounded-3xl inline-block relative cursor-pointer group hover:border-[#ccff00]/40 transition-all duration-300"
+                  className="bg-neutral-900 border border-neutral-800 p-6 rounded-3xl inline-block relative cursor-pointer group hover:border-[#7A724E]/40 transition-all duration-300"
                   title="Tocar para ampliar brillo"
                 >
                   <div className="bg-white p-3.5 rounded-2xl inline-block shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
@@ -206,7 +206,7 @@ export default function ClientRole({
                   </div>
 
                   {/* Absolute click indicator button */}
-                  <div className="absolute bottom-2 inset-x-0 mx-auto w-max bg-black/80 text-[8px] font-mono text-[#ccff00] uppercase tracking-widest py-1 px-3 rounded-full flex items-center gap-1.5 opacity-85 group-hover:opacity-100 transition-opacity">
+                  <div className="absolute bottom-2 inset-x-0 mx-auto w-max bg-black/80 text-[8px] font-mono text-[#7A724E] uppercase tracking-widest py-1 px-3 rounded-full flex items-center gap-1.5 opacity-85 group-hover:opacity-100 transition-opacity">
                     <Sun className="w-2.5 h-2.5 animate-spin" />
                     <span>Tocar para Brillo Escáner</span>
                   </div>
@@ -252,7 +252,7 @@ export default function ClientRole({
               
               {/* Membership Main Panel */}
               <div className="bg-[#111] border border-[#222] rounded-[28px] p-5 shadow-lg relative overflow-hidden">
-                <span className="text-[8px] font-mono text-[#ccff00] uppercase tracking-widest block mb-2 font-bold">ESTADO DE MEMBRESÍA</span>
+                <span className="text-[8px] font-mono text-[#7A724E] uppercase tracking-widest block mb-2 font-bold">ESTADO DE MEMBRESÍA</span>
                 
                 <h3 className="text-lg font-black text-white">{currentPlan?.name || 'Membresía Plan'}</h3>
                 
@@ -268,7 +268,7 @@ export default function ClientRole({
                         d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                       />
                       <path
-                        className={isExpired ? 'text-red-500' : 'text-[#ccff00]'}
+                        className={isExpired ? 'text-red-500' : 'text-[#7A724E]'}
                         strokeDasharray={`${Math.max(0, Math.min(100, (daysRemaining / Math.max(1, currentPlan?.durationDays || 30)) * 100))}, 100`}
                         strokeWidth="3"
                         strokeLinecap="round"
@@ -290,7 +290,7 @@ export default function ClientRole({
                       Tu plan actual tiene <strong className="text-white font-bold">{daysRemaining > 0 ? `${daysRemaining} días` : '0 días'}</strong> de validez restantes.
                     </p>
                     <div className="text-[11px] text-neutral-400 font-mono">
-                      Próximo Pago: <span className={isExpired ? 'text-red-400 font-bold' : 'text-[#ccff00] font-bold'}>{client.expirationDate}</span>
+                      Próximo Pago: <span className={isExpired ? 'text-red-400 font-bold' : 'text-[#7A724E] font-bold'}>{client.expirationDate}</span>
                     </div>
                   </div>
                 </div>
@@ -308,7 +308,7 @@ export default function ClientRole({
                         <span className="text-[9px] text-neutral-500 font-mono">Fecha: {item.date}</span>
                       </div>
                       <div className="text-right">
-                        <span className="text-xs font-bold text-[#ccff00] font-mono block">${item.price}</span>
+                        <span className="text-xs font-bold text-[#7A724E] font-mono block">${item.price}</span>
                         <span className={`text-[8px] font-bold uppercase font-mono px-1.5 py-0.2 rounded ${
                           item.status === 'Vigente' ? 'bg-emerald-950 text-emerald-400' : 'bg-neutral-900 text-neutral-500'
                         }`}>
@@ -327,7 +327,7 @@ export default function ClientRole({
           {activeTab === 'avisos' && (
             <div className="space-y-4 animate-fade-in">
               <div className="flex items-center gap-1.5">
-                <Bell className="w-4 h-4 text-[#ccff00]" />
+                <Bell className="w-4 h-4 text-[#7A724E]" />
                 <h3 className="text-xs text-neutral-400 uppercase tracking-wider font-mono">Muro de Comunicados</h3>
               </div>
 
@@ -365,7 +365,7 @@ export default function ClientRole({
           {activeTab === 'recibos' && (
             <div className="space-y-4 animate-fade-in">
               <div className="flex items-center gap-1.5">
-                <CreditCard className="w-4 h-4 text-[#ccff00]" />
+                <CreditCard className="w-4 h-4 text-[#7A724E]" />
                 <h3 className="text-xs text-neutral-400 uppercase tracking-wider font-mono">Historial de Recibos</h3>
               </div>
 
@@ -375,7 +375,7 @@ export default function ClientRole({
                 <div className="space-y-3">
                   {clientPayments.map(pay => (
                     <div key={pay.id} className="bg-[#111] border border-neutral-800 rounded-2xl p-4 flex justify-between items-center relative overflow-hidden">
-                      <div className="absolute top-0 right-0 w-[60px] h-[60px] rounded-bl-full bg-[#ccff00]/5"></div>
+                      <div className="absolute top-0 right-0 w-[60px] h-[60px] rounded-bl-full bg-[#7A724E]/5"></div>
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="text-xs font-bold text-white font-mono">{pay.folio}</span>
@@ -389,7 +389,7 @@ export default function ClientRole({
                       </div>
 
                       <div className="text-right shrink-0">
-                        <span className="text-xs font-black text-[#ccff00] font-mono block">${pay.amount} MXN</span>
+                        <span className="text-xs font-black text-[#7A724E] font-mono block">${pay.amount} MXN</span>
                         <span className="text-[8px] text-neutral-500 font-mono block">Comprobante Digital</span>
                       </div>
                     </div>
@@ -406,7 +406,7 @@ export default function ClientRole({
               {/* Profile Details (Basic info only to prevent overwhelming user) */}
               <div className="bg-[#111] border border-[#222] rounded-[28px] p-5 shadow-lg space-y-4">
                 <div className="text-center pb-2 border-b border-[#222]">
-                  <img src={client.avatar} alt="Foto" className="w-20 h-20 rounded-full object-cover mx-auto border-2 border-[#ccff00] mb-2" />
+                  <img src={client.avatar} alt="Foto" className="w-20 h-20 rounded-full object-cover mx-auto border-2 border-[#7A724E] mb-2" />
                   <h4 className="text-sm font-bold text-white">{client.name}</h4>
                   <span className="text-[9px] text-neutral-400 font-mono block uppercase">Socio ID: #{client.id}</span>
                 </div>
@@ -454,7 +454,7 @@ export default function ClientRole({
           <button 
             id="btn-client-tab-credencial"
             onClick={() => setActiveTab('credencial')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'credencial' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'credencial' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <QrCode className="w-5 h-5" />
             <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Acceso</span>
@@ -463,7 +463,7 @@ export default function ClientRole({
           <button 
             id="btn-client-tab-membresia"
             onClick={() => setActiveTab('membresia')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'membresia' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'membresia' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Calendar className="w-5 h-5" />
             <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Membresía</span>
@@ -472,7 +472,7 @@ export default function ClientRole({
           <button 
             id="btn-client-tab-avisos"
             onClick={() => setActiveTab('avisos')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'avisos' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'avisos' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Bell className="w-5 h-5" />
             <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Anuncios</span>
@@ -481,7 +481,7 @@ export default function ClientRole({
           <button 
             id="btn-client-tab-recibos"
             onClick={() => setActiveTab('recibos')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'recibos' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'recibos' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Receipt className="w-5 h-5" />
             <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Recibos</span>
@@ -490,7 +490,7 @@ export default function ClientRole({
           <button 
             id="btn-client-tab-perfil"
             onClick={() => setActiveTab('perfil')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'perfil' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'perfil' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <User className="w-5 h-5" />
             <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Perfil</span>

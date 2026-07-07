@@ -327,13 +327,13 @@ export default function AdminRole({
         <div className="max-w-3xl mx-auto w-full">
           <div className="flex justify-between items-center mb-2.5">
             <div>
-              <span className="text-[9px] font-mono text-[#ccff00] uppercase tracking-widest font-bold">Consola Global del Propietario</span>
+              <span className="text-[9px] font-mono text-[#7A724E] uppercase tracking-widest font-bold">Consola Global del Propietario</span>
               <h3 className="text-sm font-black text-white tracking-tight font-display flex items-center gap-1.5">
-                <Crown className="w-4 h-4 text-[#ccff00]" />
+                <Crown className="w-4 h-4 text-[#7A724E]" />
                 <span>SUPERADMIN: ALEJANDRO MARTÍNEZ</span>
               </h3>
             </div>
-            <div className="bg-[#ccff00] text-black text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full font-mono">
+            <div className="bg-[#7A724E] text-black text-[9px] font-black uppercase px-2.5 py-0.5 rounded-full font-mono">
               PROPIETARIO L1
             </div>
           </div>
@@ -356,7 +356,7 @@ export default function AdminRole({
                 </div>
                 <div className="bg-[#111] border border-[#222] rounded-2xl p-3 text-center shadow-md">
                   <span className="text-[9px] text-yellow-500 uppercase font-mono font-bold block mb-1">Por Vencer (7d)</span>
-                  <span className="text-xl font-black text-[#ccff00] font-mono">{nearExpirationClients}</span>
+                  <span className="text-xl font-black text-[#7A724E] font-mono">{nearExpirationClients}</span>
                 </div>
                 <div className="bg-[#111] border border-[#222] rounded-2xl p-3 text-center shadow-md">
                   <span className="text-[9px] text-red-500 uppercase font-mono font-bold block mb-1">Socios Vencidos</span>
@@ -368,15 +368,15 @@ export default function AdminRole({
               <div className="bg-[#111] border border-[#222] rounded-[24px] p-4 shadow-lg">
                 <div className="flex justify-between items-center mb-3">
                   <div className="flex items-center gap-1.5">
-                    <Activity className="w-4 h-4 text-[#ccff00]" />
+                    <Activity className="w-4 h-4 text-[#7A724E]" />
                     <h4 className="text-xs text-white uppercase tracking-wider font-bold">Flujo de Socios Hoy (Check-Ins)</h4>
                   </div>
-                  <span className="text-[10px] font-mono text-[#ccff00] font-bold">Ref: 2026-07-06</span>
+                  <span className="text-[10px] font-mono text-[#7A724E] font-bold">Ref: 2026-07-06</span>
                 </div>
 
                 <div className="flex items-center gap-4">
                   <div className="bg-[#050505] border border-[#222] rounded-xl p-3 text-center shrink-0 min-w-[100px]">
-                    <span className="text-[28px] font-black text-[#ccff00] font-display block leading-none">
+                    <span className="text-[28px] font-black text-[#7A724E] font-display block leading-none">
                       {todayCheckInsCount}
                     </span>
                     <span className="text-[9px] text-neutral-400 font-mono uppercase tracking-wider mt-1 block">Asistencias Hoy</span>
@@ -387,7 +387,7 @@ export default function AdminRole({
                     </p>
                     <div className="w-full bg-[#222] h-2 rounded-full mt-2 overflow-hidden">
                       <div 
-                        className="bg-[#ccff00] h-full rounded-full shadow-[0_0_8px_rgba(204,255,0,0.5)]"
+                        className="bg-[#7A724E] h-full rounded-full shadow-[0_0_8px_rgba(122,114,78,0.5)]"
                         style={{ width: `${Math.min(100, (todayCheckInsCount / Math.max(1, activeClients) * 100))}%` }}
                       ></div>
                     </div>
@@ -399,7 +399,7 @@ export default function AdminRole({
               <div className="bg-[#111] border border-[#222] rounded-[24px] p-5 shadow-lg">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-1.5">
-                    <DollarSign className="w-4.5 h-4.5 text-[#ccff00]" />
+                    <DollarSign className="w-4.5 h-4.5 text-[#7A724E]" />
                     <h4 className="text-xs text-white uppercase tracking-wider font-bold">Resumen y Proyección Financiera</h4>
                   </div>
                 </div>
@@ -421,8 +421,8 @@ export default function AdminRole({
                       <span className="text-[9px] text-neutral-400 font-mono mt-1">Jun</span>
                     </div>
                     <div className="flex flex-col items-center flex-1">
-                      <span className="text-[8px] text-[#ccff00] font-mono font-bold">${totalIncome}</span>
-                      <div className="w-8 bg-[#ccff00] hover:bg-[#d9ff26] transition-all rounded-t h-[110px] shadow-[0_0_10px_rgba(204,255,0,0.3)]"></div>
+                      <span className="text-[8px] text-[#7A724E] font-mono font-bold">${totalIncome}</span>
+                      <div className="w-8 bg-[#7A724E] hover:bg-[#91875d] transition-all rounded-t h-[110px] shadow-[0_0_10px_rgba(122,114,78,0.3)]"></div>
                       <span className="text-[9px] text-white font-mono font-bold mt-1">Jul *</span>
                     </div>
                   </div>
@@ -434,8 +434,8 @@ export default function AdminRole({
                     <span className="text-lg font-black text-white font-mono">${totalIncome}</span>
                   </div>
                   <div className="bg-[#050505] border border-[#222] rounded-xl p-3">
-                    <span className="text-[9px] text-[#ccff00] font-mono uppercase tracking-wider block mb-1">Proyección Renovaciones</span>
-                    <span className="text-lg font-black text-[#ccff00] font-mono">${projectedRevenue}</span>
+                    <span className="text-[9px] text-[#7A724E] font-mono uppercase tracking-wider block mb-1">Proyección Renovaciones</span>
+                    <span className="text-lg font-black text-[#7A724E] font-mono">${projectedRevenue}</span>
                   </div>
                 </div>
                 <p className="text-[10px] text-neutral-500 mt-2.5 italic text-center">
@@ -456,7 +456,7 @@ export default function AdminRole({
                 </div>
                 <button 
                   onClick={() => setShowAddPlanForm(!showAddPlanForm)}
-                  className="bg-[#ccff00] hover:bg-[#d9ff26] text-black text-[10px] font-extrabold uppercase tracking-wide py-1.5 px-3 rounded-xl flex items-center gap-1 transition-all active:scale-95 cursor-pointer shadow-lg w-max shrink-0"
+                  className="bg-[#7A724E] hover:bg-[#91875d] text-black text-[10px] font-extrabold uppercase tracking-wide py-1.5 px-3 rounded-xl flex items-center gap-1 transition-all active:scale-95 cursor-pointer shadow-lg w-max shrink-0"
                 >
                   <PlusCircle className="w-3.5 h-3.5" />
                   <span>Nuevo Plan</span>
@@ -465,8 +465,8 @@ export default function AdminRole({
 
               {/* Add Plan Form */}
               {showAddPlanForm && (
-                <div className="bg-[#111] border border-[#ccff00]/30 rounded-[24px] p-4 shadow-xl">
-                  <h4 className="text-xs font-mono text-[#ccff00] uppercase tracking-wider mb-3">CREAR PLAN DE MEMBRESÍA</h4>
+                <div className="bg-[#111] border border-[#7A724E]/30 rounded-[24px] p-4 shadow-xl">
+                  <h4 className="text-xs font-mono text-[#7A724E] uppercase tracking-wider mb-3">CREAR PLAN DE MEMBRESÍA</h4>
                   {planError && <p className="text-[11px] text-red-400 mb-2 font-mono font-bold">{planError}</p>}
                   <form onSubmit={handleAddPlanSubmit} className="space-y-3">
                     <div>
@@ -477,7 +477,7 @@ export default function AdminRole({
                         placeholder="Ej. Plan Semestral"
                         value={newPlanName}
                         onChange={(e) => setNewPlanName(e.target.value)}
-                        className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-lg py-1.5 px-2.5 text-xs text-white"
+                        className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-lg py-1.5 px-2.5 text-xs text-white"
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-2">
@@ -489,7 +489,7 @@ export default function AdminRole({
                           placeholder="250"
                           value={newPlanPrice}
                           onChange={(e) => setNewPlanPrice(e.target.value)}
-                          className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-lg py-1.5 px-2.5 text-xs text-white font-mono"
+                          className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-lg py-1.5 px-2.5 text-xs text-white font-mono"
                         />
                       </div>
                       <div>
@@ -500,7 +500,7 @@ export default function AdminRole({
                           placeholder="180"
                           value={newPlanDays}
                           onChange={(e) => setNewPlanDays(e.target.value)}
-                          className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-lg py-1.5 px-2.5 text-xs text-white font-mono"
+                          className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-lg py-1.5 px-2.5 text-xs text-white font-mono"
                         />
                       </div>
                     </div>
@@ -514,7 +514,7 @@ export default function AdminRole({
                       </button>
                       <button 
                         type="submit" 
-                        className="bg-[#ccff00] text-black text-[10px] uppercase font-black py-1.5 px-4 rounded-lg"
+                        className="bg-[#7A724E] text-black text-[10px] uppercase font-black py-1.5 px-4 rounded-lg"
                       >
                         Crear Plan
                       </button>
@@ -548,7 +548,7 @@ export default function AdminRole({
                               type="number" 
                               value={editPrice}
                               onChange={(e) => setEditPrice(e.target.value)}
-                              className="bg-[#050505] border border-[#ccff00] focus:outline-none rounded w-16 text-xs py-0.5 px-1.5 text-white font-mono text-center"
+                              className="bg-[#050505] border border-[#7A724E] focus:outline-none rounded w-16 text-xs py-0.5 px-1.5 text-white font-mono text-center"
                             />
                             <button 
                               onClick={() => {
@@ -558,14 +558,14 @@ export default function AdminRole({
                                 }
                                 setEditingPlanId(null);
                               }}
-                              className="bg-[#ccff00] text-black text-[9px] font-extrabold p-1 rounded"
+                              className="bg-[#7A724E] text-black text-[9px] font-extrabold p-1 rounded"
                             >
                               ✓
                             </button>
                           </div>
                         ) : (
                           <div className="text-right">
-                            <span className="text-sm font-black text-[#ccff00] font-mono block">${p.price}</span>
+                            <span className="text-sm font-black text-[#7A724E] font-mono block">${p.price}</span>
                             <button 
                               onClick={() => {
                                 setEditingPlanId(p.id);
@@ -580,7 +580,7 @@ export default function AdminRole({
 
                         <button
                           onClick={() => onTogglePlanStatus(p.id)}
-                          className={`text-xs p-1.5 rounded-lg border ${p.status === 'Activo' ? 'border-[#ccff00]/40 text-[#ccff00] bg-[#ccff00]/5' : 'border-neutral-800 text-neutral-500 bg-black/5'}`}
+                          className={`text-xs p-1.5 rounded-lg border ${p.status === 'Activo' ? 'border-[#7A724E]/40 text-[#7A724E] bg-[#7A724E]/5' : 'border-neutral-800 text-neutral-500 bg-black/5'}`}
                           title={p.status === 'Activo' ? 'Desactivar plan' : 'Activar plan'}
                         >
                           {p.status === 'Activo' ? 'Desactivar' : 'Activar'}
@@ -603,7 +603,7 @@ export default function AdminRole({
                 </div>
                 <button 
                   onClick={() => setShowAddStaffForm(!showAddStaffForm)}
-                  className="bg-[#ccff00] hover:bg-[#d9ff26] text-black text-[10px] font-extrabold uppercase tracking-wide py-1.5 px-3 rounded-xl flex items-center gap-1 transition-all active:scale-95 cursor-pointer shadow-lg w-max shrink-0"
+                  className="bg-[#7A724E] hover:bg-[#91875d] text-black text-[10px] font-extrabold uppercase tracking-wide py-1.5 px-3 rounded-xl flex items-center gap-1 transition-all active:scale-95 cursor-pointer shadow-lg w-max shrink-0"
                 >
                   <UserPlus className="w-3.5 h-3.5" />
                   <span>+ Agregar Staff</span>
@@ -612,8 +612,8 @@ export default function AdminRole({
 
               {/* Add Staff form */}
               {showAddStaffForm && (
-                <div className="bg-[#111] border border-[#ccff00]/30 rounded-[24px] p-4 shadow-xl">
-                  <h4 className="text-xs font-mono text-[#ccff00] uppercase tracking-wider mb-3">REGISTRAR NUEVO EMPLEADO</h4>
+                <div className="bg-[#111] border border-[#7A724E]/30 rounded-[24px] p-4 shadow-xl">
+                  <h4 className="text-xs font-mono text-[#7A724E] uppercase tracking-wider mb-3">REGISTRAR NUEVO EMPLEADO</h4>
                   {staffError && <p className="text-[11px] text-red-400 mb-2 font-mono font-bold">{staffError}</p>}
                   <form onSubmit={handleAddStaffSubmit} className="space-y-3">
                     <div>
@@ -624,7 +624,7 @@ export default function AdminRole({
                         placeholder="Ej. Lucía Gómez"
                         value={newStaffName}
                         onChange={(e) => setNewStaffName(e.target.value)}
-                        className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-lg py-1.5 px-2.5 text-xs text-white"
+                        className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-lg py-1.5 px-2.5 text-xs text-white"
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-2">
@@ -633,7 +633,7 @@ export default function AdminRole({
                         <select
                           value={newStaffRole}
                           onChange={(e) => setNewStaffRole(e.target.value as any)}
-                          className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-lg py-1.5 px-2 text-xs text-white"
+                          className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-lg py-1.5 px-2 text-xs text-white"
                         >
                           <option value="Recepcionista">Recepcionista</option>
                           <option value="Entrenador">Entrenador</option>
@@ -648,7 +648,7 @@ export default function AdminRole({
                           placeholder="lucia.recep"
                           value={newStaffUser}
                           onChange={(e) => setNewStaffUser(e.target.value)}
-                          className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-lg py-1.5 px-2.5 text-xs text-white font-mono"
+                          className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-lg py-1.5 px-2.5 text-xs text-white font-mono"
                         />
                       </div>
                     </div>
@@ -662,7 +662,7 @@ export default function AdminRole({
                       </button>
                       <button 
                         type="submit" 
-                        className="bg-[#ccff00] text-black text-[10px] uppercase font-black py-1.5 px-4 rounded-lg"
+                        className="bg-[#7A724E] text-black text-[10px] uppercase font-black py-1.5 px-4 rounded-lg"
                       >
                         Guardar Staff
                       </button>
@@ -679,7 +679,7 @@ export default function AdminRole({
                     <div key={s.id} className="bg-[#111] border border-[#222] rounded-2xl p-3.5 flex flex-col sm:flex-row gap-3 sm:items-center justify-between hover:border-neutral-800">
                       <div className="flex items-center gap-3">
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center border font-black text-sm shrink-0 ${
-                          isSuspended ? 'bg-red-950/20 text-red-500 border-red-900/30' : 'bg-white/5 text-[#ccff00] border-[#222]'
+                          isSuspended ? 'bg-red-950/20 text-red-500 border-red-900/30' : 'bg-white/5 text-[#7A724E] border-[#222]'
                         }`}>
                           {s.name.slice(0, 2).toUpperCase()}
                         </div>
@@ -713,7 +713,7 @@ export default function AdminRole({
                           onClick={() => onToggleStaffStatus(s.id)}
                           className={`text-[10px] font-black uppercase py-1.5 px-3 rounded-lg transition-all shrink-0 ${
                             isSuspended 
-                              ? 'bg-[#ccff00] hover:bg-[#d9ff26] text-black cursor-pointer' 
+                              ? 'bg-[#7A724E] hover:bg-[#91875d] text-black cursor-pointer' 
                               : 'bg-red-950/40 hover:bg-red-950 text-red-400 border border-red-900/40 cursor-pointer'
                           }`}
                         >
@@ -737,7 +737,7 @@ export default function AdminRole({
                 </div>
                 <button 
                   onClick={() => setShowAddMember(!showAddMember)}
-                  className="bg-[#ccff00] hover:bg-[#d9ff26] text-black text-[10px] font-extrabold uppercase py-1.5 px-3 rounded-xl flex items-center gap-1 cursor-pointer w-max shrink-0"
+                  className="bg-[#7A724E] hover:bg-[#91875d] text-black text-[10px] font-extrabold uppercase py-1.5 px-3 rounded-xl flex items-center gap-1 cursor-pointer w-max shrink-0"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>+ Nuevo Socio</span>
@@ -746,8 +746,8 @@ export default function AdminRole({
 
               {/* Sliding Form to Add Member */}
               {showAddMember && (
-                <div className="bg-[#111] border border-[#ccff00]/30 rounded-[24px] p-4 shadow-xl">
-                  <h4 className="text-xs font-mono text-[#ccff00] uppercase tracking-wider mb-2">REGISTRAR NUEVO SOCIO</h4>
+                <div className="bg-[#111] border border-[#7A724E]/30 rounded-[24px] p-4 shadow-xl">
+                  <h4 className="text-xs font-mono text-[#7A724E] uppercase tracking-wider mb-2">REGISTRAR NUEVO SOCIO</h4>
                   {memberError && <p className="text-[11px] text-red-400 mb-2 font-mono font-bold">{memberError}</p>}
                   <form onSubmit={handleAddClientSubmit} className="space-y-3">
                     <div>
@@ -758,7 +758,7 @@ export default function AdminRole({
                         placeholder="Ej. Carlos Mendoza"
                         value={memberName}
                         onChange={(e) => setMemberName(e.target.value)}
-                        className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-lg py-1.5 px-2.5 text-xs text-white"
+                        className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-lg py-1.5 px-2.5 text-xs text-white"
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-2">
@@ -770,7 +770,7 @@ export default function AdminRole({
                           placeholder="carlos@gym.com"
                           value={memberEmail}
                           onChange={(e) => setMemberEmail(e.target.value)}
-                          className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-lg py-1.5 px-2.5 text-xs text-white font-mono"
+                          className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-lg py-1.5 px-2.5 text-xs text-white font-mono"
                         />
                       </div>
                       <div>
@@ -780,7 +780,7 @@ export default function AdminRole({
                           placeholder="+34 600 000 000"
                           value={memberPhone}
                           onChange={(e) => setMemberPhone(e.target.value)}
-                          className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-lg py-1.5 px-2.5 text-xs text-white font-mono"
+                          className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-lg py-1.5 px-2.5 text-xs text-white font-mono"
                         />
                       </div>
                     </div>
@@ -791,7 +791,7 @@ export default function AdminRole({
                         <select
                           value={memberPlanId}
                           onChange={(e) => setMemberPlanId(e.target.value)}
-                          className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-lg py-1 px-2 text-xs text-white"
+                          className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-lg py-1 px-2 text-xs text-white"
                         >
                           {plans.map(p => (
                             <option key={p.id} value={p.id}>{p.name} — ${p.price}</option>
@@ -804,7 +804,7 @@ export default function AdminRole({
                           type="number" 
                           value={memberWeight}
                           onChange={(e) => setMemberWeight(e.target.value)}
-                          className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-lg py-1.5 px-2.5 text-xs text-white font-mono"
+                          className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-lg py-1.5 px-2.5 text-xs text-white font-mono"
                         />
                       </div>
                     </div>
@@ -816,7 +816,7 @@ export default function AdminRole({
                         placeholder="Ej. Madre - +34 600 111 222"
                         value={memberEmergency}
                         onChange={(e) => setMemberEmergency(e.target.value)}
-                        className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-lg py-1.5 px-2.5 text-xs text-white"
+                        className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-lg py-1.5 px-2.5 text-xs text-white"
                       />
                     </div>
 
@@ -830,7 +830,7 @@ export default function AdminRole({
                       </button>
                       <button 
                         type="submit" 
-                        className="bg-[#ccff00] text-black text-[10px] uppercase font-black py-1.5 px-4 rounded-lg"
+                        className="bg-[#7A724E] text-black text-[10px] uppercase font-black py-1.5 px-4 rounded-lg"
                       >
                         Guardar Socio
                       </button>
@@ -846,7 +846,7 @@ export default function AdminRole({
                   placeholder="Buscar socio por nombre o correo..."
                   value={memberSearch}
                   onChange={(e) => setMemberSearch(e.target.value)}
-                  className="w-full bg-[#111] border border-[#222] focus:border-[#ccff00]/50 rounded-xl py-2.5 pl-10 pr-4 text-xs font-semibold text-white placeholder-neutral-500 outline-none transition-all"
+                  className="w-full bg-[#111] border border-[#222] focus:border-[#7A724E]/50 rounded-xl py-2.5 pl-10 pr-4 text-xs font-semibold text-white placeholder-neutral-500 outline-none transition-all"
                 />
                 <Search className="w-4 h-4 text-neutral-500 absolute left-3.5 top-3.5" />
               </div>
@@ -888,7 +888,7 @@ export default function AdminRole({
                             title="Alternar estado de suscripción"
                           >
                             {c.status === 'Activo' ? (
-                              <ToggleRight className="w-6 h-6 text-[#ccff00]" />
+                              <ToggleRight className="w-6 h-6 text-[#7A724E]" />
                             ) : (
                               <ToggleLeft className="w-6 h-6 text-neutral-600" />
                             )}
@@ -920,7 +920,7 @@ export default function AdminRole({
             <div className="space-y-4 animate-fade-in">
               <div className="bg-[#111] border border-[#222] rounded-[32px] p-5 shadow-lg">
                 <div className="flex items-center gap-2 mb-3">
-                  <FileText className="w-5 h-5 text-[#ccff00]" />
+                  <FileText className="w-5 h-5 text-[#7A724E]" />
                   <h3 className="text-sm font-black text-white uppercase tracking-wider font-display">Reportes y Auditoría de Ingresos</h3>
                 </div>
 
@@ -932,7 +932,7 @@ export default function AdminRole({
                       type="date"
                       value={reportStartDate}
                       onChange={(e) => setReportStartDate(e.target.value)}
-                      className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-xl py-2 px-3 text-xs text-white font-mono"
+                      className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-xl py-2 px-3 text-xs text-white font-mono"
                     />
                   </div>
                   <div>
@@ -941,27 +941,27 @@ export default function AdminRole({
                       type="date"
                       value={reportEndDate}
                       onChange={(e) => setReportEndDate(e.target.value)}
-                      className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-xl py-2 px-3 text-xs text-white font-mono"
+                      className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-xl py-2 px-3 text-xs text-white font-mono"
                     />
                   </div>
                 </div>
 
                 {/* Export data section */}
                 <div className="bg-[#050505] border border-[#222] rounded-2xl p-4 mb-4">
-                  <h4 className="text-[11px] text-[#ccff00] font-mono uppercase tracking-widest mb-3">Descargas y Auditoría del Sistema</h4>
+                  <h4 className="text-[11px] text-[#7A724E] font-mono uppercase tracking-widest mb-3">Descargas y Auditoría del Sistema</h4>
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       onClick={triggerExportClients}
                       className="bg-neutral-900 hover:bg-neutral-800 text-neutral-100 border border-[#222] text-xs font-bold uppercase p-3 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer"
                     >
-                      <FileDown className="w-4 h-4 text-[#ccff00]" />
+                      <FileDown className="w-4 h-4 text-[#7A724E]" />
                       <span>Exportar Socios</span>
                     </button>
                     <button
                       onClick={triggerExportLedger}
                       className="bg-neutral-900 hover:bg-neutral-800 text-neutral-100 border border-[#222] text-xs font-bold uppercase p-3 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer"
                     >
-                      <FileDown className="w-4 h-4 text-[#ccff00]" />
+                      <FileDown className="w-4 h-4 text-[#7A724E]" />
                       <span>Exportar Caja</span>
                     </button>
                   </div>
@@ -978,14 +978,14 @@ export default function AdminRole({
                         <div>
                           <div className="flex items-center gap-1.5">
                             <span className="text-[11px] font-black text-white">{pay.clientName}</span>
-                            <span className="text-[8px] bg-[#ccff00]/10 text-[#ccff00] px-1 rounded font-mono font-bold">{pay.method}</span>
+                            <span className="text-[8px] bg-[#7A724E]/10 text-[#7A724E] px-1 rounded font-mono font-bold">{pay.method}</span>
                           </div>
                           <p className="text-[9px] text-neutral-500 font-mono mt-0.5">
                             Membresía: {pay.planName} • Folio: {pay.folio}
                           </p>
                         </div>
                         <div className="text-right">
-                          <span className="text-xs font-black text-[#ccff00] font-mono">${pay.amount}</span>
+                          <span className="text-xs font-black text-[#7A724E] font-mono">${pay.amount}</span>
                           <span className="text-[8px] text-neutral-500 font-mono block">{pay.date}</span>
                         </div>
                       </div>
@@ -996,7 +996,7 @@ export default function AdminRole({
                 {/* Ledger Summation */}
                 <div className="mt-4 pt-3 border-t border-[#222] flex justify-between items-center px-1">
                   <span className="text-xs font-mono uppercase tracking-widest text-neutral-400 font-bold">Total Recaudado Auditado</span>
-                  <span className="text-sm font-black text-[#ccff00] font-mono">
+                  <span className="text-sm font-black text-[#7A724E] font-mono">
                     ${auditedPayments.reduce((sum, p) => sum + p.amount, 0)} MXN
                   </span>
                 </div>
@@ -1010,7 +1010,7 @@ export default function AdminRole({
             <div className="space-y-5 animate-fade-in">
               <div className="bg-[#111] border border-[#222] rounded-[32px] p-5 shadow-lg">
                 <div className="flex items-center gap-1.5 mb-3">
-                  <Bell className="w-4 h-4 text-[#ccff00]" />
+                  <Bell className="w-4 h-4 text-[#7A724E]" />
                   <h4 className="text-xs text-white uppercase tracking-wider font-bold">Publicar Aviso en el Muro (PWA Socio)</h4>
                 </div>
                 {annSuccessMsg && (
@@ -1028,7 +1028,7 @@ export default function AdminRole({
                       placeholder="Ej. Clases de Yoga Suspendidas Temporalmente"
                       value={annTitle}
                       onChange={(e) => setAnnTitle(e.target.value)}
-                      className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-lg py-1.5 px-2.5 text-xs text-white"
+                      className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-lg py-1.5 px-2.5 text-xs text-white"
                     />
                   </div>
                   <div>
@@ -1039,7 +1039,7 @@ export default function AdminRole({
                       placeholder="Describe a detalle las fechas, horarios, o pautas del comunicado..."
                       value={annContent}
                       onChange={(e) => setAnnContent(e.target.value)}
-                      className="w-full bg-[#050505] border border-[#222] focus:border-[#ccff00]/50 rounded-lg py-1.5 px-2.5 text-xs text-white"
+                      className="w-full bg-[#050505] border border-[#222] focus:border-[#7A724E]/50 rounded-lg py-1.5 px-2.5 text-xs text-white"
                     />
                   </div>
                   <div className="flex items-center gap-2">
@@ -1048,7 +1048,7 @@ export default function AdminRole({
                       id="important-chk"
                       checked={annImportant}
                       onChange={(e) => setAnnImportant(e.target.checked)}
-                      className="accent-[#ccff00]"
+                      className="accent-[#7A724E]"
                     />
                     <label htmlFor="important-chk" className="text-[10px] text-neutral-300 font-mono select-none">
                       Marcar como Urgente (Resaltar en Rojo en PWA)
@@ -1056,7 +1056,7 @@ export default function AdminRole({
                   </div>
                   <button 
                     type="submit" 
-                    className="w-full bg-[#ccff00] text-black font-extrabold uppercase py-2.5 rounded-xl text-xs transition-all active:scale-95 cursor-pointer shadow-md"
+                    className="w-full bg-[#7A724E] text-black font-extrabold uppercase py-2.5 rounded-xl text-xs transition-all active:scale-95 cursor-pointer shadow-md"
                   >
                     Publicar Aviso en Dragon Muro
                   </button>
@@ -1101,7 +1101,7 @@ export default function AdminRole({
           <button 
             id="btn-admin-tab-metrics"
             onClick={() => setActiveTab('metrics')}
-            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'metrics' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'metrics' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Activity className="w-4 h-4" />
             <span className="text-[8px] font-mono uppercase font-bold tracking-wider">Métricas</span>
@@ -1110,7 +1110,7 @@ export default function AdminRole({
           <button 
             id="btn-admin-tab-plans"
             onClick={() => setActiveTab('plans')}
-            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'plans' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'plans' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <DollarSign className="w-4 h-4" />
             <span className="text-[8px] font-mono uppercase font-bold tracking-wider">Membresías</span>
@@ -1119,7 +1119,7 @@ export default function AdminRole({
           <button 
             id="btn-admin-tab-staff"
             onClick={() => setActiveTab('staff')}
-            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'staff' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'staff' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Users className="w-4 h-4" />
             <span className="text-[8px] font-mono uppercase font-bold tracking-wider">Personal</span>
@@ -1128,7 +1128,7 @@ export default function AdminRole({
           <button 
             id="btn-admin-tab-socios"
             onClick={() => setActiveTab('socios')}
-            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'socios' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'socios' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <UserCheck className="w-4 h-4" />
             <span className="text-[8px] font-mono uppercase font-bold tracking-wider">Socios</span>
@@ -1137,7 +1137,7 @@ export default function AdminRole({
           <button 
             id="btn-admin-tab-reports"
             onClick={() => setActiveTab('reports')}
-            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'reports' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'reports' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <FileText className="w-4 h-4" />
             <span className="text-[8px] font-mono uppercase font-bold tracking-wider">Auditoría</span>
@@ -1146,7 +1146,7 @@ export default function AdminRole({
           <button 
             id="btn-admin-tab-announcements"
             onClick={() => setActiveTab('announcements')}
-            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'announcements' ? 'text-[#ccff00]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'announcements' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Bell className="w-4 h-4" />
             <span className="text-[8px] font-mono uppercase font-bold tracking-wider">Avisos</span>

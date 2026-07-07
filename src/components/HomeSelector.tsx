@@ -12,8 +12,8 @@ export default function HomeSelector({ onSelectRole, onInstallClick, isInstalled
   return (
     <div className="flex flex-col min-h-screen bg-[#050505] px-6 py-8 relative overflow-y-auto overflow-x-hidden">
       {/* Background premium glows */}
-      <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full bg-[#ccff00]/10 blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-[-150px] right-[-100px] w-[350px] h-[350px] rounded-full bg-[#ccff00]/5 blur-[150px] pointer-events-none"></div>
+      <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full bg-[#7A724E]/10 blur-[120px] pointer-events-none"></div>
+      <div className="absolute bottom-[-150px] right-[-100px] w-[350px] h-[350px] rounded-full bg-[#7A724E]/5 blur-[150px] pointer-events-none"></div>
 
       {/* Responsive Content Wrapper */}
       <div className="w-full max-w-3xl mx-auto flex-1 flex flex-col justify-between gap-6 z-10">
@@ -36,23 +36,23 @@ export default function HomeSelector({ onSelectRole, onInstallClick, isInstalled
           <motion.div 
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-gradient-to-r from-neutral-950 to-[#111] border border-[#ccff00]/25 rounded-[24px] p-4 flex items-center justify-between gap-4 shadow-[0_8px_30px_rgb(204,255,0,0.03)]"
+            className="bg-gradient-to-r from-neutral-950 to-[#111] border border-[#7A724E]/25 rounded-[24px] p-4 flex items-center justify-between gap-4 shadow-[0_8px_30px_rgb(122,114,78,0.03)]"
           >
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-[#ccff00]/10 flex items-center justify-center text-[#ccff00] shrink-0 border border-[#ccff00]/20">
+              <div className="w-10 h-10 rounded-xl bg-[#7A724E]/10 flex items-center justify-center text-[#7A724E] shrink-0 border border-[#7A724E]/20">
                 <Smartphone className="w-5 h-5" />
               </div>
               <div className="min-w-0">
                 <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
                   Aplicación Dragon Gym
-                  <span className="text-[7px] font-bold px-1.5 py-0.5 rounded-full bg-[#ccff00] text-black font-mono uppercase tracking-wider scale-90">PWA</span>
+                  <span className="text-[7px] font-bold px-1.5 py-0.5 rounded-full bg-[#7A724E] text-black font-mono uppercase tracking-wider scale-90">PWA</span>
                 </h4>
                 <p className="text-[10px] text-neutral-400 truncate mt-0.5">Instala la app en tu pantalla de inicio móvil</p>
               </div>
             </div>
             <button 
               onClick={onInstallClick}
-              className="bg-[#ccff00] hover:bg-[#d9ff26] text-black text-[10px] font-extrabold uppercase tracking-wider py-2 px-3.5 rounded-xl transition-all active:scale-95 cursor-pointer shadow-[0_4px_12px_rgba(204,255,0,0.25)] shrink-0 flex items-center gap-1"
+              className="bg-[#7A724E] hover:bg-[#91875d] text-black text-[10px] font-extrabold uppercase tracking-wider py-2 px-3.5 rounded-xl transition-all active:scale-95 cursor-pointer shadow-[0_4px_12px_rgba(122,114,78,0.25)] shrink-0 flex items-center gap-1"
             >
               <Download className="w-3 h-3" />
               <span>Instalar</span>
@@ -74,15 +74,15 @@ export default function HomeSelector({ onSelectRole, onInstallClick, isInstalled
             <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent"></div>
             
             {/* Subtle Accent Ambient Filter */}
-            <div className="absolute inset-0 bg-[#ccff00]/5 mix-blend-color"></div>
+            <div className="absolute inset-0 bg-[#7A724E]/5 mix-blend-color"></div>
 
             {/* Floating Badge */}
-            <div className="absolute top-4 right-4 bg-[#ccff00] text-black text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full shadow-[0_4px_12px_rgba(204,255,0,0.3)] font-mono">
+            <div className="absolute top-4 right-4 bg-[#7A724E] text-black text-[8px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full shadow-[0_4px_12px_rgba(122,114,78,0.3)] font-mono">
               SISTEMA INTEGRADO 2026
             </div>
 
             {/* Overlaid message */}
-            <div className="absolute bottom-4 left-4 right-4 bg-[#ccff00] text-black p-4 rounded-[20px] shadow-lg">
+            <div className="absolute bottom-4 left-4 right-4 bg-[#7A724E] text-black p-4 rounded-[20px] shadow-lg">
               <h4 className="text-[12px] font-black uppercase tracking-wider text-black font-display">
                 MÁXIMA EFICIENCIA OPERATIVA
               </h4>
@@ -110,19 +110,19 @@ export default function HomeSelector({ onSelectRole, onInstallClick, isInstalled
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => onSelectRole('admin')}
-              className="flex flex-col justify-between p-5 rounded-[24px] bg-[#111111] border border-[#222] hover:border-[#ccff00]/50 transition-all duration-300 text-left group cursor-pointer shadow-lg relative overflow-hidden h-[180px]"
+              className="flex flex-col justify-between p-5 rounded-[24px] bg-[#111111] border border-[#222] hover:border-[#7A724E]/50 transition-all duration-300 text-left group cursor-pointer shadow-lg relative overflow-hidden h-[180px]"
             >
-              <div className="absolute top-0 right-0 w-[80px] h-[80px] rounded-bl-full bg-[#ccff00]/5 group-hover:bg-[#ccff00]/10 transition-all"></div>
+              <div className="absolute top-0 right-0 w-[80px] h-[80px] rounded-bl-full bg-[#7A724E]/5 group-hover:bg-[#7A724E]/10 transition-all"></div>
               
-              <div className="w-12 h-12 rounded-2xl bg-[#ccff00]/15 flex items-center justify-center text-[#ccff00] border border-[#ccff00]/35 group-hover:bg-[#ccff00] group-hover:text-black transition-all duration-300">
+              <div className="w-12 h-12 rounded-2xl bg-[#7A724E]/15 flex items-center justify-center text-[#7A724E] border border-[#7A724E]/35 group-hover:bg-[#7A724E] group-hover:text-black transition-all duration-300">
                 <Crown className="w-6 h-6" />
               </div>
               
               <div className="mt-4">
-                <span className="text-[9px] text-[#ccff00] font-bold tracking-widest uppercase font-mono block">
+                <span className="text-[9px] text-[#7A724E] font-bold tracking-widest uppercase font-mono block">
                   C-SUITE / PROPIETARIO
                 </span>
-                <h4 className="text-sm font-black text-white tracking-wide group-hover:text-[#ccff00] transition-all">
+                <h4 className="text-sm font-black text-white tracking-wide group-hover:text-[#7A724E] transition-all">
                   SuperAdmin
                 </h4>
                 <p className="text-[10px] text-neutral-400 mt-1 leading-snug">
@@ -137,11 +137,11 @@ export default function HomeSelector({ onSelectRole, onInstallClick, isInstalled
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => onSelectRole('staff')}
-              className="flex flex-col justify-between p-5 rounded-[24px] bg-[#111111] border border-[#222] hover:border-[#ccff00]/50 transition-all duration-300 text-left group cursor-pointer shadow-lg relative overflow-hidden h-[180px]"
+              className="flex flex-col justify-between p-5 rounded-[24px] bg-[#111111] border border-[#222] hover:border-[#7A724E]/50 transition-all duration-300 text-left group cursor-pointer shadow-lg relative overflow-hidden h-[180px]"
             >
-              <div className="absolute top-0 right-0 w-[80px] h-[80px] rounded-bl-full bg-[#ccff00]/5 group-hover:bg-[#ccff00]/10 transition-all"></div>
+              <div className="absolute top-0 right-0 w-[80px] h-[80px] rounded-bl-full bg-[#7A724E]/5 group-hover:bg-[#7A724E]/10 transition-all"></div>
               
-              <div className="w-12 h-12 rounded-2xl bg-[#ccff00]/10 flex items-center justify-center text-[#ccff00] border border-[#ccff00]/20 group-hover:bg-[#ccff00] group-hover:text-black transition-all duration-300">
+              <div className="w-12 h-12 rounded-2xl bg-[#7A724E]/10 flex items-center justify-center text-[#7A724E] border border-[#7A724E]/20 group-hover:bg-[#7A724E] group-hover:text-black transition-all duration-300">
                 <Laptop className="w-6 h-6" />
               </div>
               
@@ -149,7 +149,7 @@ export default function HomeSelector({ onSelectRole, onInstallClick, isInstalled
                 <span className="text-[9px] text-neutral-400 font-bold tracking-widest uppercase font-mono block">
                   MOSTRADOR / TABLET
                 </span>
-                <h4 className="text-sm font-black text-white tracking-wide group-hover:text-[#ccff00] transition-all">
+                <h4 className="text-sm font-black text-white tracking-wide group-hover:text-[#7A724E] transition-all">
                   Staff / Recepción
                 </h4>
                 <p className="text-[10px] text-neutral-400 mt-1 leading-snug">
@@ -164,11 +164,11 @@ export default function HomeSelector({ onSelectRole, onInstallClick, isInstalled
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => onSelectRole('client')}
-              className="flex flex-col justify-between p-5 rounded-[24px] bg-[#111111] border border-[#222] hover:border-[#ccff00]/50 transition-all duration-300 text-left group cursor-pointer shadow-lg relative overflow-hidden h-[180px]"
+              className="flex flex-col justify-between p-5 rounded-[24px] bg-[#111111] border border-[#222] hover:border-[#7A724E]/50 transition-all duration-300 text-left group cursor-pointer shadow-lg relative overflow-hidden h-[180px]"
             >
-              <div className="absolute top-0 right-0 w-[80px] h-[80px] rounded-bl-full bg-[#ccff00]/5 group-hover:bg-[#ccff00]/10 transition-all"></div>
+              <div className="absolute top-0 right-0 w-[80px] h-[80px] rounded-bl-full bg-[#7A724E]/5 group-hover:bg-[#7A724E]/10 transition-all"></div>
               
-              <div className="w-12 h-12 rounded-2xl bg-[#ccff00]/10 flex items-center justify-center text-neutral-400 border border-neutral-800 group-hover:bg-[#ccff00] group-hover:text-black transition-all duration-300">
+              <div className="w-12 h-12 rounded-2xl bg-[#7A724E]/10 flex items-center justify-center text-neutral-400 border border-neutral-800 group-hover:bg-[#7A724E] group-hover:text-black transition-all duration-300">
                 <User className="w-6 h-6" />
               </div>
               
@@ -176,7 +176,7 @@ export default function HomeSelector({ onSelectRole, onInstallClick, isInstalled
                 <span className="text-[9px] text-neutral-400 font-bold tracking-widest uppercase font-mono block">
                   APLICACIÓN PWA SOCIO
                 </span>
-                <h4 className="text-sm font-black text-white tracking-wide group-hover:text-[#ccff00] transition-all">
+                <h4 className="text-sm font-black text-white tracking-wide group-hover:text-[#7A724E] transition-all">
                   Socio / Cliente
                 </h4>
                 <p className="text-[10px] text-neutral-400 mt-1 leading-snug">
