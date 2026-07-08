@@ -59,6 +59,10 @@ export interface WorkoutRoutine {
   durationMin: number;
   level: 'Principiante' | 'Intermedio' | 'Avanzado';
   exercises: WorkoutExercise[];
+  videoUrl?: string;      // Link de YouTube
+  description?: string;   // Descripción / Instrucciones
+  uploadedBy?: string;    // Autor
+  date?: string;          // Fecha de publicación
 }
 
 export interface Plan {
@@ -96,3 +100,15 @@ export interface CheckIn {
   date: string; // YYYY-MM-DD
   status: 'Permitido' | 'Denegado';
 }
+
+export interface QrAccess {
+  id: string;
+  clientId: string;
+  clientName: string;
+  code: string;
+  status: 'Activo' | 'Suspendido';
+  expiresAt: string;
+  schedule: string;
+  createdAt: string;
+}
+

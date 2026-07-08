@@ -4,10 +4,11 @@ import {
   Info, Calendar, ArrowRightLeft, Terminal, Heart, Trophy, Activity,
   Download, Share2, MoreVertical, PlusSquare, X, Smartphone, CheckCircle
 } from 'lucide-react';
-import { Client, GymClass, Announcement, Booking, Plan, Staff, Payment, CheckIn } from './types';
+import { Client, GymClass, Announcement, Booking, Plan, Staff, Payment, CheckIn, WorkoutRoutine, QrAccess } from './types';
 import { 
   INITIAL_CLIENTS, INITIAL_CLASSES, INITIAL_ANNOUNCEMENTS, 
-  INITIAL_PLANS, INITIAL_STAFF, INITIAL_PAYMENTS, INITIAL_CHECKINS 
+  INITIAL_PLANS, INITIAL_STAFF, INITIAL_PAYMENTS, INITIAL_CHECKINS,
+  WORKOUT_ROUTINES, INITIAL_QR_ACCESSES
 } from './data/mockData';
 import MobileFrame from './components/MobileFrame';
 import HomeSelector from './components/HomeSelector';
@@ -66,6 +67,16 @@ export default function App() {
   const [checkIns, setCheckIns] = useState<CheckIn[]>(() => {
     const saved = localStorage.getItem('gymaura_checkins');
     return saved ? JSON.parse(saved) : INITIAL_CHECKINS;
+  });
+
+  const [routines, setRoutines] = useState<WorkoutRoutine[]>(() => {
+    const saved = localStorage.getItem('gymaura_routines');
+    return saved ? JSON.parse(saved) : WORKOUT_ROUTINES;
+  });
+
+  const [qrAccesses, setQrAccesses] = useState<QrAccess[]>(() => {
+    const saved = localStorage.getItem('gymaura_qr_accesses');
+    return saved ? JSON.parse(saved) : INITIAL_QR_ACCESSES;
   });
 
   const [activeRole, setActiveRole] = useState<'home' | 'client' | 'staff' | 'admin'>('home');
@@ -163,6 +174,14 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('gymaura_checkins', JSON.stringify(checkIns));
   }, [checkIns]);
+
+  useEffect(() => {
+    localStorage.setItem('gymaura_routines', JSON.stringify(routines));
+  }, [routines]);
+
+  useEffect(() => {
+    localStorage.setItem('gymaura_qr_accesses', JSON.stringify(qrAccesses));
+  }, [qrAccesses]);
 
   // Helper to add system logs
   const addLog = (message: string, type: 'system' | 'client' | 'admin' | 'database') => {
@@ -449,6 +468,61 @@ export default function App() {
     addLog(`[ACCESO] Ingreso de ${created.clientName}: ${created.status}`, 'system');
   };
 
+  // 19. Add Workout Routine with videoUrl
+  const handleAddRoutine = (newR: Omit<WorkoutRoutine, 'id' | 'uploadedBy' | 'date'>) => {
+    const created: WorkoutRoutine = {
+      id: 'r' + (routines.length + 1).toString(),
+      uploadedBy: 'Administración',
+      date: new Date().toISOString().split('T')[0],
+      ...newR
+    };
+    setRoutines(prev => [created, ...prev]);
+    addLog(`[RUTINAS] Nueva rutina subida: "${created.title}" por Administración.`, 'admin');
+  };
+
+  // 20. Delete Workout Routine
+  const handleDeleteRoutine = (id: string) => {
+    const target = routines.find(r => r.id === id);
+    setRoutines(prev => prev.filter(r => r.id !== id));
+    if (target) {
+      addLog(`[RUTINAS] Rutina eliminada: "${target.title}"`, 'admin');
+    }
+  };
+
+  // 21. Generate QR Access Code for Gym facility
+  const handleGenerateQrAccess = (clientId: string, schedule: string, expiresAt: string) => {
+    const targetClient = clients.find(c => c.id === clientId);
+    if (!targetClient) return;
+
+    const nextId = 'qr' + (qrAccesses.length + 1).toString();
+    const codeStr = `DG-${targetClient.name.split(' ')[0].toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+    const newQr: QrAccess = {
+      id: nextId,
+      clientId,
+      clientName: targetClient.name,
+      code: codeStr,
+      status: 'Activo',
+      expiresAt,
+      schedule,
+      createdAt: new Date().toISOString().split('T')[0]
+    };
+
+    setQrAccesses(prev => [newQr, ...prev.filter(q => q.clientId !== clientId)]);
+    addLog(`[ACCESO QR] Nuevo pase QR generado para ${targetClient.name} (${schedule})`, 'admin');
+  };
+
+  // 22. Toggle QR Access status (Suspend/Activate)
+  const handleToggleQrAccessStatus = (id: string) => {
+    setQrAccesses(prev => prev.map(q => {
+      if (q.id === id) {
+        const nextStatus = q.status === 'Activo' ? 'Suspendido' : 'Activo';
+        addLog(`[ACCESO QR] Estatus de QR para ${q.clientName} modificado a: ${nextStatus}`, 'admin');
+        return { ...q, status: nextStatus };
+      }
+      return q;
+    }));
+  };
+
   // Navigation handlers
   const handleRoleSelection = (role: 'client' | 'staff' | 'admin') => {
     setActiveRole(role);
@@ -489,6 +563,8 @@ export default function App() {
             onCompleteWorkout={handleCompleteWorkout}
             activeClientId={activeClientId}
             onChangeClient={setActiveClientId}
+            routines={routines}
+            qrAccesses={qrAccesses}
           />
         )}
 
@@ -525,6 +601,12 @@ export default function App() {
             onTogglePlanStatus={handleTogglePlanStatus}
             onAddStaff={handleAddStaff}
             onToggleStaffStatus={handleToggleStaffStatus}
+            routines={routines}
+            qrAccesses={qrAccesses}
+            onAddRoutine={handleAddRoutine}
+            onDeleteRoutine={handleDeleteRoutine}
+            onGenerateQrAccess={handleGenerateQrAccess}
+            onToggleQrAccessStatus={handleToggleQrAccessStatus}
           />
         )}
       </MobileFrame>

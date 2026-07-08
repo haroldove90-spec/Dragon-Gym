@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { 
   Users, Calendar, Bell, Plus, Trash2, Search, ToggleLeft, ToggleRight, 
   Sparkles, ShieldAlert, Check, CheckCircle2, UserPlus, FileText, Dumbbell,
-  Crown, DollarSign, Activity, FileDown, PlusCircle, ToggleLeft as ToggleOff, Lock, UserCheck, ShieldX
+  Crown, DollarSign, Activity, FileDown, PlusCircle, ToggleLeft as ToggleOff, Lock, UserCheck, ShieldX,
+  Video, Play, QrCode, RefreshCw, Key
 } from 'lucide-react';
-import { Client, GymClass, Announcement, Plan, Staff, Payment, CheckIn } from '../types';
+import { Client, GymClass, Announcement, Plan, Staff, Payment, CheckIn, WorkoutRoutine, QrAccess } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface AdminRoleProps {
@@ -27,9 +28,15 @@ interface AdminRoleProps {
   onTogglePlanStatus: (id: string) => void;
   onAddStaff: (newStaff: Omit<Staff, 'id'>) => void;
   onToggleStaffStatus: (id: string) => void;
+  routines: WorkoutRoutine[];
+  qrAccesses: QrAccess[];
+  onAddRoutine: (newRoutine: Omit<WorkoutRoutine, 'id' | 'uploadedBy' | 'date'>) => void;
+  onDeleteRoutine: (id: string) => void;
+  onGenerateQrAccess: (clientId: string, schedule: string, expiresAt: string) => void;
+  onToggleQrAccessStatus: (id: string) => void;
 }
 
-type AdminTab = 'metrics' | 'plans' | 'staff' | 'socios' | 'reports' | 'announcements';
+type AdminTab = 'metrics' | 'plans' | 'staff' | 'socios' | 'reports' | 'announcements' | 'qr_access' | 'workout_routines';
 
 export default function AdminRole({
   clients,
@@ -50,7 +57,13 @@ export default function AdminRole({
   onEditPlan,
   onTogglePlanStatus,
   onAddStaff,
-  onToggleStaffStatus
+  onToggleStaffStatus,
+  routines,
+  qrAccesses,
+  onAddRoutine,
+  onDeleteRoutine,
+  onGenerateQrAccess,
+  onToggleQrAccessStatus
 }: AdminRoleProps) {
   const [activeTab, setActiveTab] = useState<AdminTab>('metrics');
   
@@ -1091,12 +1104,289 @@ export default function AdminRole({
             </div>
           )}
 
+          {/* TAB: ACCESOS QR */}
+          {activeTab === 'qr_access' && (
+            <div className="space-y-5 animate-fade-in text-left">
+              <div className="bg-[#111] border border-[#222] rounded-[32px] p-5 shadow-lg">
+                <div className="flex items-center gap-1.5 mb-3">
+                  <QrCode className="w-4 h-4 text-[#7A724E]" />
+                  <h4 className="text-xs text-white uppercase tracking-wider font-bold">Generador de Acceso QR para Clientes</h4>
+                </div>
+                
+                <form 
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.currentTarget);
+                    const clientId = formData.get('clientId') as string;
+                    const schedule = formData.get('schedule') as string;
+                    const expiresAt = formData.get('expiresAt') as string;
+                    if (!clientId) return;
+                    onGenerateQrAccess(clientId, schedule, expiresAt);
+                    e.currentTarget.reset();
+                  }}
+                  className="space-y-4"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                    <div>
+                      <label className="text-[10px] uppercase font-mono text-neutral-400 block mb-1">Seleccionar Socio</label>
+                      <select 
+                        name="clientId"
+                        required
+                        className="w-full bg-[#050505] border border-neutral-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#7A724E]"
+                      >
+                        <option value="">-- Elige un Socio --</option>
+                        {clients.map(c => (
+                          <option key={c.id} value={c.id}>{c.name} (Socio #{c.id})</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] uppercase font-mono text-neutral-400 block mb-1">Horario Autorizado</label>
+                      <select 
+                        name="schedule"
+                        required
+                        className="w-full bg-[#050505] border border-neutral-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#7A724E]"
+                      >
+                        <option value="Todos los días (06:00 - 23:00)">Todos los días (06:00 - 23:00)</option>
+                        <option value="Lunes a Viernes (06:00 - 22:00)">Lunes a Viernes (06:00 - 22:00)</option>
+                        <option value="Lunes a Sábado (06:00 - 22:00)">Lunes a Sábado (06:00 - 22:00)</option>
+                        <option value="Fines de Semana (08:00 - 18:00)">Fines de Semana (08:00 - 18:00)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] uppercase font-mono text-neutral-400 block mb-1">Fecha de Expiración del Pase</label>
+                    <input 
+                      type="date"
+                      name="expiresAt"
+                      required
+                      defaultValue="2027-01-15"
+                      className="w-full bg-[#050505] border border-neutral-800 rounded-xl px-3 py-2.5 text-xs text-white font-mono focus:outline-none focus:border-[#7A724E]"
+                    />
+                  </div>
+
+                  <button 
+                    type="submit" 
+                    className="w-full bg-[#7A724E] text-black font-extrabold uppercase py-3 rounded-xl text-xs transition-all active:scale-95 cursor-pointer shadow-md flex items-center justify-center gap-2"
+                  >
+                    <QrCode className="w-4 h-4" />
+                    <span>Emitir y Generar Pase QR Sincronizado</span>
+                  </button>
+                </form>
+              </div>
+
+              {/* QR list of active codes */}
+              <div className="bg-[#111] border border-[#222] rounded-[32px] p-5 shadow-lg">
+                <h4 className="text-xs text-neutral-400 uppercase tracking-wider font-mono mb-3">PASES QR DE ACCESO EMITIDOS ({qrAccesses.length})</h4>
+                <div className="space-y-3">
+                  {qrAccesses.map(qr => {
+                    const isSuspendido = qr.status === 'Suspendido';
+                    return (
+                      <div key={qr.id} className="p-3.5 rounded-2xl border border-neutral-800 bg-[#050505] flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${
+                            isSuspendido ? 'bg-red-950/20 border-red-900/40 text-red-400' : 'bg-[#7A724E]/10 border-[#7A724E]/20 text-[#7A724E]'
+                          }`}>
+                            <QrCode className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <h5 className="text-xs font-bold text-white">{qr.clientName}</h5>
+                            <div className="flex flex-wrap gap-x-2 gap-y-0.5 mt-1 text-[10px] text-neutral-400 font-mono">
+                              <span className="text-[#7A724E] font-bold">{qr.code}</span>
+                              <span>•</span>
+                              <span>Vence: {qr.expiresAt}</span>
+                            </div>
+                            <span className="text-[9px] text-neutral-500 font-mono block mt-0.5">{qr.schedule}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => onToggleQrAccessStatus(qr.id)}
+                            className={`px-2.5 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all border cursor-pointer ${
+                              isSuspendido 
+                                ? 'bg-red-950 text-red-400 border-red-900/40 hover:bg-red-900/20' 
+                                : 'bg-[#7A724E]/10 text-[#7A724E] border-[#7A724E]/20 hover:bg-[#7A724E]/20'
+                            }`}
+                            title={isSuspendido ? 'Activar Pase de Acceso' : 'Suspender Pase de Acceso'}
+                          >
+                            {qr.status}
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* TAB: SUBIR RUTINAS */}
+          {activeTab === 'workout_routines' && (
+            <div className="space-y-5 animate-fade-in text-left">
+              <div className="bg-[#111] border border-[#222] rounded-[32px] p-5 shadow-lg">
+                <div className="flex items-center gap-1.5 mb-3">
+                  <Video className="w-4 h-4 text-[#7A724E]" />
+                  <h4 className="text-xs text-white uppercase tracking-wider font-bold">Subir Nueva Rutina de Video (Link YouTube)</h4>
+                </div>
+                
+                <form 
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.currentTarget);
+                    const title = formData.get('title') as string;
+                    const level = formData.get('level') as 'Principiante' | 'Intermedio' | 'Avanzado';
+                    const durationMin = parseInt(formData.get('durationMin') as string) || 45;
+                    const videoUrl = formData.get('videoUrl') as string;
+                    const description = formData.get('description') as string;
+                    
+                    if (!title || !videoUrl) return;
+
+                    const exercises = [
+                      { name: 'Ejercicio Principal A', sets: 4, reps: '8-10', weight: 'Moderado' },
+                      { name: 'Ejercicio Principal B', sets: 3, reps: '10-12', weight: 'Moderado' },
+                      { name: 'Ejercicio Secundario C', sets: 3, reps: '12-15', weight: 'Ligero' }
+                    ];
+
+                    onAddRoutine({
+                      title,
+                      level,
+                      durationMin,
+                      videoUrl,
+                      description,
+                      exercises
+                    });
+
+                    e.currentTarget.reset();
+                  }}
+                  className="space-y-4"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                    <div>
+                      <label className="text-[10px] uppercase font-mono text-neutral-400 block mb-1">Título de la Rutina</label>
+                      <input 
+                        type="text"
+                        name="title"
+                        required
+                        placeholder="Ej. Rutina de Espalda y Bíceps Brutal"
+                        className="w-full bg-[#050505] border border-neutral-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#7A724E]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] uppercase font-mono text-neutral-400 block mb-1">Nivel del Socio</label>
+                      <select 
+                        name="level"
+                        className="w-full bg-[#050505] border border-neutral-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#7A724E]"
+                      >
+                        <option value="Principiante">Principiante</option>
+                        <option value="Intermedio">Intermedio</option>
+                        <option value="Avanzado">Avanzado</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                    <div>
+                      <label className="text-[10px] uppercase font-mono text-neutral-400 block mb-1">Duración del Entrenamiento (Minutos)</label>
+                      <input 
+                        type="number"
+                        name="durationMin"
+                        defaultValue={45}
+                        required
+                        className="w-full bg-[#050505] border border-neutral-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#7A724E]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] uppercase font-mono text-neutral-400 block mb-1">Enlace de YouTube (Video de Demostración)</label>
+                      <input 
+                        type="url"
+                        name="videoUrl"
+                        required
+                        placeholder="Ej. https://www.youtube.com/watch?v=..."
+                        className="w-full bg-[#050505] border border-neutral-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#7A724E]"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] uppercase font-mono text-neutral-400 block mb-1">Descripción / Recomendaciones de la Rutina</label>
+                    <textarea 
+                      name="description"
+                      rows={2}
+                      placeholder="Ej. Calienta 5 min antes. Mantén los codos pegados al cuerpo..."
+                      className="w-full bg-[#050505] border border-neutral-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#7A724E] resize-none"
+                    />
+                  </div>
+
+                  <button 
+                    type="submit" 
+                    className="w-full bg-[#7A724E] text-black font-extrabold uppercase py-3 rounded-xl text-xs transition-all active:scale-95 cursor-pointer shadow-md flex items-center justify-center gap-2"
+                  >
+                    <Video className="w-4 h-4" />
+                    <span>Publicar Video de Rutina para Socios</span>
+                  </button>
+                </form>
+              </div>
+
+              {/* Published routines list */}
+              <div className="bg-[#111] border border-[#222] rounded-[32px] p-5 shadow-lg">
+                <h4 className="text-xs text-neutral-400 uppercase tracking-wider font-mono mb-3">RUTINAS DE VIDEO PUBLICADAS ({routines.length})</h4>
+                <div className="space-y-4">
+                  {routines.map(routine => (
+                    <div key={routine.id} className="p-3.5 rounded-2xl border border-neutral-800 bg-[#050505] flex flex-col gap-3">
+                      <div className="flex justify-between items-start gap-4">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className={`text-[8px] font-black uppercase font-mono px-2 py-0.5 rounded ${
+                              routine.level === 'Principiante' ? 'bg-emerald-950 text-emerald-400' :
+                              routine.level === 'Intermedio' ? 'bg-amber-950 text-amber-400' : 'bg-red-950 text-red-400'
+                            }`}>
+                              {routine.level}
+                            </span>
+                            <span className="text-[9px] text-neutral-500 font-mono">{routine.durationMin} Min</span>
+                          </div>
+                          <h5 className="text-xs font-bold text-white mt-1.5 uppercase">{routine.title}</h5>
+                          {routine.description && <p className="text-[10px] text-neutral-400 leading-relaxed mt-1">{routine.description}</p>}
+                          <span className="text-[9px] text-[#7A724E] font-mono block mt-1 truncate max-w-[220px]">{routine.videoUrl}</span>
+                        </div>
+                        
+                        <button
+                          onClick={() => onDeleteRoutine(routine.id)}
+                          className="text-red-500/70 hover:text-red-400 p-2 bg-black/40 border border-neutral-800 rounded-xl"
+                          title="Eliminar rutina"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      {/* Display dynamic exercise tags count */}
+                      <div className="bg-black/30 border border-neutral-900 rounded-lg p-2.5">
+                        <span className="text-[8px] font-mono text-neutral-500 block uppercase mb-1">Tabla de Ejercicios de Muestra ({routine.exercises.length})</span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {routine.exercises.map((ex, idx) => (
+                            <span key={idx} className="text-[8.5px] bg-[#7A724E]/10 border border-[#7A724E]/20 text-neutral-300 font-mono px-2 py-0.5 rounded-full">
+                              {ex.name} ({ex.sets}x{ex.reps})
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
 
       {/* SuperAdmin Navigation tabs (Perfect layout inside frame) */}
       <div className="absolute bottom-0 inset-x-0 h-16 bg-[#111111]/95 backdrop-blur-lg border-t border-[#222] flex items-center justify-center px-4 z-30">
-        <div className="max-w-xl mx-auto w-full flex items-center justify-around overflow-x-auto scrollbar-none py-1">
+        <div className="max-w-xl mx-auto w-full flex items-center justify-between overflow-x-auto scrollbar-none py-1">
           
           <button 
             id="btn-admin-tab-metrics"
@@ -1104,7 +1394,7 @@ export default function AdminRole({
             className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'metrics' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Activity className="w-4 h-4" />
-            <span className="text-[8px] font-mono uppercase font-bold tracking-wider">Métricas</span>
+            <span className="text-[8px] font-mono uppercase font-black tracking-wider">Métricas</span>
           </button>
 
           <button 
@@ -1113,7 +1403,7 @@ export default function AdminRole({
             className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'plans' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <DollarSign className="w-4 h-4" />
-            <span className="text-[8px] font-mono uppercase font-bold tracking-wider">Membresías</span>
+            <span className="text-[8px] font-mono uppercase font-black tracking-wider">Precios</span>
           </button>
 
           <button 
@@ -1122,7 +1412,7 @@ export default function AdminRole({
             className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'staff' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Users className="w-4 h-4" />
-            <span className="text-[8px] font-mono uppercase font-bold tracking-wider">Personal</span>
+            <span className="text-[8px] font-mono uppercase font-black tracking-wider">Personal</span>
           </button>
 
           <button 
@@ -1131,7 +1421,25 @@ export default function AdminRole({
             className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'socios' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <UserCheck className="w-4 h-4" />
-            <span className="text-[8px] font-mono uppercase font-bold tracking-wider">Socios</span>
+            <span className="text-[8px] font-mono uppercase font-black tracking-wider">Socios</span>
+          </button>
+
+          <button 
+            id="btn-admin-tab-qr-access"
+            onClick={() => setActiveTab('qr_access')}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'qr_access' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+          >
+            <QrCode className="w-4 h-4 text-[#7A724E]" />
+            <span className="text-[8px] font-mono uppercase font-black tracking-wider">Pases QR</span>
+          </button>
+
+          <button 
+            id="btn-admin-tab-workout-routines"
+            onClick={() => setActiveTab('workout_routines')}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'workout_routines' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+          >
+            <Video className="w-4 h-4 text-[#7A724E]" />
+            <span className="text-[8px] font-mono uppercase font-black tracking-wider">Rutinas</span>
           </button>
 
           <button 
@@ -1140,7 +1448,7 @@ export default function AdminRole({
             className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'reports' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <FileText className="w-4 h-4" />
-            <span className="text-[8px] font-mono uppercase font-bold tracking-wider">Auditoría</span>
+            <span className="text-[8px] font-mono uppercase font-black tracking-wider">Auditoría</span>
           </button>
 
           <button 
@@ -1149,7 +1457,7 @@ export default function AdminRole({
             className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'announcements' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Bell className="w-4 h-4" />
-            <span className="text-[8px] font-mono uppercase font-bold tracking-wider">Avisos</span>
+            <span className="text-[8px] font-mono uppercase font-black tracking-wider">Avisos</span>
           </button>
 
         </div>

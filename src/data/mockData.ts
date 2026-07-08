@@ -1,4 +1,4 @@
-import { Client, GymClass, Announcement, WorkoutRoutine, Plan, Staff, Payment, CheckIn } from '../types';
+import { Client, GymClass, Announcement, WorkoutRoutine, Plan, Staff, Payment, CheckIn, QrAccess } from '../types';
 
 export const INITIAL_PLANS: Plan[] = [
   { id: 'p1', name: 'Mensual', price: 50, durationDays: 30, status: 'Activo' },
@@ -184,41 +184,90 @@ export const INITIAL_ANNOUNCEMENTS: Announcement[] = [
 export const WORKOUT_ROUTINES: WorkoutRoutine[] = [
   {
     id: 'r1',
-    title: 'Hipertrofia Empuje (Pecho/Tríceps)',
-    durationMin: 55,
+    title: 'Rutina Completa de Pecho y Espalda',
+    durationMin: 50,
     level: 'Intermedio',
+    videoUrl: 'https://www.youtube.com/watch?v=xP4iItH8HBU',
+    description: 'Una rutina balanceada enfocada en empuje y tracción del torso superior para maximizar la densidad muscular y mejorar la postura.',
+    uploadedBy: 'Administración',
+    date: '2026-07-06',
     exercises: [
       { name: 'Press de Banca Plano con Barra', sets: 4, reps: '8-10', weight: '70 kg' },
+      { name: 'Remo con Barra Pendlay', sets: 4, reps: '8', weight: '80 kg' },
       { name: 'Press Inclinado con Mancuernas', sets: 3, reps: '10-12', weight: '24 kg' },
-      { name: 'Aperturas en Polea (Cruce)', sets: 3, reps: '15', weight: '15 kg' },
-      { name: 'Fondos de Tríceps en Paralelas', sets: 3, reps: 'Al Fallo', weight: 'Corporal' },
-      { name: 'Extensión de Tríceps en Polea Alta', sets: 4, reps: '12', weight: '20 kg' }
+      { name: 'Jalón al Pecho Agarre Neutro', sets: 3, reps: '12', weight: '55 kg' }
     ]
   },
   {
     id: 'r2',
-    title: 'Tracción Explosiva (Espalda/Bíceps)',
+    title: 'Guía de Hipertrofia y Definición Total',
     durationMin: 60,
     level: 'Avanzado',
+    videoUrl: 'https://www.youtube.com/watch?v=w_0hSr5U-2U&t=681s',
+    description: 'Técnicas avanzadas de aislamiento e hipertrofia para esculpir todo el cuerpo con alto volumen de entrenamiento y tiempos bajo tensión controlados.',
+    uploadedBy: 'Marcos Rubio (Entrenador)',
+    date: '2026-07-05',
     exercises: [
+      { name: 'Sentadilla Trasera con Barra', sets: 4, reps: '8-10', weight: '100 kg' },
       { name: 'Dominadas Pronas Lastradas', sets: 4, reps: '6-8', weight: '+10 kg' },
-      { name: 'Remo con Barra Pendlay', sets: 3, reps: '8', weight: '80 kg' },
-      { name: 'Jalón al Pecho Agarre Neutro', sets: 3, reps: '12', weight: '55 kg' },
-      { name: 'Curl de Bíceps con Barra Z', sets: 4, reps: '10', weight: '30 kg' },
-      { name: 'Curl Martillo Alterno Mancuernas', sets: 3, reps: '12-15', weight: '14 kg' }
+      { name: 'Press Militar de Hombros', sets: 3, reps: '10', weight: '45 kg' },
+      { name: 'Curl de Bíceps con Barra Z', sets: 4, reps: '12', weight: '30 kg' }
     ]
   },
   {
     id: 'r3',
-    title: 'Fuerza de Piernas y Core',
-    durationMin: 50,
-    level: 'Intermedio',
+    title: 'Ejecución Perfecta de Sentadilla y Fuerza',
+    durationMin: 45,
+    level: 'Principiante',
+    videoUrl: 'https://www.youtube.com/watch?v=7NmiKpvPvt8&t=183s',
+    description: 'Aprende la técnica perfecta de sentadilla profunda, posicionamiento de pies y mecánicas de fuerza básicas para evitar lesiones y levantar pesado.',
+    uploadedBy: 'Marcos Rubio (Entrenador)',
+    date: '2026-07-04',
     exercises: [
-      { name: 'Sentadilla Trasera con Barra', sets: 4, reps: '6-8', weight: '100 kg' },
-      { name: 'Prensa de Piernas 45º', sets: 3, reps: '10-12', weight: '200 kg' },
-      { name: 'Peso Muerto Rumano Mancuernas', sets: 3, reps: '12', weight: '32 kg' },
-      { name: 'Elevaciones de Talones de pie', sets: 4, reps: '15', weight: '45 kg' },
-      { name: 'Abdominales de Rodillo (Ab Wheel)', sets: 3, reps: '15', weight: 'Corporal' }
+      { name: 'Sentadilla de Copa (Goblet)', sets: 3, reps: '12', weight: '16 kg' },
+      { name: 'Prensa de Piernas a 45º', sets: 3, reps: '10', weight: '120 kg' },
+      { name: 'Extensión de Piernas en Máquina', sets: 3, reps: '15', weight: '40 kg' },
+      { name: 'Plancha Abdominal Isométrica', sets: 3, reps: '45 seg', weight: 'Corporal' }
+    ]
+  },
+  {
+    id: 'r4',
+    title: 'Circuito de Abdominales y Core Intenso',
+    durationMin: 30,
+    level: 'Intermedio',
+    videoUrl: 'https://www.youtube.com/watch?v=3SwP-FHEL68',
+    description: 'Un circuito dinámico para fortalecer el transverso abdominal, lumbares, oblicuos y estabilizadores profundos del core.',
+    uploadedBy: 'Administración',
+    date: '2026-07-03',
+    exercises: [
+      { name: 'Abdominales de Rodillo (Ab Wheel)', sets: 3, reps: '12', weight: 'Corporal' },
+      { name: 'Elevaciones de Piernas Suspendido', sets: 3, reps: '15', weight: 'Corporal' },
+      { name: 'Giro Ruso con Balón Medicinal', sets: 3, reps: '20', weight: '8 kg' },
+      { name: 'Hiperextensiones Lumbares', sets: 3, reps: '15', weight: 'Corporal' }
     ]
   }
 ];
+
+export const INITIAL_QR_ACCESSES: QrAccess[] = [
+  {
+    id: 'qr1',
+    clientId: '1',
+    clientName: 'Carlos Mendoza',
+    code: 'DG-CARLOS-7729',
+    status: 'Activo',
+    expiresAt: '2027-01-15',
+    schedule: 'Todos los días (06:00 - 23:00)',
+    createdAt: '2026-01-15'
+  },
+  {
+    id: 'qr2',
+    clientId: '2',
+    clientName: 'Mariana Silva',
+    code: 'DG-MARIANA-3110',
+    status: 'Activo',
+    expiresAt: '2026-07-10',
+    schedule: 'Lunes a Sábado (06:00 - 22:00)',
+    createdAt: '2026-06-10'
+  }
+];
+

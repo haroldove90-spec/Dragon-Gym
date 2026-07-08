@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { 
   QrCode, Calendar, Bell, CreditCard, User, Dumbbell, Sparkles, 
-  CheckCircle2, AlertCircle, Smartphone, Sun, Users, Receipt, ShieldCheck
+  CheckCircle2, AlertCircle, Smartphone, Sun, Users, Receipt, ShieldCheck,
+  Video, Play, Trophy, Flame, TrendingUp, Check, ExternalLink, RefreshCw
 } from 'lucide-react';
-import { Client, GymClass, Announcement, Plan, Payment } from '../types';
+import { Client, GymClass, Announcement, Plan, Payment, WorkoutRoutine, QrAccess } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface ClientRoleProps {
@@ -19,9 +20,11 @@ interface ClientRoleProps {
   onCompleteWorkout: (clientId: string) => void;
   activeClientId: string;
   onChangeClient: (id: string) => void;
+  routines: WorkoutRoutine[];
+  qrAccesses: QrAccess[];
 }
 
-type ClientTab = 'credencial' | 'membresia' | 'avisos' | 'recibos' | 'perfil';
+type ClientTab = 'credencial' | 'membresia' | 'sesiones' | 'rutinas' | 'avisos' | 'perfil';
 
 export default function ClientRole({
   clients,
@@ -35,7 +38,9 @@ export default function ClientRole({
   onAddWeightRecord,
   onCompleteWorkout,
   activeClientId,
-  onChangeClient
+  onChangeClient,
+  routines,
+  qrAccesses
 }: ClientRoleProps) {
   const [activeTab, setActiveTab] = useState<ClientTab>('credencial');
   
@@ -58,6 +63,9 @@ export default function ClientRole({
 
   // Find current plan details
   const currentPlan = plans.find(p => p.id === client.planId);
+
+  // Find generated QR code for this client
+  const clientQr = qrAccesses.find(q => q.clientId === client.id);
 
   // Filter receipts for this client
   const clientPayments = payments.filter(p => p.clientId === client.id);
@@ -212,32 +220,55 @@ export default function ClientRole({
                   </div>
                 </div>
 
-                <div className="mt-5 space-y-1">
-                  <span className="text-[10px] text-neutral-400 font-mono">SOCIO ID: #{client.id}</span>
-                  <h4 className="text-sm font-bold text-white tracking-wide uppercase">Socio Activo Dragon Gym</h4>
+                <div className="mt-5 space-y-1.5">
+                  <span className="text-[10px] text-[#7A724E] font-mono font-bold uppercase tracking-wider bg-[#7A724E]/10 py-0.5 px-2 rounded-full inline-block">
+                    {clientQr ? `Código QR Sincronizado: ${clientQr.code}` : `Código Temporal: DG-${client.name.split(' ')[0].toUpperCase()}-TEMP`}
+                  </span>
+                  <h4 className="text-sm font-bold text-white tracking-wide uppercase">
+                    {clientQr ? 'Pase de Acceso Generado' : 'Socio Activo Dragon Gym'}
+                  </h4>
+                  {clientQr && (
+                    <p className="text-[11px] text-neutral-400 font-mono">
+                      Horario: {clientQr.schedule}
+                    </p>
+                  )}
                 </div>
               </div>
 
-              {/* Status Alert Summary */}
-              <div className={`p-4 rounded-2xl max-w-sm mx-auto flex items-center gap-3 border ${
+              {/* Status Alert Summary / Sync Badge */}
+              <div className={`p-4 rounded-2xl max-w-sm mx-auto flex items-center gap-3 border text-left ${
                 isExpired 
                   ? 'bg-red-950/20 border-red-900/40 text-red-400' 
-                  : 'bg-emerald-950/20 border-emerald-900/40 text-emerald-400'
+                  : (clientQr && clientQr.status === 'Suspendido')
+                    ? 'bg-amber-950/20 border-amber-900/40 text-amber-400'
+                    : 'bg-emerald-950/20 border-emerald-900/40 text-emerald-400'
               }`}>
                 {isExpired ? (
                   <>
                     <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />
-                    <div className="text-left text-xs">
-                      <strong className="text-white block uppercase">Acceso Denegado por Vencimiento</strong>
-                      Por favor, acude a la recepción para realizar el pago de tu membresía.
+                    <div className="text-xs">
+                      <strong className="text-white block uppercase font-black">Acceso Bloqueado</strong>
+                      Tu membresía ha vencido. Por favor, acude a recepción para renovar tu plan.
+                    </div>
+                  </>
+                ) : (clientQr && clientQr.status === 'Suspendido') ? (
+                  <>
+                    <AlertCircle className="w-5 h-5 text-amber-400 shrink-0" />
+                    <div className="text-xs">
+                      <strong className="text-white block uppercase font-black">Pase Suspendido temporalmente</strong>
+                      El administrador ha desactivado tu acceso. Consulta en recepción.
                     </div>
                   </>
                 ) : (
                   <>
-                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-                    <div className="text-left text-xs">
-                      <strong className="text-white block uppercase">Membresía Vigente y Activa</strong>
-                      Aproxima tu QR al lector de la recepción al ingresar para registrar tu check-in.
+                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 animate-pulse" />
+                    <div className="text-xs">
+                      <strong className="text-white block uppercase font-black">
+                        {clientQr ? '¡Pase de Acceso Activo!' : 'Membresía Vigente'}
+                      </strong>
+                      {clientQr 
+                        ? `Tu pase QR fue emitido por el Admin. Escanéalo para entrar.` 
+                        : 'Aproxima tu QR al lector de la recepción al ingresar para registrar tu check-in.'}
                     </div>
                   </>
                 )}
@@ -444,56 +475,254 @@ export default function ClientRole({
             </div>
           )}
 
+          {/* TAB: SESIONES */}
+          {activeTab === 'sesiones' && (
+            <div className="space-y-4 animate-fade-in text-left">
+              {/* Stats Card */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-gradient-to-br from-[#111] to-[#1a1a1a] border border-[#222] rounded-3xl p-4 flex items-center gap-3 relative overflow-hidden">
+                  <div className="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 shrink-0">
+                    <Flame className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-[8px] text-neutral-400 font-mono uppercase block">Racha Actual</span>
+                    <span className="text-lg font-black text-white font-mono">{client.streakDays} Días</span>
+                  </div>
+                  <div className="absolute top-0 right-0 w-8 h-8 rounded-bl-full bg-amber-500/5"></div>
+                </div>
+                
+                <div className="bg-gradient-to-br from-[#111] to-[#1a1a1a] border border-[#222] rounded-3xl p-4 flex items-center gap-3 relative overflow-hidden">
+                  <div className="w-10 h-10 rounded-2xl bg-[#7A724E]/10 border border-[#7A724E]/20 flex items-center justify-center text-[#7A724E] shrink-0">
+                    <Trophy className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <span className="text-[8px] text-neutral-400 font-mono uppercase block">Total Sesiones</span>
+                    <span className="text-lg font-black text-white font-mono">{client.completedWorkouts}</span>
+                  </div>
+                  <div className="absolute top-0 right-0 w-8 h-8 rounded-bl-full bg-[#7A724E]/5"></div>
+                </div>
+              </div>
+
+              {/* Workout Checklist or Quick Logger */}
+              <div className="bg-[#111] border border-[#222] rounded-[28px] p-5 shadow-lg relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-[120px] h-[120px] rounded-bl-full bg-[#7A724E]/5 pointer-events-none"></div>
+                <span className="text-[8px] font-mono text-[#7A724E] uppercase tracking-widest block mb-1 font-bold">REGISTRO DIARIO</span>
+                <h3 className="text-sm font-bold text-white tracking-tight">Sesión de Entrenamiento</h3>
+                <p className="text-xs text-neutral-400 mt-1">Registra tu rutina completada hoy en Dragon Gym para sumar a tu racha.</p>
+
+                {/* Simulated Success / Completed State indicator */}
+                <div className="mt-5">
+                  <button
+                    onClick={() => {
+                      onCompleteWorkout(client.id);
+                    }}
+                    className="w-full bg-[#7A724E] hover:bg-[#91875d] text-black text-xs font-black uppercase tracking-widest py-3.5 px-4 rounded-xl transition-all active:scale-95 flex items-center justify-center gap-2 cursor-pointer shadow-[0_4px_15px_rgba(122,114,78,0.2)]"
+                  >
+                    <Dumbbell className="w-4 h-4" />
+                    <span>¡Registrar Sesión de Hoy!</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Weekly Progress Tracker */}
+              <div className="bg-[#111] border border-[#222] rounded-[28px] p-5 shadow-lg">
+                <h4 className="text-xs text-neutral-400 uppercase tracking-wider font-mono mb-3 flex items-center gap-1.5">
+                  <TrendingUp className="w-3.5 h-3.5 text-[#7A724E]" />
+                  <span>Seguimiento Semanal</span>
+                </h4>
+                
+                <div className="grid grid-cols-7 gap-1.5 text-center">
+                  {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((day, idx) => {
+                    const isDone = idx < (client.streakDays % 7 || 3); // mock some active days based on streak
+                    return (
+                      <div key={idx} className="flex flex-col items-center gap-1">
+                        <span className="text-[9px] text-neutral-500 font-mono font-bold">{day}</span>
+                        <div className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
+                          isDone 
+                            ? 'bg-[#7A724E] border-[#7A724E] text-black font-black' 
+                            : 'bg-black/50 border-neutral-800 text-neutral-600'
+                        }`}>
+                          {isDone ? <Check className="w-4 h-4" strokeWidth={3} /> : <span className="text-[10px] font-mono">{idx + 1}</span>}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="text-[10px] text-neutral-500 text-center mt-3">Completando sesiones consecutivas incrementas tu racha de constancia.</p>
+              </div>
+            </div>
+          )}
+
+          {/* TAB: RUTINAS (VIDEOS DE YOUTUBE DEL ADMIN) */}
+          {activeTab === 'rutinas' && (
+            <div className="space-y-4 animate-fade-in text-left">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-sm font-black text-white tracking-tight flex items-center gap-1.5">
+                    <Video className="w-4 h-4 text-[#7A724E]" />
+                    <span>RUTINAS DE DRAGON GYM</span>
+                  </h3>
+                  <p className="text-[10px] text-neutral-400">Videos subidos por Administración</p>
+                </div>
+                <div className="text-[8px] font-mono text-[#7A724E] bg-[#7A724E]/10 py-0.5 px-2.5 rounded-full uppercase font-bold animate-pulse">
+                  {routines.length} Publicadas
+                </div>
+              </div>
+
+              {routines.length === 0 ? (
+                <div className="bg-[#111] border border-[#222] rounded-3xl p-8 text-center text-neutral-500">
+                  <Play className="w-8 h-8 mx-auto mb-2.5 opacity-30 text-neutral-500" />
+                  <p className="text-xs font-mono">No hay rutinas publicadas en video.</p>
+                  <p className="text-[10px] text-neutral-600 mt-1">El administrador subirá rutinas próximamente.</p>
+                </div>
+              ) : (
+                <div className="space-y-5">
+                  {routines.map((routine) => {
+                    const getYoutubeId = (url: string) => {
+                      if (!url) return '';
+                      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                      const match = url.match(regExp);
+                      return (match && match[2].length === 11) ? match[2] : '';
+                    };
+                    const videoId = getYoutubeId(routine.videoUrl || '');
+                    
+                    return (
+                      <div key={routine.id} className="bg-[#111] border border-[#222] rounded-[28px] overflow-hidden shadow-lg">
+                        
+                        {/* Video Player */}
+                        {videoId ? (
+                          <div className="w-full aspect-video bg-black relative">
+                            <iframe 
+                              className="w-full h-full"
+                              src={`https://www.youtube.com/embed/${videoId}`}
+                              title={routine.title}
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              allowFullScreen
+                            ></iframe>
+                          </div>
+                        ) : (
+                          <div className="w-full h-36 bg-gradient-to-br from-neutral-900 to-neutral-950 flex flex-col items-center justify-center border-b border-[#222]">
+                            <Video className="w-8 h-8 text-neutral-600 mb-1" />
+                            <span className="text-[10px] text-neutral-500 font-mono">Sin reproducción de video directa</span>
+                          </div>
+                        )}
+
+                        <div className="p-4">
+                          <div className="flex items-center justify-between gap-2 mb-1.5">
+                            <span className={`text-[8px] font-bold uppercase tracking-widest font-mono px-2 py-0.5 rounded-full ${
+                              routine.level === 'Principiante' ? 'bg-emerald-950 text-emerald-400' :
+                              routine.level === 'Intermedio' ? 'bg-amber-950 text-amber-400' : 'bg-red-950 text-red-400'
+                            }`}>
+                              {routine.level}
+                            </span>
+                            <span className="text-[9px] text-neutral-500 font-mono">{routine.durationMin} Min</span>
+                          </div>
+
+                          <h4 className="text-xs font-bold text-white tracking-wide uppercase">{routine.title}</h4>
+                          {routine.description && (
+                            <p className="text-[10px] text-neutral-400 leading-relaxed mt-1.5">{routine.description}</p>
+                          )}
+
+                          <div className="mt-3.5 pt-3 border-t border-[#222]/60">
+                            <span className="text-[8px] font-mono text-neutral-500 block uppercase mb-2">Lista de Ejercicios</span>
+                            <div className="space-y-1.5">
+                              {routine.exercises.map((ex, exIdx) => (
+                                <div key={exIdx} className="flex items-center justify-between bg-black/40 border border-[#1a1a1a] rounded-lg p-2 text-[10px]">
+                                  <div className="flex items-center gap-1.5 min-w-0">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-[#7A724E] shrink-0"></div>
+                                    <span className="text-white font-medium truncate">{ex.name}</span>
+                                  </div>
+                                  <div className="flex items-center gap-1 font-mono text-neutral-400 shrink-0">
+                                    <span>{ex.sets}x{ex.reps}</span>
+                                    {ex.weight && <span className="text-[#7A724E]">({ex.weight})</span>}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="mt-3 pt-2.5 border-t border-neutral-900 flex justify-between items-center text-[8px] text-neutral-500 font-mono">
+                            <span>Instructor: {routine.uploadedBy || 'Administración'}</span>
+                            <span>{routine.date || 'Reciente'}</span>
+                          </div>
+                        </div>
+
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
         </div>
       </div>
 
       {/* Bottom PWA Navigation Tabs */}
-      <div className="absolute bottom-0 inset-x-0 h-16 bg-[#111111]/95 backdrop-blur-lg border-t border-[#222] flex items-center justify-center px-4 z-30">
-        <div className="max-w-xl mx-auto w-full flex items-center justify-around">
+      <div className="absolute bottom-0 inset-x-0 h-16 bg-[#111111]/95 backdrop-blur-lg border-t border-[#222] flex items-center justify-center px-2 z-30">
+        <div className="max-w-xl mx-auto w-full flex items-center justify-between">
           
           <button 
             id="btn-client-tab-credencial"
             onClick={() => setActiveTab('credencial')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'credencial' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer flex-1 py-1 ${activeTab === 'credencial' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
-            <QrCode className="w-5 h-5" />
-            <span className="text-[8px] xs:text-[9px] font-mono uppercase font-bold tracking-tight xs:tracking-wider">Acceso</span>
+            <QrCode className="w-4 h-4 xs:w-5 h-5" />
+            <span className="text-[7.5px] font-mono uppercase font-black tracking-tighter">Acceso</span>
+          </button>
+
+          <button 
+            id="btn-client-tab-sesiones"
+            onClick={() => setActiveTab('sesiones')}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer flex-1 py-1 ${activeTab === 'sesiones' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+          >
+            <Flame className="w-4 h-4 xs:w-5 h-5 animate-pulse text-amber-500/90" />
+            <span className="text-[7.5px] font-mono uppercase font-black tracking-tighter">Sesiones</span>
+          </button>
+
+          <button 
+            id="btn-client-tab-rutinas"
+            onClick={() => setActiveTab('rutinas')}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer flex-1 py-1 ${activeTab === 'rutinas' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+          >
+            <Video className="w-4 h-4 xs:w-5 h-5 text-[#7A724E]" />
+            <span className="text-[7.5px] font-mono uppercase font-black tracking-tighter">Rutinas</span>
           </button>
 
           <button 
             id="btn-client-tab-membresia"
             onClick={() => setActiveTab('membresia')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'membresia' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer flex-1 py-1 ${activeTab === 'membresia' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
-            <Calendar className="w-5 h-5" />
-            <span className="text-[8px] xs:text-[9px] font-mono uppercase font-bold tracking-tight xs:tracking-wider">Plan</span>
+            <Calendar className="w-4 h-4 xs:w-5 h-5" />
+            <span className="text-[7.5px] font-mono uppercase font-black tracking-tighter">Plan</span>
           </button>
 
           <button 
             id="btn-client-tab-avisos"
             onClick={() => setActiveTab('avisos')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'avisos' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer flex-1 py-1 ${activeTab === 'avisos' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
-            <Bell className="w-5 h-5" />
-            <span className="text-[8px] xs:text-[9px] font-mono uppercase font-bold tracking-tight xs:tracking-wider">Avisos</span>
+            <Bell className="w-4 h-4 xs:w-5 h-5" />
+            <span className="text-[7.5px] font-mono uppercase font-black tracking-tighter">Avisos</span>
           </button>
 
           <button 
             id="btn-client-tab-recibos"
             onClick={() => setActiveTab('recibos')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'recibos' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer flex-1 py-1 ${activeTab === 'recibos' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
-            <Receipt className="w-5 h-5" />
-            <span className="text-[8px] xs:text-[9px] font-mono uppercase font-bold tracking-tight xs:tracking-wider">Recibos</span>
+            <Receipt className="w-4 h-4 xs:w-5 h-5" />
+            <span className="text-[7.5px] font-mono uppercase font-black tracking-tighter">Recibos</span>
           </button>
 
           <button 
             id="btn-client-tab-perfil"
             onClick={() => setActiveTab('perfil')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'perfil' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer flex-1 py-1 ${activeTab === 'perfil' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
-            <User className="w-5 h-5" />
-            <span className="text-[8px] xs:text-[9px] font-mono uppercase font-bold tracking-tight xs:tracking-wider">Perfil</span>
+            <User className="w-4 h-4 xs:w-5 h-5" />
+            <span className="text-[7.5px] font-mono uppercase font-black tracking-tighter">Perfil</span>
           </button>
 
         </div>
