@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { 
   QrCode, Calendar, Bell, CreditCard, User, Dumbbell, Sparkles, 
   CheckCircle2, AlertCircle, Smartphone, Sun, Users, Receipt, ShieldCheck,
-  Video, Play, Trophy, Flame, TrendingUp, Check, ExternalLink, RefreshCw
+  Video, Play, Trophy, Flame, TrendingUp, Check, ExternalLink, RefreshCw,
+  Maximize2, X
 } from 'lucide-react';
 import { Client, GymClass, Announcement, Plan, Payment, WorkoutRoutine, QrAccess } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
@@ -46,6 +47,12 @@ export default function ClientRole({
   
   // High Visibility screen simulation state
   const [highVisibility, setHighVisibility] = useState(false);
+
+  // State for routine in fullscreen mode
+  const [fullscreenRoutine, setFullscreenRoutine] = useState<WorkoutRoutine | null>(null);
+
+  // Track checked exercises in active routines
+  const [checkedExercises, setCheckedExercises] = useState<Record<string, boolean>>({});
 
   // Find current logged-in client
   const client = clients.find(c => c.id === activeClientId) || clients[0];
@@ -652,7 +659,7 @@ export default function ClientRole({
                   <p className="text-[10px] text-neutral-600 mt-1">El administrador subirá rutinas próximamente.</p>
                 </div>
               ) : (
-                <div className="space-y-5">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-20">
                   {routines.map((routine) => {
                     const getYoutubeId = (url: string) => {
                       if (!url) return '';
@@ -663,66 +670,82 @@ export default function ClientRole({
                     const videoId = getYoutubeId(routine.videoUrl || '');
                     
                     return (
-                      <div key={routine.id} className="bg-[#111] border border-[#222] rounded-[28px] overflow-hidden shadow-lg">
-                        
-                        {/* Video Player */}
-                        {videoId ? (
-                          <div className="w-full aspect-video bg-black relative">
-                            <iframe 
-                              className="w-full h-full"
-                              src={`https://www.youtube.com/embed/${videoId}`}
-                              title={routine.title}
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                            ></iframe>
-                          </div>
-                        ) : (
-                          <div className="w-full h-36 bg-gradient-to-br from-neutral-900 to-neutral-950 flex flex-col items-center justify-center border-b border-[#222]">
-                            <Video className="w-8 h-8 text-neutral-600 mb-1" />
-                            <span className="text-[10px] text-neutral-500 font-mono">Sin reproducción de video directa</span>
-                          </div>
-                        )}
+                      <div key={routine.id} className="bg-[#111] border border-[#222] hover:border-[#7A724E]/40 rounded-[24px] overflow-hidden shadow-lg transition-all flex flex-col justify-between group">
+                        <div>
+                          {/* Video thumbnail cover with play overlay */}
+                          <div 
+                            className="relative aspect-video bg-black/80 overflow-hidden cursor-pointer"
+                            onClick={() => setFullscreenRoutine(routine)}
+                          >
+                            {videoId ? (
+                              <img 
+                                src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`} 
+                                alt={routine.title} 
+                                className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300 opacity-80 group-hover:opacity-100"
+                                referrerPolicy="no-referrer"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-gradient-to-br from-neutral-900 to-neutral-950 flex flex-col items-center justify-center">
+                                <Video className="w-8 h-8 text-neutral-600" />
+                              </div>
+                            )}
+                            
+                            {/* Play Overlay */}
+                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-100 group-hover:bg-black/20 transition-all duration-300">
+                              <div className="w-9 h-9 rounded-full bg-[#7A724E] text-black flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-all duration-300">
+                                <Play className="w-4 h-4 fill-black translate-x-0.5" />
+                              </div>
+                            </div>
 
-                        <div className="p-4">
-                          <div className="flex items-center justify-between gap-2 mb-1.5">
-                            <span className={`text-[8px] font-bold uppercase tracking-widest font-mono px-2 py-0.5 rounded-full ${
-                              routine.level === 'Principiante' ? 'bg-emerald-950 text-emerald-400' :
-                              routine.level === 'Intermedio' ? 'bg-amber-950 text-amber-400' : 'bg-red-950 text-red-400'
-                            }`}>
-                              {routine.level}
-                            </span>
-                            <span className="text-[9px] text-neutral-500 font-mono">{routine.durationMin} Min</span>
-                          </div>
+                            {/* Maximize Icon */}
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setFullscreenRoutine(routine);
+                              }}
+                              className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 text-white hover:text-[#7A724E] transition-all cursor-pointer backdrop-blur-sm"
+                              title="Ver en Pantalla Completa"
+                            >
+                              <Maximize2 className="w-3.5 h-3.5" />
+                            </button>
 
-                          <h4 className="text-xs font-bold text-white tracking-wide uppercase">{routine.title}</h4>
-                          {routine.description && (
-                            <p className="text-[10px] text-neutral-400 leading-relaxed mt-1.5">{routine.description}</p>
-                          )}
-
-                          <div className="mt-3.5 pt-3 border-t border-[#222]/60">
-                            <span className="text-[8px] font-mono text-neutral-500 block uppercase mb-2">Lista de Ejercicios</span>
-                            <div className="space-y-1.5">
-                              {routine.exercises.map((ex, exIdx) => (
-                                <div key={exIdx} className="flex items-center justify-between bg-black/40 border border-[#1a1a1a] rounded-lg p-2 text-[10px]">
-                                  <div className="flex items-center gap-1.5 min-w-0">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-[#7A724E] shrink-0"></div>
-                                    <span className="text-white font-medium truncate">{ex.name}</span>
-                                  </div>
-                                  <div className="flex items-center gap-1 font-mono text-neutral-400 shrink-0">
-                                    <span>{ex.sets}x{ex.reps}</span>
-                                    {ex.weight && <span className="text-[#7A724E]">({ex.weight})</span>}
-                                  </div>
-                                </div>
-                              ))}
+                            {/* Level Tag */}
+                            <div className="absolute bottom-2 left-2">
+                              <span className={`text-[8px] font-black uppercase tracking-wider font-mono px-2 py-0.5 rounded-md ${
+                                routine.level === 'Principiante' ? 'bg-emerald-950/90 text-emerald-400 border border-emerald-900/40' :
+                                routine.level === 'Intermedio' ? 'bg-amber-950/90 text-amber-400 border border-amber-900/40' : 'bg-red-950/90 text-red-400 border border-red-900/40'
+                              }`}>
+                                {routine.level}
+                              </span>
                             </div>
                           </div>
 
-                          <div className="mt-3 pt-2.5 border-t border-neutral-900 flex justify-between items-center text-[8px] text-neutral-500 font-mono">
-                            <span>Instructor: {routine.uploadedBy || 'Administración'}</span>
-                            <span>{routine.date || 'Reciente'}</span>
+                          <div className="p-3">
+                            <div className="flex items-center justify-between text-[8px] font-mono text-neutral-400 mb-1.5">
+                              <span>⏱ {routine.durationMin} Minutos</span>
+                            </div>
+
+                            <h4 className="text-[11px] font-extrabold text-white leading-tight uppercase group-hover:text-[#7A724E] transition-all line-clamp-1">
+                              {routine.title}
+                            </h4>
+                            
+                            {routine.description && (
+                              <p className="text-[9.5px] text-neutral-400 leading-snug mt-1 line-clamp-2">
+                                {routine.description}
+                              </p>
+                            )}
                           </div>
                         </div>
 
+                        <div className="p-3 pt-0">
+                          <button
+                            onClick={() => setFullscreenRoutine(routine)}
+                            className="w-full bg-[#1a1a1a] hover:bg-[#7A724E] hover:text-black text-[9px] font-black uppercase py-2 rounded-xl transition-all border border-neutral-800 hover:border-transparent flex items-center justify-center gap-1 cursor-pointer"
+                          >
+                            <Maximize2 className="w-3 h-3" />
+                            <span>Pantalla Completa</span>
+                          </button>
+                        </div>
                       </div>
                     );
                   })}
@@ -803,6 +826,175 @@ export default function ClientRole({
 
         </div>
       </div>
+
+      {/* FULLSCREEN IMMERSIVE VIDEO MODAL */}
+      <AnimatePresence>
+        {fullscreenRoutine && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/95 backdrop-blur-md z-50 overflow-y-auto flex items-center justify-center p-4 md:p-10 text-left"
+          >
+            <motion.div 
+              initial={{ scale: 0.95, y: 15 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 15 }}
+              className="bg-[#0b0b0b] border border-neutral-800 rounded-[32px] w-full max-w-4xl overflow-hidden shadow-2xl relative"
+            >
+              {/* Close Button */}
+              <button 
+                onClick={() => setFullscreenRoutine(null)}
+                className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/70 hover:bg-red-500/10 text-neutral-400 hover:text-red-400 flex items-center justify-center border border-neutral-800 transition-all cursor-pointer"
+                title="Cerrar"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-0">
+                {/* Left side: Video Player (occupies 7 cols on desktop) */}
+                <div className="md:col-span-7 bg-black flex flex-col justify-center relative aspect-video md:aspect-auto md:min-h-[480px]">
+                  {(() => {
+                    const getYoutubeId = (url: string) => {
+                      if (!url) return '';
+                      const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                      const match = url.match(regExp);
+                      return (match && match[2].length === 11) ? match[2] : '';
+                    };
+                    const videoId = getYoutubeId(fullscreenRoutine.videoUrl || '');
+                    
+                    return videoId ? (
+                      <iframe 
+                        className="w-full h-full md:absolute md:inset-0"
+                        src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+                        title={fullscreenRoutine.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center p-8 bg-neutral-900/40">
+                        <Video className="w-12 h-12 text-neutral-600 mb-2" />
+                        <span className="text-xs text-neutral-500 font-mono">Video no disponible en reproducción directa</span>
+                      </div>
+                    );
+                  })()}
+                </div>
+
+                {/* Right side: Information, stats and interactive exercises checklist (occupies 5 cols) */}
+                <div className="md:col-span-5 p-6 md:p-8 flex flex-col justify-between max-h-[500px] md:max-h-[600px] overflow-y-auto border-t md:border-t-0 md:border-l border-neutral-900">
+                  <div className="space-y-4">
+                    {/* Level and Duration row */}
+                    <div className="flex items-center gap-2">
+                      <span className={`text-[9px] font-black uppercase tracking-wider font-mono px-2.5 py-1 rounded-md ${
+                        fullscreenRoutine.level === 'Principiante' ? 'bg-emerald-950 text-emerald-400 border border-emerald-900/30' :
+                        fullscreenRoutine.level === 'Intermedio' ? 'bg-amber-950 text-amber-400 border border-amber-900/30' : 'bg-red-950 text-red-400 border border-red-900/30'
+                      }`}>
+                        {fullscreenRoutine.level}
+                      </span>
+                      <span className="text-[10px] text-neutral-400 font-mono bg-neutral-900 px-2 py-1 rounded-md">⏱ {fullscreenRoutine.durationMin} Minutos</span>
+                    </div>
+
+                    <div>
+                      <h3 className="text-base font-black text-white uppercase tracking-tight font-sans">{fullscreenRoutine.title}</h3>
+                      {fullscreenRoutine.description && (
+                        <p className="text-xs text-neutral-400 mt-2 leading-relaxed">
+                          {fullscreenRoutine.description}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Interactive Exercises checklist */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-mono text-[#7A724E] uppercase tracking-wider font-bold">Lista de Ejercicios (Toca para tachar)</span>
+                        {/* Progress percentage */}
+                        {(() => {
+                          const total = fullscreenRoutine.exercises.length;
+                          const checkedCount = fullscreenRoutine.exercises.filter((_, idx) => checkedExercises[`${fullscreenRoutine.id}-${idx}`]).length;
+                          const pct = total > 0 ? Math.round((checkedCount / total) * 100) : 0;
+                          return (
+                            <span className="text-[10px] font-mono text-neutral-400">{pct}% Completado</span>
+                          );
+                        })()}
+                      </div>
+
+                      <div className="space-y-1.5 max-h-[160px] md:max-h-[220px] overflow-y-auto pr-1">
+                        {fullscreenRoutine.exercises.map((ex, exIdx) => {
+                          const isChecked = !!checkedExercises[`${fullscreenRoutine.id}-${exIdx}`];
+                          return (
+                            <button
+                              key={exIdx}
+                              onClick={() => {
+                                setCheckedExercises(prev => ({
+                                  ...prev,
+                                  [`${fullscreenRoutine.id}-${exIdx}`]: !isChecked
+                                }));
+                              }}
+                              className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-xs transition-all text-left cursor-pointer ${
+                                isChecked 
+                                  ? 'bg-emerald-950/20 border-emerald-900/40 text-neutral-300' 
+                                  : 'bg-black/60 border-neutral-800 text-white hover:border-neutral-700'
+                              }`}
+                            >
+                              <div className="flex items-center gap-2.5 min-w-0">
+                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 transition-all ${
+                                  isChecked 
+                                    ? 'bg-emerald-500 border-emerald-500 text-black' 
+                                    : 'border-neutral-700 bg-black'
+                                }`}>
+                                  {isChecked && <Check className="w-3 h-3" strokeWidth={3} />}
+                                </div>
+                                <span className={`truncate ${isChecked ? 'line-through text-neutral-500 font-mono' : 'font-medium'}`}>{ex.name}</span>
+                              </div>
+                              <div className="flex items-center gap-1 font-mono text-[10px] text-neutral-400 shrink-0 ml-2">
+                                <span>{ex.sets}x{ex.reps}</span>
+                                {ex.weight && <span className="text-[#7A724E]">({ex.weight})</span>}
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Complete Workout feedback or button */}
+                  <div className="mt-6 pt-4 border-t border-neutral-900 flex flex-col gap-2 shrink-0">
+                    <div className="flex items-center justify-between text-[10px] text-neutral-500 font-mono">
+                      <span>Coach: {fullscreenRoutine.uploadedBy || 'Dragon Gym'}</span>
+                      <span>Publicado: {fullscreenRoutine.date || 'Reciente'}</span>
+                    </div>
+
+                    <div className="flex gap-2 mt-2">
+                      <button
+                        onClick={() => {
+                          // Complete all exercises instantly
+                          const updated: Record<string, boolean> = { ...checkedExercises };
+                          fullscreenRoutine.exercises.forEach((_, idx) => {
+                            updated[`${fullscreenRoutine.id}-${idx}`] = true;
+                          });
+                          setCheckedExercises(updated);
+                        }}
+                        className="flex-1 bg-neutral-900 hover:bg-neutral-800 text-white text-[10px] font-black uppercase py-3 rounded-xl transition-all cursor-pointer text-center font-sans"
+                      >
+                        Marcar Todo Listo
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setFullscreenRoutine(null);
+                        }}
+                        className="flex-1 bg-[#7A724E] hover:bg-[#91875d] text-black text-[10px] font-black uppercase py-3 rounded-xl transition-all cursor-pointer text-center font-sans"
+                      >
+                        Cerrar y Volver
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </div>
   );
