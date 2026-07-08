@@ -735,13 +735,13 @@ export default function ClientRole({
       </div>
 
       {/* Bottom PWA Navigation Tabs */}
-      <div className="absolute bottom-0 inset-x-0 h-16 bg-[#111111]/95 backdrop-blur-lg border-t border-[#222] flex items-center justify-center px-2 z-30">
-        <div className="max-w-xl mx-auto w-full flex items-center justify-between">
+      <div className="absolute bottom-0 inset-x-0 h-16 bg-[#111111]/95 backdrop-blur-lg border-t border-[#222] flex items-center z-30 overflow-x-auto scrollbar-none px-4">
+        <div className="mx-auto flex items-center justify-start sm:justify-center gap-3 min-w-max w-full">
           
           <button 
             id="btn-client-tab-credencial"
             onClick={() => setActiveTab('credencial')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer flex-1 py-1 ${activeTab === 'credencial' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-0.5 transition-all cursor-pointer shrink-0 px-2.5 py-1 ${activeTab === 'credencial' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <QrCode className="w-4 h-4 xs:w-5 h-5" />
             <span className="text-[7.5px] font-mono uppercase font-black tracking-tighter">Acceso</span>
@@ -750,7 +750,7 @@ export default function ClientRole({
           <button 
             id="btn-client-tab-sesiones"
             onClick={() => setActiveTab('sesiones')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer flex-1 py-1 ${activeTab === 'sesiones' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-0.5 transition-all cursor-pointer shrink-0 px-2.5 py-1 ${activeTab === 'sesiones' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Flame className="w-4 h-4 xs:w-5 h-5 animate-pulse text-amber-500/90" />
             <span className="text-[7.5px] font-mono uppercase font-black tracking-tighter">Sesiones</span>
@@ -759,7 +759,7 @@ export default function ClientRole({
           <button 
             id="btn-client-tab-rutinas"
             onClick={() => setActiveTab('rutinas')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer flex-1 py-1 ${activeTab === 'rutinas' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-0.5 transition-all cursor-pointer shrink-0 px-2.5 py-1 ${activeTab === 'rutinas' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Video className="w-4 h-4 xs:w-5 h-5 text-[#7A724E]" />
             <span className="text-[7.5px] font-mono uppercase font-black tracking-tighter">Rutinas</span>
@@ -768,7 +768,7 @@ export default function ClientRole({
           <button 
             id="btn-client-tab-membresia"
             onClick={() => setActiveTab('membresia')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer flex-1 py-1 ${activeTab === 'membresia' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-0.5 transition-all cursor-pointer shrink-0 px-2.5 py-1 ${activeTab === 'membresia' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Calendar className="w-4 h-4 xs:w-5 h-5" />
             <span className="text-[7.5px] font-mono uppercase font-black tracking-tighter">Plan</span>
@@ -777,7 +777,7 @@ export default function ClientRole({
           <button 
             id="btn-client-tab-avisos"
             onClick={() => setActiveTab('avisos')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer flex-1 py-1 ${activeTab === 'avisos' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-0.5 transition-all cursor-pointer shrink-0 px-2.5 py-1 ${activeTab === 'avisos' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Bell className="w-4 h-4 xs:w-5 h-5" />
             <span className="text-[7.5px] font-mono uppercase font-black tracking-tighter">Avisos</span>
@@ -786,7 +786,7 @@ export default function ClientRole({
           <button 
             id="btn-client-tab-recibos"
             onClick={() => setActiveTab('recibos')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer flex-1 py-1 ${activeTab === 'recibos' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-0.5 transition-all cursor-pointer shrink-0 px-2.5 py-1 ${activeTab === 'recibos' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Receipt className="w-4 h-4 xs:w-5 h-5" />
             <span className="text-[7.5px] font-mono uppercase font-black tracking-tighter">Recibos</span>
@@ -795,7 +795,7 @@ export default function ClientRole({
           <button 
             id="btn-client-tab-perfil"
             onClick={() => setActiveTab('perfil')}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer flex-1 py-1 ${activeTab === 'perfil' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-0.5 transition-all cursor-pointer shrink-0 px-2.5 py-1 ${activeTab === 'perfil' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <User className="w-4 h-4 xs:w-5 h-5" />
             <span className="text-[7.5px] font-mono uppercase font-black tracking-tighter">Perfil</span>

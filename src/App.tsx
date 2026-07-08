@@ -577,6 +577,9 @@ export default function App() {
             onAddClient={handleAddClient}
             onRecordPayment={handleRecordPayment}
             onAddCheckIn={handleAddCheckIn}
+            qrAccesses={qrAccesses}
+            onGenerateQrAccess={handleGenerateQrAccess}
+            onToggleQrAccessStatus={handleToggleQrAccessStatus}
           />
         )}
 

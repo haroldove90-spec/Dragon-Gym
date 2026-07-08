@@ -3,7 +3,7 @@ import {
   Camera, Search, CheckCircle2, AlertCircle, UserPlus, CreditCard, 
   RefreshCw, Laptop, ShieldCheck, Dumbbell, Sparkles, Smartphone, QrCode
 } from 'lucide-react';
-import { Client, Plan, Payment, CheckIn } from '../types';
+import { Client, Plan, Payment, CheckIn, QrAccess } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface StaffRoleProps {
@@ -31,9 +31,12 @@ interface StaffRoleProps {
     method: 'Efectivo' | 'Tarjeta' | 'Transferencia'
   ) => void;
   onAddCheckIn: (checkIn: Omit<CheckIn, 'id'>) => void;
+  qrAccesses: QrAccess[];
+  onGenerateQrAccess: (clientId: string, schedule: string, expiresAt: string) => void;
+  onToggleQrAccessStatus: (id: string) => void;
 }
 
-type StaffTab = 'checkin' | 'socios' | 'caja';
+type StaffTab = 'checkin' | 'socios' | 'caja' | 'qr_access';
 
 export default function StaffRole({
   clients,
@@ -42,7 +45,10 @@ export default function StaffRole({
   checkIns,
   onAddClient,
   onRecordPayment,
-  onAddCheckIn
+  onAddCheckIn,
+  qrAccesses,
+  onGenerateQrAccess,
+  onToggleQrAccessStatus
 }: StaffRoleProps) {
   const [activeTab, setActiveTab] = useState<StaffTab>('checkin');
   
@@ -889,6 +895,129 @@ export default function StaffRole({
             </div>
           )}
 
+          {/* TAB: ACCESOS QR */}
+          {activeTab === 'qr_access' && (
+            <div className="space-y-5 animate-fade-in text-left">
+              <div className="bg-[#111] border border-[#222] rounded-[32px] p-5 shadow-lg">
+                <div className="flex items-center gap-1.5 mb-3">
+                  <QrCode className="w-4 h-4 text-[#7A724E]" />
+                  <h4 className="text-xs text-white uppercase tracking-wider font-bold">Generador de Acceso QR para Clientes</h4>
+                </div>
+                
+                <form 
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.currentTarget);
+                    const clientId = formData.get('clientId') as string;
+                    const schedule = formData.get('schedule') as string;
+                    const expiresAt = formData.get('expiresAt') as string;
+                    if (!clientId) return;
+                    onGenerateQrAccess(clientId, schedule, expiresAt);
+                    e.currentTarget.reset();
+                  }}
+                  className="space-y-4"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                    <div>
+                      <label className="text-[10px] uppercase font-mono text-neutral-400 block mb-1">Seleccionar Socio</label>
+                      <select 
+                        name="clientId"
+                        required
+                        className="w-full bg-[#050505] border border-neutral-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#7A724E]"
+                      >
+                        <option value="">-- Elige un Socio --</option>
+                        {clients.map(c => (
+                          <option key={c.id} value={c.id}>{c.name} (Socio #{c.id})</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] uppercase font-mono text-neutral-400 block mb-1">Horario Autorizado</label>
+                      <select 
+                        name="schedule"
+                        required
+                        className="w-full bg-[#050505] border border-neutral-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-[#7A724E]"
+                      >
+                        <option value="Todos los días (06:00 - 23:00)">Todos los días (06:00 - 23:00)</option>
+                        <option value="Lunes a Viernes (06:00 - 22:00)">Lunes a Viernes (06:00 - 22:00)</option>
+                        <option value="Lunes a Sábado (06:00 - 22:00)">Lunes a Sábado (06:00 - 22:00)</option>
+                        <option value="Fines de Semana (08:00 - 18:00)">Fines de Semana (08:00 - 18:00)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] uppercase font-mono text-neutral-400 block mb-1">Fecha de Expiración del Pase</label>
+                    <input 
+                      type="date"
+                      name="expiresAt"
+                      required
+                      defaultValue="2027-01-15"
+                      className="w-full bg-[#050505] border border-neutral-800 rounded-xl px-3 py-2.5 text-xs text-white font-mono focus:outline-none focus:border-[#7A724E]"
+                    />
+                  </div>
+
+                  <button 
+                    type="submit" 
+                    className="w-full bg-[#7A724E] text-black font-extrabold uppercase py-3 rounded-xl text-xs transition-all active:scale-95 cursor-pointer shadow-md flex items-center justify-center gap-2"
+                  >
+                    <QrCode className="w-4 h-4" />
+                    <span>Emitir y Generar Pase QR Sincronizado</span>
+                  </button>
+                </form>
+              </div>
+
+              {/* QR list of active codes */}
+              <div className="bg-[#111] border border-[#222] rounded-[32px] p-5 shadow-lg">
+                <h4 className="text-xs text-neutral-400 uppercase tracking-wider font-mono mb-3">PASES QR DE ACCESO EMITIDOS ({qrAccesses.length})</h4>
+                <div className="space-y-3">
+                  {qrAccesses.length === 0 ? (
+                    <p className="text-xs text-neutral-600 italic text-center py-2">No hay pases QR de acceso emitidos.</p>
+                  ) : (
+                    qrAccesses.map(qr => {
+                      const isSuspendido = qr.status === 'Suspendido';
+                      return (
+                        <div key={qr.id} className="p-3.5 rounded-2xl border border-neutral-800 bg-[#050505] flex items-center justify-between gap-4">
+                          <div className="flex items-center gap-3">
+                            <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${
+                              isSuspendido ? 'bg-red-950/20 border-red-900/40 text-red-400' : 'bg-[#7A724E]/10 border-[#7A724E]/20 text-[#7A724E]'
+                            }`}>
+                              <QrCode className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <h5 className="text-xs font-bold text-white">{qr.clientName}</h5>
+                              <div className="flex flex-wrap gap-x-2 gap-y-0.5 mt-1 text-[10px] text-neutral-400 font-mono">
+                                <span className="text-[#7A724E] font-bold">{qr.code}</span>
+                                <span>•</span>
+                                <span>Vence: {qr.expiresAt}</span>
+                              </div>
+                              <span className="text-[9px] text-neutral-500 font-mono block mt-0.5">{qr.schedule}</span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => onToggleQrAccessStatus(qr.id)}
+                              className={`px-2.5 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-wider transition-all border cursor-pointer ${
+                                isSuspendido 
+                                  ? 'bg-red-950 text-red-400 border-red-900/40 hover:bg-red-900/20' 
+                                  : 'bg-[#7A724E]/10 text-[#7A724E] border-[#7A724E]/20 hover:bg-[#7A724E]/20'
+                              }`}
+                              title={isSuspendido ? 'Activar Pase de Acceso' : 'Suspender Pase de Acceso'}
+                            >
+                              {isSuspendido ? 'Suspendido' : 'Activo'}
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
         </div>
       </div>
 
@@ -921,6 +1050,15 @@ export default function StaffRole({
           >
             <CreditCard className="w-5 h-5" />
             <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Caja Rápida</span>
+          </button>
+
+          <button 
+            id="btn-staff-tab-qr"
+            onClick={() => { stopCamera(); setActiveTab('qr_access'); }}
+            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'qr_access' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+          >
+            <QrCode className="w-5 h-5" />
+            <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Pases QR</span>
           </button>
 
         </div>
