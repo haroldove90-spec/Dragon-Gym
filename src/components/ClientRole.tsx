@@ -274,6 +274,64 @@ export default function ClientRole({
                 )}
               </div>
 
+              {/* CLIENT QUICK-ACCESS TOOLS */}
+              <div className="bg-[#111] border border-[#222] rounded-[28px] p-4 max-w-sm mx-auto shadow-lg text-left">
+                <span className="text-[8px] font-mono text-[#7A724E] uppercase tracking-widest block mb-2 font-bold text-center">Accesos Rápidos</span>
+                <div className="grid grid-cols-2 gap-2">
+                  <button 
+                    onClick={() => setActiveTab('sesiones')}
+                    className="flex flex-col gap-1.5 bg-[#050505] hover:bg-[#1a1a1a] active:scale-98 border border-neutral-800 hover:border-[#7A724E]/30 p-2.5 rounded-xl transition-all text-left cursor-pointer"
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-amber-950/20 border border-amber-900/30 flex items-center justify-center text-amber-500 shrink-0">
+                      <Flame className="w-4 h-4 animate-pulse" />
+                    </div>
+                    <div>
+                      <span className="text-[9.5px] font-black uppercase text-white block">Sesiones</span>
+                      <span className="text-[8px] text-neutral-400 block font-mono">Clases y Horarios</span>
+                    </div>
+                  </button>
+
+                  <button 
+                    onClick={() => setActiveTab('rutinas')}
+                    className="flex flex-col gap-1.5 bg-[#050505] hover:bg-[#1a1a1a] active:scale-98 border border-neutral-800 hover:border-[#7A724E]/30 p-2.5 rounded-xl transition-all text-left cursor-pointer"
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-[#7A724E]/10 border border-[#7A724E]/20 flex items-center justify-center text-[#7A724E] shrink-0">
+                      <Video className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="text-[9.5px] font-black uppercase text-white block">Rutinas</span>
+                      <span className="text-[8px] text-neutral-400 block font-mono">Entrenamientos</span>
+                    </div>
+                  </button>
+
+                  <button 
+                    onClick={() => setActiveTab('membresia')}
+                    className="flex flex-col gap-1.5 bg-[#050505] hover:bg-[#1a1a1a] active:scale-98 border border-neutral-800 hover:border-[#7A724E]/30 p-2.5 rounded-xl transition-all text-left cursor-pointer"
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-emerald-950/20 border border-emerald-900/30 flex items-center justify-center text-emerald-400 shrink-0">
+                      <Calendar className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="text-[9.5px] font-black uppercase text-white block">Mi Plan</span>
+                      <span className="text-[8px] text-neutral-400 block font-mono">Estatus y Días</span>
+                    </div>
+                  </button>
+
+                  <button 
+                    onClick={() => setActiveTab('avisos')}
+                    className="flex flex-col gap-1.5 bg-[#050505] hover:bg-[#1a1a1a] active:scale-98 border border-neutral-800 hover:border-[#7A724E]/30 p-2.5 rounded-xl transition-all text-left cursor-pointer"
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-blue-950/20 border border-blue-900/30 flex items-center justify-center text-blue-400 shrink-0">
+                      <Bell className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className="text-[9.5px] font-black uppercase text-white block">Avisos</span>
+                      <span className="text-[8px] text-neutral-400 block font-mono">Anuncios Dragon</span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
             </div>
           )}
 
@@ -356,7 +414,13 @@ export default function ClientRole({
 
           {/* TAB 3: AVISOS (TABLÓN DE ANUNCIOS) */}
           {activeTab === 'avisos' && (
-            <div className="space-y-4 animate-fade-in">
+            <div className="space-y-4 animate-fade-in text-left">
+              <button 
+                onClick={() => setActiveTab('credencial')}
+                className="flex items-center gap-2 text-[10px] text-neutral-400 hover:text-white uppercase font-mono font-bold bg-[#111] border border-[#222] py-1.5 px-3 rounded-xl cursor-pointer transition-all active:scale-95 mb-1"
+              >
+                <span>← Volver a Acceso (Inicio)</span>
+              </button>
               <div className="flex items-center gap-1.5">
                 <Bell className="w-4 h-4 text-[#7A724E]" />
                 <h3 className="text-xs text-neutral-400 uppercase tracking-wider font-mono">Muro de Comunicados</h3>
@@ -478,6 +542,12 @@ export default function ClientRole({
           {/* TAB: SESIONES */}
           {activeTab === 'sesiones' && (
             <div className="space-y-4 animate-fade-in text-left">
+              <button 
+                onClick={() => setActiveTab('credencial')}
+                className="flex items-center gap-2 text-[10px] text-neutral-400 hover:text-white uppercase font-mono font-bold bg-[#111] border border-[#222] py-1.5 px-3 rounded-xl cursor-pointer transition-all active:scale-95 mb-1"
+              >
+                <span>← Volver a Acceso (Inicio)</span>
+              </button>
               {/* Stats Card */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-gradient-to-br from-[#111] to-[#1a1a1a] border border-[#222] rounded-3xl p-4 flex items-center gap-3 relative overflow-hidden">
@@ -556,6 +626,12 @@ export default function ClientRole({
           {/* TAB: RUTINAS (VIDEOS DE YOUTUBE DEL ADMIN) */}
           {activeTab === 'rutinas' && (
             <div className="space-y-4 animate-fade-in text-left">
+              <button 
+                onClick={() => setActiveTab('credencial')}
+                className="flex items-center gap-2 text-[10px] text-neutral-400 hover:text-white uppercase font-mono font-bold bg-[#111] border border-[#222] py-1.5 px-3 rounded-xl cursor-pointer transition-all active:scale-95 mb-1"
+              >
+                <span>← Volver a Acceso (Inicio)</span>
+              </button>
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-sm font-black text-white tracking-tight flex items-center gap-1.5">

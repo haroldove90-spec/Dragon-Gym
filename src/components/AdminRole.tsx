@@ -456,6 +456,67 @@ export default function AdminRole({
                 </p>
               </div>
 
+              {/* ACCESOS RÁPIDOS / MÓDULOS DE ADMINISTRACIÓN */}
+              <div className="bg-[#111] border border-[#222] rounded-[24px] p-4 shadow-lg text-left">
+                <div className="flex items-center gap-1.5 mb-3">
+                  <Sparkles className="w-4 h-4 text-[#7A724E]" />
+                  <h4 className="text-xs text-white uppercase tracking-wider font-bold">Herramientas Especiales</h4>
+                </div>
+                <div className="grid grid-cols-2 gap-2.5">
+                  <button 
+                    onClick={() => setActiveTab('qr_access')}
+                    className="flex items-center gap-2.5 bg-[#050505] hover:bg-[#1a1a1a] active:scale-98 border border-neutral-800 hover:border-[#7A724E]/40 p-3 rounded-xl transition-all text-left cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-[#7A724E]/10 flex items-center justify-center text-[#7A724E] shrink-0">
+                      <QrCode className="w-4.5 h-4.5" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-black uppercase text-white block">Pases QR</span>
+                      <span className="text-[8.5px] text-neutral-400 block font-mono">Emitir accesos</span>
+                    </div>
+                  </button>
+
+                  <button 
+                    onClick={() => setActiveTab('workout_routines')}
+                    className="flex items-center gap-2.5 bg-[#050505] hover:bg-[#1a1a1a] active:scale-98 border border-neutral-800 hover:border-[#7A724E]/40 p-3 rounded-xl transition-all text-left cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-[#7A724E]/10 flex items-center justify-center text-[#7A724E] shrink-0">
+                      <Video className="w-4.5 h-4.5" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-black uppercase text-white block">Subir Rutinas</span>
+                      <span className="text-[8.5px] text-neutral-400 block font-mono">Videos de YouTube</span>
+                    </div>
+                  </button>
+
+                  <button 
+                    onClick={() => setActiveTab('reports')}
+                    className="flex items-center gap-2.5 bg-[#050505] hover:bg-[#1a1a1a] active:scale-98 border border-neutral-800 hover:border-[#7A724E]/40 p-3 rounded-xl transition-all text-left cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-indigo-950/20 flex items-center justify-center text-indigo-400 border border-indigo-900/30 shrink-0">
+                      <FileText className="w-4.5 h-4.5" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-black uppercase text-white block">Auditoría</span>
+                      <span className="text-[8.5px] text-neutral-400 block font-mono">Reporte de pagos</span>
+                    </div>
+                  </button>
+
+                  <button 
+                    onClick={() => setActiveTab('announcements')}
+                    className="flex items-center gap-2.5 bg-[#050505] hover:bg-[#1a1a1a] active:scale-98 border border-neutral-800 hover:border-[#7A724E]/40 p-3 rounded-xl transition-all text-left cursor-pointer"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-amber-950/20 flex items-center justify-center text-amber-500 border border-amber-900/30 shrink-0">
+                      <Bell className="w-4.5 h-4.5" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-black uppercase text-white block">Avisos</span>
+                      <span className="text-[8.5px] text-neutral-400 block font-mono">Alertas generales</span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
             </div>
           )}
 
@@ -930,7 +991,13 @@ export default function AdminRole({
 
           {/* TAB 5: REPORTS & AUDITING */}
           {activeTab === 'reports' && (
-            <div className="space-y-4 animate-fade-in">
+            <div className="space-y-4 animate-fade-in text-left">
+              <button 
+                onClick={() => setActiveTab('metrics')}
+                className="flex items-center gap-2 text-[10px] text-neutral-400 hover:text-white uppercase font-mono font-bold bg-[#111] border border-[#222] py-2 px-3.5 rounded-xl cursor-pointer transition-all active:scale-95 mb-1"
+              >
+                <span>← Volver al Dashboard (Métricas)</span>
+              </button>
               <div className="bg-[#111] border border-[#222] rounded-[32px] p-5 shadow-lg">
                 <div className="flex items-center gap-2 mb-3">
                   <FileText className="w-5 h-5 text-[#7A724E]" />
@@ -1107,6 +1174,12 @@ export default function AdminRole({
           {/* TAB: ACCESOS QR */}
           {activeTab === 'qr_access' && (
             <div className="space-y-5 animate-fade-in text-left">
+              <button 
+                onClick={() => setActiveTab('metrics')}
+                className="flex items-center gap-2 text-[10px] text-neutral-400 hover:text-white uppercase font-mono font-bold bg-[#111] border border-[#222] py-2 px-3.5 rounded-xl cursor-pointer transition-all active:scale-95 mb-1"
+              >
+                <span>← Volver al Dashboard (Métricas)</span>
+              </button>
               <div className="bg-[#111] border border-[#222] rounded-[32px] p-5 shadow-lg">
                 <div className="flex items-center gap-1.5 mb-3">
                   <QrCode className="w-4 h-4 text-[#7A724E]" />
@@ -1226,6 +1299,12 @@ export default function AdminRole({
           {/* TAB: SUBIR RUTINAS */}
           {activeTab === 'workout_routines' && (
             <div className="space-y-5 animate-fade-in text-left">
+              <button 
+                onClick={() => setActiveTab('metrics')}
+                className="flex items-center gap-2 text-[10px] text-neutral-400 hover:text-white uppercase font-mono font-bold bg-[#111] border border-[#222] py-2 px-3.5 rounded-xl cursor-pointer transition-all active:scale-95 mb-1"
+              >
+                <span>← Volver al Dashboard (Métricas)</span>
+              </button>
               <div className="bg-[#111] border border-[#222] rounded-[32px] p-5 shadow-lg">
                 <div className="flex items-center gap-1.5 mb-3">
                   <Video className="w-4 h-4 text-[#7A724E]" />
