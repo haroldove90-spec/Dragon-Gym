@@ -1463,14 +1463,14 @@ export default function AdminRole({
         </div>
       </div>
 
-      {/* SuperAdmin Navigation tabs (Perfect layout inside frame) */}
-      <div className="absolute bottom-0 inset-x-0 h-16 bg-[#111111]/95 backdrop-blur-lg border-t border-[#222] flex items-center justify-center px-4 z-30">
-        <div className="max-w-xl mx-auto w-full flex items-center justify-between overflow-x-auto scrollbar-none py-1">
+      {/* SuperAdmin Navigation tabs (Perfect layout inside frame with lateral scrolling) */}
+      <div className="absolute bottom-0 inset-x-0 h-16 bg-[#111111]/95 backdrop-blur-lg border-t border-[#222] flex items-center z-30 overflow-x-auto scrollbar-none px-4">
+        <div className="mx-auto flex items-center justify-start sm:justify-center gap-3.5 min-w-max w-full py-1">
           
           <button 
             id="btn-admin-tab-metrics"
             onClick={() => setActiveTab('metrics')}
-            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'metrics' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2.5 py-1 cursor-pointer ${activeTab === 'metrics' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Activity className="w-4 h-4" />
             <span className="text-[8px] font-mono uppercase font-black tracking-wider">Métricas</span>
@@ -1479,7 +1479,7 @@ export default function AdminRole({
           <button 
             id="btn-admin-tab-plans"
             onClick={() => setActiveTab('plans')}
-            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'plans' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2.5 py-1 cursor-pointer ${activeTab === 'plans' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <DollarSign className="w-4 h-4" />
             <span className="text-[8px] font-mono uppercase font-black tracking-wider">Precios</span>
@@ -1488,7 +1488,7 @@ export default function AdminRole({
           <button 
             id="btn-admin-tab-staff"
             onClick={() => setActiveTab('staff')}
-            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'staff' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2.5 py-1 cursor-pointer ${activeTab === 'staff' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Users className="w-4 h-4" />
             <span className="text-[8px] font-mono uppercase font-black tracking-wider">Personal</span>
@@ -1497,7 +1497,7 @@ export default function AdminRole({
           <button 
             id="btn-admin-tab-socios"
             onClick={() => setActiveTab('socios')}
-            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'socios' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2.5 py-1 cursor-pointer ${activeTab === 'socios' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <UserCheck className="w-4 h-4" />
             <span className="text-[8px] font-mono uppercase font-black tracking-wider">Socios</span>
@@ -1506,7 +1506,7 @@ export default function AdminRole({
           <button 
             id="btn-admin-tab-qr-access"
             onClick={() => setActiveTab('qr_access')}
-            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'qr_access' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2.5 py-1 cursor-pointer ${activeTab === 'qr_access' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <QrCode className="w-4 h-4 text-[#7A724E]" />
             <span className="text-[8px] font-mono uppercase font-black tracking-wider">Pases QR</span>
@@ -1515,7 +1515,7 @@ export default function AdminRole({
           <button 
             id="btn-admin-tab-workout-routines"
             onClick={() => setActiveTab('workout_routines')}
-            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'workout_routines' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2.5 py-1 cursor-pointer ${activeTab === 'workout_routines' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Video className="w-4 h-4 text-[#7A724E]" />
             <span className="text-[8px] font-mono uppercase font-black tracking-wider">Rutinas</span>
@@ -1524,7 +1524,7 @@ export default function AdminRole({
           <button 
             id="btn-admin-tab-reports"
             onClick={() => setActiveTab('reports')}
-            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'reports' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2.5 py-1 cursor-pointer ${activeTab === 'reports' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <FileText className="w-4 h-4" />
             <span className="text-[8px] font-mono uppercase font-black tracking-wider">Auditoría</span>
@@ -1533,7 +1533,7 @@ export default function AdminRole({
           <button 
             id="btn-admin-tab-announcements"
             onClick={() => setActiveTab('announcements')}
-            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2 cursor-pointer ${activeTab === 'announcements' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2.5 py-1 cursor-pointer ${activeTab === 'announcements' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <Bell className="w-4 h-4" />
             <span className="text-[8px] font-mono uppercase font-black tracking-wider">Avisos</span>

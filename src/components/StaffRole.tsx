@@ -1021,14 +1021,14 @@ export default function StaffRole({
         </div>
       </div>
 
-      {/* Reception Staff Navigation Tabs */}
-      <div className="absolute bottom-0 inset-x-0 h-16 bg-[#111111]/95 backdrop-blur-lg border-t border-[#222] flex items-center justify-center px-4 z-30">
-        <div className="max-w-xl mx-auto w-full flex items-center justify-around">
+      {/* Reception Staff Navigation Tabs (with lateral scrolling) */}
+      <div className="absolute bottom-0 inset-x-0 h-16 bg-[#111111]/95 backdrop-blur-lg border-t border-[#222] flex items-center z-30 overflow-x-auto scrollbar-none px-4">
+        <div className="mx-auto flex items-center justify-start sm:justify-center gap-4 min-w-max w-full py-1">
           
           <button 
             id="btn-staff-tab-checkin"
             onClick={() => { stopCamera(); setActiveTab('checkin'); }}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'checkin' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2.5 py-1 cursor-pointer ${activeTab === 'checkin' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <ShieldCheck className="w-5 h-5" />
             <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Check-In</span>
@@ -1037,7 +1037,7 @@ export default function StaffRole({
           <button 
             id="btn-staff-tab-socios"
             onClick={() => { stopCamera(); setActiveTab('socios'); }}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'socios' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2.5 py-1 cursor-pointer ${activeTab === 'socios' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <UserPlus className="w-5 h-5" />
             <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Inscripción</span>
@@ -1046,7 +1046,7 @@ export default function StaffRole({
           <button 
             id="btn-staff-tab-caja"
             onClick={() => { stopCamera(); setActiveTab('caja'); }}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'caja' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2.5 py-1 cursor-pointer ${activeTab === 'caja' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <CreditCard className="w-5 h-5" />
             <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Caja Rápida</span>
@@ -1055,7 +1055,7 @@ export default function StaffRole({
           <button 
             id="btn-staff-tab-qr"
             onClick={() => { stopCamera(); setActiveTab('qr_access'); }}
-            className={`flex flex-col items-center gap-1 transition-all cursor-pointer ${activeTab === 'qr_access' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
+            className={`flex flex-col items-center gap-1 transition-all shrink-0 px-2.5 py-1 cursor-pointer ${activeTab === 'qr_access' ? 'text-[#7A724E]' : 'text-neutral-400 hover:text-white/75'}`}
           >
             <QrCode className="w-5 h-5" />
             <span className="text-[9px] font-mono uppercase font-bold tracking-wider">Pases QR</span>
